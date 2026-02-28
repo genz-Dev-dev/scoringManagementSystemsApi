@@ -16,8 +16,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "scores", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { "student_id", "subject_id", "semester_id" }) })
+@Table(
+		name = "scores", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "student_id", "subject_id", "semester_id" })
+})
 public class Scores {
 	@Id
 	@UuidGenerator(style = UuidGenerator.Style.RANDOM)

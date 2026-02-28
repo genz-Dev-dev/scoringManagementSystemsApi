@@ -15,7 +15,6 @@ public class ClassesServiceImpl implements ClassesService {
 
 	@Override
 	public Classes createClasses(Classes classes) {
-
 		return classesRepository.save(classes);
 	}
 

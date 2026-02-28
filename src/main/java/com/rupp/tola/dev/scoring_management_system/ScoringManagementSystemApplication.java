@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ScoringManagementSystemApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ScoringManagementSystemApplication.class, args);
 	}
-
 }

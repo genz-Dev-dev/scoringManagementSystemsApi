@@ -11,6 +11,7 @@ import com.rupp.tola.dev.scoring_management_system.exception.ApiException;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.repository.RolesRepository;
 import com.rupp.tola.dev.scoring_management_system.service.RoleService;
+import org.springframework.lang.NonNull;
 
 import lombok.AllArgsConstructor;
 
@@ -23,7 +24,6 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public Roles createRoles(Roles roles) {
 		return rolesRepository.save(roles);
-
 	}
 
 	@Override

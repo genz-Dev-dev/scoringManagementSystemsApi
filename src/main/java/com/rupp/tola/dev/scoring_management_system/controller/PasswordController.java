@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rupp.tola.dev.scoring_management_system.DTO.ApiResponseDto;
-import com.rupp.tola.dev.scoring_management_system.DTO.ForgotPasswordRequestDto;
-import com.rupp.tola.dev.scoring_management_system.DTO.ResetPasswordRequestDto;
-import com.rupp.tola.dev.scoring_management_system.DTO.UserResponseDto;
-import com.rupp.tola.dev.scoring_management_system.service.PasswordService;
+import com.rupp.tola.dev.scoring_management_system.dto.ApiResponseDto;
+import com.rupp.tola.dev.scoring_management_system.dto.ForgotPasswordRequestDto;
+import com.rupp.tola.dev.scoring_management_system.dto.ResetPasswordRequestDto;
+import com.rupp.tola.dev.scoring_management_system.dto.UserResponseDto;
+import com.rupp.tola.dev.scoring_management_system.security.PasswordService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

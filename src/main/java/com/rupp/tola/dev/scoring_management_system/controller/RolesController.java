@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rupp.tola.dev.scoring_management_system.DTO.RolesDTO;
-import com.rupp.tola.dev.scoring_management_system.Mapper.RolesMapper;
+import com.rupp.tola.dev.scoring_management_system.dto.RolesDTO;
 import com.rupp.tola.dev.scoring_management_system.entity.Roles;
+import com.rupp.tola.dev.scoring_management_system.mapper.RolesMapper;
 import com.rupp.tola.dev.scoring_management_system.service.RoleService;
 
 import jakarta.validation.Valid;

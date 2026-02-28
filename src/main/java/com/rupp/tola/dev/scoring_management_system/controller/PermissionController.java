@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rupp.tola.dev.scoring_management_system.DTO.PermissionDTO;
-import com.rupp.tola.dev.scoring_management_system.Mapper.PermissionMapper;
+import com.rupp.tola.dev.scoring_management_system.dto.PermissionDTO;
 import com.rupp.tola.dev.scoring_management_system.entity.Permissions;
-import com.rupp.tola.dev.scoring_management_system.service.PermissionService;
+import com.rupp.tola.dev.scoring_management_system.mapper.PermissionMapper;
+import com.rupp.tola.dev.scoring_management_system.security.PermissionService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

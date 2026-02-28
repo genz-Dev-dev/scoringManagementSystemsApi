@@ -11,3 +11,4 @@ import com.rupp.tola.dev.scoring_management_system.entity.UploadBatches;
 public interface UploadBatchesRepository extends JpaRepository<UploadBatches, UUID> {
 
 }
+    

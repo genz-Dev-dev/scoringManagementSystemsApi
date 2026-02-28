@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rupp.tola.dev.scoring_management_system.DTO.ClassDTO;
-import com.rupp.tola.dev.scoring_management_system.Mapper.ClassesMapper;
+import com.rupp.tola.dev.scoring_management_system.dto.ClassDTO;
 import com.rupp.tola.dev.scoring_management_system.entity.Classes;
+import com.rupp.tola.dev.scoring_management_system.mapper.ClassesMapper;
 import com.rupp.tola.dev.scoring_management_system.service.ClassesService;
 
 import lombok.RequiredArgsConstructor;

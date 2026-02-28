@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rupp.tola.dev.scoring_management_system.DTO.ApiResponseDto;
-import com.rupp.tola.dev.scoring_management_system.DTO.RegistrationRequestDto;
-import com.rupp.tola.dev.scoring_management_system.DTO.UserResponseDto;
-import com.rupp.tola.dev.scoring_management_system.service.UserService;
+import com.rupp.tola.dev.scoring_management_system.dto.ApiResponseDto;
+import com.rupp.tola.dev.scoring_management_system.dto.RegistrationRequestDto;
+import com.rupp.tola.dev.scoring_management_system.dto.UserResponseDto;
+import com.rupp.tola.dev.scoring_management_system.security.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

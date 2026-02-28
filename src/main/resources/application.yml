@@ -1,3 +1,81 @@
+server:
+    port: 8080
+    servlet:
+        context-path: /api
+
+app:
+    cors:
+        allowed-origins: ${ALLOW_ORIGINS:http://localhost:4200,http://localhost:5173}
+
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:4321/SM
+        username: SMUSER
+        password: SMPW
+        driver-class-name: org.postgresql.Driver
+
+    jpa:
+        hibernate:
+            ddl-auto: update
+
+        show-sql: true
+
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+
+    liquibase:
+        enabled: true
+        change-log: classpath:db/changelog/db.changeLog-master.yaml
+
+    servlet:
+        multipart:
+            enabled: true
+            max-file-size: 10MB
+            max-request-size: 10MB
+            file-size-threshold: 2KB
+
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: namtola4444@gmail.com
+        password: zckf kihg bmpi azai
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+                        required: true
+                debug: false
+
+jwt:
+    secret: ${JWT_SECRET:your-super-secret-key-must-be-at-least-256-bits-long-for-hs256}
+    expiration-ms: 86400000 # 24 hours
+
+springdoc:
+    swagger-ui:
+        path: /swagger-ui.html
+        enabled: true
+    api-docs:
+        path: /v3/api-docs
+        enabled: true
+    packages-to-scan: com.rupp.tola.dev.scoring_management_system
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #server:
 #    port: 8080
 #    servlet:
@@ -46,65 +124,3 @@
 #        path: /v3/api-docs
 #        enabled: true
 #    packages-to-scan: com.rupp.tola.dev.scoring_management_system
-
-server:
-    port: 8080
-    servlet:
-        context-path: /api
-
-app:
-    cors:
-        allowed-origins: ${ALLOW_ORIGINS:http://localhost:4200,http://localhost:5173}
-
-spring:
-    datasource:
-        url: jdbc:postgresql://localhost:5432/scoring_management_systems
-        username: tola.dev
-        password: namtola123
-        driver-class-name: org.postgresql.Driver
-
-    jpa:
-        hibernate:
-            ddl-auto: update
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.PostgreSQLDialect
-        show-sql: true
-
-    liquibase:
-        enabled: true
-        change-log: classpath:db/changelog/db.changeLog-master.yaml
-
-    servlet:
-        multipart:
-            enabled: true
-            max-file-size: 10MB
-            max-request-size: 10MB
-            file-size-threshold: 2KB
-
-    mail:
-        host: smtp.gmail.com
-        port: 587
-        username: namtola4444@gmail.com
-        password: zckf kihg bmpi azai
-        properties:
-            mail:
-                smtp:
-                    auth: true
-                    starttls:
-                        enable: true
-                        required: true
-                debug: false
-
-jwt:
-    secret: ${JWT_SECRET:your-super-secret-key-must-be-at-least-256-bits-long-for-hs256}
-    expiration-ms: 86400000 # 24 hours
-
-springdoc:
-    swagger-ui:
-        path: /swagger-ui.html
-        enabled: true
-    api-docs:
-        path: /v3/api-docs
-        enabled: true
-    packages-to-scan: com.rupp.tola.dev.scoring_management_system

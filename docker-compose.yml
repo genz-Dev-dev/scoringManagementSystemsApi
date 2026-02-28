@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: SM_Postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: SM
+      POSTGRES_USER: SMUSER
+      POSTGRES_PASSWORD: SMPW
+    ports:
+      - "4321:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sm@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: smpw
+    ports:
+      - "5050:80"
+    volumes:
+      - pg_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+volumes:
+  pg_data:
