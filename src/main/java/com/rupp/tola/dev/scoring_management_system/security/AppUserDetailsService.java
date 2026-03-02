@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.security;
 
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,12 +19,13 @@ public class AppUserDetailsService implements UserDetailsService {
     private final UsersRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    @NullMarked
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Users user = userRepository.findByUsername(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
         return User.builder()
-                .username(user.getUsername())
+                .username(user.getEmail())
                 .password(user.getPassword())
                 .build();
     }

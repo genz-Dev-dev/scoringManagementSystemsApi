@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${spring.mail.username}")
 	private String from;
 
-	// @Override
+    // @Override
 	// public void sendVerificationEmail(String email, String verificationToken) {
 	// sendEmail(email, verificationToken, "Email Verification",
 	// "/req/signup/verify",
@@ -30,14 +31,14 @@ public class EmailServiceImpl implements EmailService {
 	// }
 	@Override
 	public void sendVerificationEmail(String email, String verificationToken) {
-		sendEmail(email, verificationToken, "Email Verification", "/req/auth/signup/verify", // ← must match your
+		sendEmail(email, verificationToken, "Email Verification", "/auth/signup/verify", // ← must match your
 																								// controller exactly
 				"Click the button below to verify your email address:");
 	}
 
 	@Override
 	public void sendForgotPasswordEmail(String email, String resetToken) {
-		sendEmail(email, resetToken, "Password Reset Request", "/req/reset-password",
+		sendEmail(email, resetToken, "Password Reset Request", "/reset-password",
 				"Click the button below to reset your password:");
 	}
 

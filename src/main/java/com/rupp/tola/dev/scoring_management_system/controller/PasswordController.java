@@ -1,5 +1,8 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
+import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
+import com.rupp.tola.dev.scoring_management_system.security.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,7 +13,6 @@ import com.rupp.tola.dev.scoring_management_system.dto.ApiResponseDto;
 import com.rupp.tola.dev.scoring_management_system.dto.ForgotPasswordRequestDto;
 import com.rupp.tola.dev.scoring_management_system.dto.ResetPasswordRequestDto;
 import com.rupp.tola.dev.scoring_management_system.dto.UserResponseDto;
-import com.rupp.tola.dev.scoring_management_system.security.PasswordService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -21,17 +23,41 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PasswordController {
 
-	private final PasswordService passwordService;
+	private final AuthService passwordService;
 
 	@Operation(summary = "Send forgot password email")
 	@PostMapping("/forgotPassword")
-	public ResponseEntity<ApiResponseDto<UserResponseDto>> forgotPassword(
+	public ResponseEntity<SingleResponse<UserResponse>> forgotPassword(
 			@Valid @RequestBody ForgotPasswordRequestDto request) {
-		UserResponseDto user = passwordService.sendForgotPasswordEmail(request.getEmail());
-		return ResponseEntity.ok(ApiResponseDto.success("Password reset email sent. Check your inbox.", user));
+		UserResponse response = passwordService.sendForgotPasswordEmail(request.getEmail());
+		return ResponseEntity.ok(SingleResponse.success("Password reset email sent. Check your inbox.", response));
 	}
 
-//	@Operation(summary = "Send forgot password email")
+	@Operation(summary = "Reset password using token")
+	@PostMapping("/resetPassword")
+	public ResponseEntity<SingleResponse<UserResponse>> resetPassword(
+			@Valid @RequestBody ResetPasswordRequestDto request) {
+		UserResponse response = passwordService.resetPassword(request.getToken(), request.getNewPassword());
+		return ResponseEntity.ok(SingleResponse.success("Password reset successfully.", response));
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//	@Operation(summary = "Send forgot password email")
 //	@PostMapping("/forgotPassword")
 //	public ResponseEntity<ApiResponseDto<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDto request) {
 //
@@ -39,13 +65,6 @@ public class PasswordController {
 //		return ResponseEntity.ok(ApiResponseDto.success("Password reset email sent. Check your inbox."));
 //	}
 
-	@Operation(summary = "Reset password using token")
-	@PostMapping("/resetPassword")
-	public ResponseEntity<ApiResponseDto<UserResponseDto>> resetPassword(
-			@Valid @RequestBody ResetPasswordRequestDto request) {
-		UserResponseDto user = passwordService.resetPassword(request.getToken(), request.getNewPassword());
-		return ResponseEntity.ok(ApiResponseDto.success("Password reset successfully.", user));
-	}
 //	public ResponseEntity<ApiResponseDto<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequestDto request) {
 //
 //		passwordService.resetPassword(request.getToken(), request.getNewPassword());
