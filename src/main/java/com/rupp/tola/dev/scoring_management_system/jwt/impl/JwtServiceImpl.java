@@ -46,7 +46,7 @@ public class JwtServiceImpl extends JwtConfig implements JwtService {
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userEmail = extractEmail(token);
-        return (userDetails.getUsername().equals(userEmail) && isTokenExpiration(token));
+        return (userDetails.getUsername().equals(userEmail) && !isTokenExpiration(token));
     }
 
     public boolean isTokenExpiration(String token) {

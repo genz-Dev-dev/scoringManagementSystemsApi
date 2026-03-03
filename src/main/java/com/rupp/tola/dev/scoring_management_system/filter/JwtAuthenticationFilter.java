@@ -2,6 +2,7 @@ package com.rupp.tola.dev.scoring_management_system.filter;
 
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
 import jakarta.servlet.http.Cookie;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.lang.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -26,8 +26,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final UserDetailsService userDetailsService;
 
 	@Override
-	protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-			@NonNull FilterChain filterChain)
+	protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain)
 			throws ServletException, IOException, java.io.IOException {
 
 		String authHeader = request.getHeader("Authorization");

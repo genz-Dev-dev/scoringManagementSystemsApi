@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 @Entity
 public class Permissions {
+
 	@Id
 	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
 	@Column(name = "permission_id", columnDefinition = "uuid", updatable = false, nullable = false)
@@ -21,5 +22,6 @@ public class Permissions {
 	private String name;
 
 	private Boolean status;
+
 
 }

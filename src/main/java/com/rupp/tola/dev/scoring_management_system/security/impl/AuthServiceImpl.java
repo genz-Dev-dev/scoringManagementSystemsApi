@@ -4,6 +4,7 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.UserRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
 import io.jsonwebtoken.JwtException;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,9 @@ import com.rupp.tola.dev.scoring_management_system.service.EmailService;
 import com.rupp.tola.dev.scoring_management_system.security.AuthService;
 
 import lombok.RequiredArgsConstructor;
+
+import java.security.Security;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @Service
@@ -81,9 +85,12 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserResponse sendForgotPasswordEmail(String email) {
+	public UserResponse sendForgotPasswordEmail(String email) throws MessagingException {
 		Users user = userRepository.findByEmail(email)
 				.orElseThrow(() -> new IllegalArgumentException("No account found with that email"));
+
+		int randomOtp = ThreadLocalRandom.current().nextInt(100000 , 1000000);
+		emailService.sendOtpResetPassword(email , String.valueOf(randomOtp));
 
 		String resetToken = jwtService.generateToken(user.getEmail());
 		user.setVerificationToken(resetToken);
