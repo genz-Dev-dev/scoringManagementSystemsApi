@@ -1,9 +1,9 @@
 package com.rupp.tola.dev.scoring_management_system.jwt;
 
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.security.Key;
 import java.util.Map;
+
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface JwtService {
 

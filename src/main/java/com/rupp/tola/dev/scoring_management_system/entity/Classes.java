@@ -23,4 +23,6 @@ public class Classes {
 
 	@Column(name = "class_name", updatable = false, nullable = false)
 	private String name;
+	
+	private Boolean status;
 }

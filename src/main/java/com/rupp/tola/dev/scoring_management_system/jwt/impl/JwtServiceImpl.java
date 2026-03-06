@@ -10,8 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -23,13 +24,13 @@ public class JwtServiceImpl extends JwtConfig implements JwtService {
     private final UserDetailsService userDetailsService;
 
     @Override
-    public Key getSigningKey() {
+    public SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(getBase64Secret().getBytes());
     }
 
     @Override
     public String generateToken(String subject) {
-        return generateToken(null , subject);
+        return generateToken(new HashMap<>(), subject);
     }
 
     @Override
@@ -64,11 +65,11 @@ public class JwtServiceImpl extends JwtConfig implements JwtService {
     private Claims extractAllClaims(String token) {
         try {
             return Jwts
-                    .parserBuilder()
-                    .setSigningKey(getSigningKey())
+                    .parser()
+                    .verifyWith(getSigningKey())
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
         }catch (MalformedJwtException ex) {
             log.info("Invalid format JWT token.");
             throw new JwtException("Invalid format JWT token.");
@@ -90,11 +91,11 @@ public class JwtServiceImpl extends JwtConfig implements JwtService {
     private String builderToken(Map<String , Object> claims , String subject , long expiration) {
         return Jwts
                 .builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + getExpiration()))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey())
                 .compact();
     }
 

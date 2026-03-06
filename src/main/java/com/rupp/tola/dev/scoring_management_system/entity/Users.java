@@ -1,7 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 //
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 //import java.time.LocalDateTime;
@@ -52,46 +56,84 @@ import java.util.UUID;
 //	private LocalDateTime date;
 //
 //}
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.jspecify.annotations.NullMarked;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Users {
+public class Users implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "user_id", updatable = false, nullable = false)
+	@Column(name = "user_id")
 	private UUID id;
 
 	@Column(name = "user_name", nullable = false, unique = true)
-	private String username;
+	private String fullName;
 
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
-	@Column(name = "password_hash", nullable = false) // ← was "password"
+	@Column(name = "password_hash", nullable = false)
 	private String password;
 
 	@Column(name = "verification_token")
 	private String verificationToken;
 
 	@Column(name = "verified", nullable = false)
-	@Builder.Default
-	private boolean verified = false;
+	private boolean verified;
+
+	@Column(name = "opt")
+	private int opt;
+
+	@Column(name = "expiry_opt")
+	private Instant expiryOpt;
+
 	@Column(name = "created_at", nullable = false, updatable = false)
-	@Builder.Default
-	private LocalDateTime createdAt = LocalDateTime.now();
+	@CreationTimestamp
+	private LocalDateTime createdAt;
+
+	@OneToMany(mappedBy = "users" , cascade = CascadeType.ALL)
+	private List<UploadBatches> uploadBatches;
+
+	@Override
+	@NullMarked
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return new LinkedList<>();
+	}
+
+	@Override
+	@NullMarked
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return UserDetails.super.isAccountNonExpired();
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return UserDetails.super.isAccountNonLocked();
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return UserDetails.super.isCredentialsNonExpired();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return UserDetails.super.isEnabled();
+	}
 }

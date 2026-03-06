@@ -1,8 +1,8 @@
 package com.rupp.tola.dev.scoring_management_system;
 
-import com.rupp.tola.dev.scoring_management_system.security.PasswordService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+<<<<<<< HEAD
 // import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -45,3 +45,16 @@ class ScoringManagementSystemApplicationTests {
 	void contextLoads() {
 	}
 }
+=======
+import org.springframework.test.context.ActiveProfiles;
+
+@SpringBootTest
+@ActiveProfiles("test")
+class ScoringManagementSystemApplicationTests {
+
+    @Test
+    void contextLoads() {
+    	
+    }
+}
+>>>>>>> e06fde8e06e8fb7fdfe51a0b8703cc55ed048a77

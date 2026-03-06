@@ -13,7 +13,7 @@ public interface UsersRepository extends JpaRepository<Users, UUID> {
 //	Optional<Users> findByUsername(String username);
 	 Optional<Users> findByUsername(String username);
 
-	    Optional<Users> findByEmail(String email);
+	 Optional<Users> findByEmail(String email);
 
-	    Optional<Users> findByVerificationToken(String token);
+	 Optional<Users> findByVerificationToken(String token);
 }

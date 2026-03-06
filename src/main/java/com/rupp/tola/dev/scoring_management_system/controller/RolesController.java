@@ -53,9 +53,9 @@ public class RolesController {
 	}
 
 	@PutMapping("{roleId}")
-	public ResponseEntity<?> eDitRole(@PathVariable("roleId") UUID roleid, @RequestBody @Valid RolesDTO dto) {
+	public ResponseEntity<?> eDitRole(@PathVariable("roleId") UUID roleId, @RequestBody @Valid RolesDTO dto) {
 		Roles roles = RolesMapper.INSTANCE.toRoles(dto);
-		Roles editRole = roleService.editRole(roleid, roles);
+		Roles editRole = roleService.editRole(roleId, roles);
 		return ResponseEntity.ok(RolesMapper.INSTANCE.toRolesDTO(editRole));
 	}
 

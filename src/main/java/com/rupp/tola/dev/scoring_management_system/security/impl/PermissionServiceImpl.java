@@ -52,10 +52,10 @@ public class PermissionServiceImpl implements PermissionService {
 
 	@Override
 	public Optional<Permissions> getByStatus(Boolean status) {
-		String message = "status not found";
-		Permissions permissions = permissionRepository.findByStatus(status)
-				.orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, message));
-		return Optional.ofNullable(permissions);
+
+		return permissionRepository.findByStatus(status).map(Optional::of).orElseGet(() -> {
+			return Optional.empty();
+		});
 	}
 
 }

@@ -14,6 +14,7 @@ import lombok.Data;
 @Entity
 @Table(name = "roles")
 public class Roles {
+
 	@Id
 	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
 	@Column(name = "role_id", columnDefinition = "uuid", updatable = false, nullable = false)
