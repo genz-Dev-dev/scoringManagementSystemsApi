@@ -3,6 +3,7 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.enums.RoleStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
 	public Roles updateStatus(UUID id, Boolean active) {
 		Roles roles = rolesRepository.findById(id)
 				.orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "roleid is null"));
-		roles.setStatus(active);
+		roles.setStatus(RoleStatus.ACTIVE);
 		return rolesRepository.save(roles);
 	}
 

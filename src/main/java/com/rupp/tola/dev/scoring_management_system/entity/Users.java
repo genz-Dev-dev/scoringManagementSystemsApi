@@ -7,62 +7,13 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
-//import java.time.LocalDateTime;
-//import java.util.UUID;
-//
-//import org.hibernate.annotations.UuidGenerator;
-//
-//import jakarta.persistence.Column;
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.Id;
-//import jakarta.persistence.JoinColumn;
-//import jakarta.persistence.ManyToOne;
-//import jakarta.persistence.Table;
-//import lombok.AllArgsConstructor;
-//import lombok.Data;
-//import lombok.NoArgsConstructor;
-//
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Entity
-//@Table(name = "users")
-//public class Users {
-//	@Id
-//	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
-//	@Column(name = "user_id", columnDefinition = "uuid", updatable = false, nullable = false)
-//	private UUID id;
-//
-//	@Column(name = "user_name", updatable = false, nullable = false)
-//	private String name;
-//
-//	@Column(name = "password_hash", updatable = false, nullable = false)
-//	private String password;
-//
-//	@ManyToOne
-//	@JoinColumn(name = "role_id")
-//	private Roles roles;
-//
-////	private boolean isAccountNonExpired;
-////	
-////	private boolean isAccountNonLocked;
-////	
-////	private boolean isCredentialsNonExpired;
-////	
-////	private boolean isEnabled;
-//
-//	@Column(name = "created_at", updatable = false, nullable = false)
-//	private LocalDateTime date;
-//
-//}
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Entity
 @Table(name = "users")
@@ -77,10 +28,10 @@ public class Users implements UserDetails {
 	@Column(name = "user_id")
 	private UUID id;
 
-	@Column(name = "user_name", nullable = false, unique = true)
+	@Column(name = "user_name", length = 50, nullable = false, unique = true)
 	private String fullName;
 
-	@Column(name = "email", nullable = false, unique = true)
+	@Column(name = "email", length = 50, nullable = false, unique = true)
 	private String email;
 
 	@Column(name = "password_hash", nullable = false)
@@ -92,23 +43,37 @@ public class Users implements UserDetails {
 	@Column(name = "verified", nullable = false)
 	private boolean verified;
 
-	@Column(name = "opt")
-	private int opt;
+	@Column(name = "otp")
+	private String otp;
+
+	@Column(name = "is_otp_verified")
+	private boolean isOtpVerified;
 
 	@Column(name = "expiry_opt")
-	private Instant expiryOpt;
+	private Instant expiryOtp;
 
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
-	@OneToMany(mappedBy = "users" , cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
 	private List<UploadBatches> uploadBatches;
+
+	@OneToMany(mappedBy = "users",fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+	private List<Roles> roles;
 
 	@Override
 	@NullMarked
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return new LinkedList<>();
+		return roles.stream()
+				.map(role -> {
+					String roleName = role.getName().name();
+					if (!roleName.startsWith("ROLE_")) {
+						roleName = "ROLE_" + roleName;
+					}
+					return new SimpleGrantedAuthority(roleName);
+				})
+				.toList();
 	}
 
 	@Override

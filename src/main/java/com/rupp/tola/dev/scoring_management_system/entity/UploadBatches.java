@@ -7,7 +7,6 @@ import com.rupp.tola.dev.scoring_management_system.enums.UploadBatchesStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "upload_batches")

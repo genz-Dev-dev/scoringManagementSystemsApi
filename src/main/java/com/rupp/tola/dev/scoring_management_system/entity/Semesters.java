@@ -2,12 +2,9 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 
 import java.util.UUID;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,11 +15,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "semesters")
 public class Semesters {
+
 	@Id
-	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "semester_id", columnDefinition = "uuid", updatable = false, nullable = false)
 	private UUID id;
 
 	@Column(name = "semester_name", updatable = false, nullable = false)
 	private String name;
+
 }

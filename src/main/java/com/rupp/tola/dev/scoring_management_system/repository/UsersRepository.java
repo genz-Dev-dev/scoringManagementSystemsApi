@@ -10,8 +10,7 @@ import com.rupp.tola.dev.scoring_management_system.entity.Users;
 
 @Repository
 public interface UsersRepository extends JpaRepository<Users, UUID> {
-//	Optional<Users> findByUsername(String username);
-	 Optional<Users> findByUsername(String username);
+	 Optional<Users> findByFullName(String fullName);
 
 	 Optional<Users> findByEmail(String email);
 
