@@ -7,6 +7,7 @@ import com.rupp.tola.dev.scoring_management_system.enums.RoleName;
 import com.rupp.tola.dev.scoring_management_system.enums.RoleStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.userdetails.User;
 
 @Entity
 @Table(name = "roles")
@@ -28,8 +29,7 @@ public class Roles {
 	@Column(name = "status")
 	private RoleStatus status = RoleStatus.ACTIVE;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id" , referencedColumnName = "user_id")
-	private Users users;
+	@ManyToMany(mappedBy = "roles")
+	private List<Users> users;
 
 }

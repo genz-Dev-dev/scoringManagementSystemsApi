@@ -31,6 +31,7 @@ public abstract class UserMapper {
 	@Mapping(target = "password", ignore = true)
 	public abstract Users toEntity(UserRequest request);
 
+	@Mapping(target = "roles", ignore = true)
 	public abstract UserResponse toResponse(Users users);
 
 	public abstract List<UserResponse> toList(List<Users> users);
@@ -53,6 +54,17 @@ public abstract class UserMapper {
 					return rolesRepository.save(role);
 				});
 
-		roles.setUsers(users);
+		roles.setUsers(List.of(users));
+		users.setRoles(List.of(roles));
+	}
+
+	@AfterMapping
+	public void addRoleToResponse(@MappingTarget UserResponse response, Users users) {
+		if (users.getRoles() != null) {
+			List<String> roles = users.getRoles().stream()
+					.map(role -> role.getName().name())
+					.toList();
+			response.setRoles(roles);
+		}
 	}
 }

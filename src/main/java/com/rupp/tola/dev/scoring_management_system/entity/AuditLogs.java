@@ -3,12 +3,9 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
@@ -17,7 +14,7 @@ import lombok.Data;
 public class AuditLogs {
 
 	@Id
-	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "audit_id", columnDefinition = "uuid", updatable = false, nullable = false)
 	private UUID id;
 

@@ -17,13 +17,4 @@ public class ScoringManagementSystemApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ScoringManagementSystemApplication.class, args);
 	}
-//
-//	@Autowired
-//	private EmailService emailService;
-//
-//	@PostConstruct
-//	public void init() throws MessagingException {
-//		int otp = ThreadLocalRandom.current().nextInt(100000 , 1000000);
-//		emailService.sendOtpResetPassword("virachamreun@gmail.com" , String.valueOf(otp));
-//	}
 }

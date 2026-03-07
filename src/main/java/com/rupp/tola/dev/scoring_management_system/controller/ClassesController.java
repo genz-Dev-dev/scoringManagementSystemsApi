@@ -20,13 +20,6 @@ public class ClassesController {
 
 	private final ClassesService classesService;
 
-//	@PostMapping
-//	public ResponseEntity<?> createClass(@RequestBody ClassDTO classDTO) {
-//		Classes classes2 = ClassesMapper.INSTANCE.toClass(classDTO);
-//		classes2 = classesService.createClasses(classes2);
-//		return ResponseEntity.ok(ClassesMapper.INSTANCE.toClass(classDTO));
-//	}
-
 	@PostMapping
 	public ResponseEntity<ClassDTO> createClass(@RequestBody ClassDTO classDTO) {
 		Classes classes = ClassesMapper.INSTANCE.toClass(classDTO);

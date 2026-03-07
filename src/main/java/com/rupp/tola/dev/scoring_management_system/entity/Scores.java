@@ -17,7 +17,7 @@ public class Scores {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "score_id" , updatable = false, nullable = false)
+	@Column(name = "score_id")
 	private UUID id;
 
 	@ManyToOne

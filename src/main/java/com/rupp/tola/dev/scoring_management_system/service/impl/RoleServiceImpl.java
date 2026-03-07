@@ -1,61 +1,55 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
+import com.rupp.tola.dev.scoring_management_system.dto.request.RoleRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.RoleResponse;
+import com.rupp.tola.dev.scoring_management_system.entity.Roles;
+import com.rupp.tola.dev.scoring_management_system.enums.RoleStatus;
+import com.rupp.tola.dev.scoring_management_system.mapper.RoleMapper;
+import com.rupp.tola.dev.scoring_management_system.repository.RolesRepository;
+import org.springframework.stereotype.Service;
+import com.rupp.tola.dev.scoring_management_system.service.RoleService;
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.UUID;
-
-import com.rupp.tola.dev.scoring_management_system.enums.RoleStatus;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import com.rupp.tola.dev.scoring_management_system.entity.Roles;
-import com.rupp.tola.dev.scoring_management_system.exception.ApiException;
-import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
-import com.rupp.tola.dev.scoring_management_system.repository.RolesRepository;
-import com.rupp.tola.dev.scoring_management_system.service.RoleService;
-import org.springframework.lang.NonNull;
-
-import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
 	private final RolesRepository rolesRepository;
+	private final RoleMapper roleMapper;
+	private final RoleMapper rolesMapper;
 
 	@Override
-	public Roles createRoles(Roles roles) {
-		return rolesRepository.save(roles);
+	public RoleResponse create(RoleRequest request) {
+		Roles roles = roleMapper.toEntity(request);
+		Roles saved = rolesRepository.save(roles);
+		return rolesMapper.toResponse(saved);
 	}
 
 	@Override
-	public Roles getById(UUID id) {
-		return rolesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("roleId is require", id));
+	public RoleResponse update(UUID uuid, RoleRequest request) {
+		return null;
 	}
 
 	@Override
-	public List<Roles> roles() {
-		return rolesRepository.findAll();
+	public void delete(UUID uuid) {
+
 	}
 
 	@Override
-	public Roles editRole(UUID id, Roles roleUpdateRole) {
-		Roles roles = getById(id);
-		roles.setName(roleUpdateRole.getName());
-		return rolesRepository.save(roles);
+	public List<RoleResponse> findAll() {
+		return List.of();
 	}
 
 	@Override
-	public List<Roles> findByActive(Boolean status) {
-
-		return rolesRepository.findByStatus(status);
+	public RoleResponse findById(UUID uuid) {
+		return null;
 	}
 
 	@Override
-	public Roles updateStatus(UUID id, Boolean active) {
-		Roles roles = rolesRepository.findById(id)
-				.orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "roleid is null"));
-		roles.setStatus(RoleStatus.ACTIVE);
-		return rolesRepository.save(roles);
+	public List<RoleResponse> findByActive(RoleStatus status) {
+		return List.of();
 	}
-
 }

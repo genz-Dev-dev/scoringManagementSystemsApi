@@ -28,7 +28,7 @@ public class UploadBatches {
 	@Column(nullable = false)
 	private UploadBatchesStatus status;
 
-	@Column(name = "total_rows", updatable = false, nullable = false, columnDefinition = "INT DEFAULT 0)")
+	@Column(name = "total_rows", updatable = false, nullable = false)
 	private Integer totalRow;
 
 	@Column(name = "success_rows", updatable = false, nullable = false)

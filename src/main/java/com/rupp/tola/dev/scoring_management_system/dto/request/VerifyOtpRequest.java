@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class VerifyOtpRequest {
-    private String email;
+
+    @NotBlank(message = "Otp is required.")
     private String otp;
 }

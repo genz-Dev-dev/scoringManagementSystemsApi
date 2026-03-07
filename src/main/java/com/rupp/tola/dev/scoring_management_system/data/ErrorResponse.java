@@ -30,6 +30,17 @@ public class ErrorResponse<T> {
                 .build();
     }
 
+    public static <T> ErrorResponse<T> error(HttpStatus status , String message) {
+        return ErrorResponse
+                .<T>builder()
+                .success(false)
+                .status(status.value())
+                .message(message)
+                .error(null)
+                .localDate(LocalDate.now())
+                .build();
+    }
+
     public static <T> ErrorResponse<T> error(String message) {
         return ErrorResponse
                 .<T>builder()
@@ -40,5 +51,4 @@ public class ErrorResponse<T> {
                 .localDate(LocalDate.now())
                 .build();
     }
-
 }

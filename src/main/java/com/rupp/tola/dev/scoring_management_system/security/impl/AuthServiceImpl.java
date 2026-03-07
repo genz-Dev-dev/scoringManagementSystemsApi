@@ -1,14 +1,16 @@
 package com.rupp.tola.dev.scoring_management_system.security.impl;
 
-import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPassword;
+import com.rupp.tola.dev.scoring_management_system.dto.request.AuthRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPasswordRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.UserRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.VerifyOtpRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
 import com.rupp.tola.dev.scoring_management_system.util.Util;
 import io.jsonwebtoken.JwtException;
-import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.Instant;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -47,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserResponse login(UserRequest request) {
+	public UserResponse login(AuthRequest request) {
 		authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 						request.getEmail(),
@@ -56,9 +58,6 @@ public class AuthServiceImpl implements AuthService {
 		);
 		Users users = userRepository.findByEmail(request.getEmail())
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
-
-		String token = jwtService.generateToken(request.getEmail());
-		users.setVerificationToken(token);
 		Users saved = userRepository.save(users);
 		return userMapper.toResponse(saved);
 	}
@@ -97,25 +96,10 @@ public class AuthServiceImpl implements AuthService {
 
 	private UserResponse createNewUser(UserRequest request) {
 		Users users = userMapper.toEntity(request);
+		log.info("New user created: {}", users);
 		Users saved = userRepository.save(users);
-
 		emailService.sendVerificationEmail(saved.getEmail(), saved.getVerificationToken());
 		return userMapper.toResponse(saved);
-	}
-
-	@Override
-	public UserResponse sendForgotPasswordEmail(String email) throws MessagingException {
-		Users user = userRepository.findByEmail(email)
-				.orElseThrow(() -> new IllegalArgumentException("No account found with that email"));
-
-		int randomOtp = ThreadLocalRandom.current().nextInt(100000, 1000000);
-		emailService.sendOtpResetPassword(email, String.valueOf(randomOtp));
-
-		String resetToken = jwtService.generateToken(user.getEmail());
-		user.setVerificationToken(resetToken);
-		userRepository.save(user);
-		emailService.sendForgotPasswordEmail(user.getEmail(), resetToken);
-		return userMapper.toResponse(user);
 	}
 
 	@Override
@@ -127,61 +111,77 @@ public class AuthServiceImpl implements AuthService {
 					.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 			users.setOtp(otp);
 			users.setExpiryOtp(Instant.now().plusSeconds(600));
+			log.info("OTP have been you email please check you box.");
 			userRepository.save(users);
 			return Map.of("email", users.getEmail(), "otp", otp);
 		} catch (Exception e) {
 			throw new RuntimeException("Something went wrong");
 		}
 	}
-
 	@Override
-	public Map<String, Object> verifyOtpResetPassword(VerifyOtpRequest request) {
-		Users users = userRepository.findByEmail(request.getEmail())
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
+	public Map<String, Object> verifyOtpResetPassword(String token, VerifyOtpRequest request) {
+		String userEmail = jwtService.extractEmail(token);
+		Users users = userRepository.findByEmail(userEmail)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
 		if (request.getOtp() == null || !request.getOtp().equals(users.getOtp())) {
 			throw new RuntimeException("OTP is not matching.");
 		}
 		if (users.getExpiryOtp().isBefore(Instant.now())) {
 			throw new RuntimeException("OTP is expired.");
 		}
-		users.setOtpVerified(true);
+		users.setVerifiedOtp(true);
 		users.setOtp(null);
-		users.setExpiryOtp(null);
+		log.info("OTP verified successfully.");
 		userRepository.save(users);
-		return Map.of("email", users.getEmail() ,"isVerified", users.isVerified());
+		return Map.of("userEmail", users.getEmail() ,"verifiedOtp", users.isVerifiedOtp());
 	}
 
 	@Override
-	public UserResponse resetPassword(ResetPassword resetPassword) {
-		Users users = userRepository.findByEmail(resetPassword.getEmail())
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + resetPassword.getEmail()));
-		if(!users.isVerified()) {
-			throw new RuntimeException("User is already verified.");
+	public UserResponse resetPassword(String token , ResetPasswordRequest request) {
+		String userEmail = jwtService.extractEmail(token);
+		Users users = userRepository.findByEmail(userEmail)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
+
+		if(!users.isVerifiedOtp()) {
+			throw new RuntimeException("Your OTP is not verified.");
 		}
-		users.setVerified(false);
-		users.setPassword(passwordEncoder.encode(resetPassword.getNewPassword()));
+
+		if(users.getExpiryOtp().isBefore(Instant.now())) {
+			users.setVerifiedOtp(false);
+			userRepository.save(users);
+			throw new RuntimeException("Your OTP is expired you cannot change password.");
+		}
+
+		users.setVerifiedOtp(false);
+		users.setExpiryOtp(null);
+		users.setPassword(passwordEncoder.encode(request.getPassword()));
+		log.info("Password have been reset by user email {}." , userEmail);
 		userRepository.save(users);
 		return userMapper.toResponse(users);
 	}
 
 	@Override
-	public UserResponse resetPassword(String token, String newPassword) {
+	public void delete(UUID uuid) {
+		Users users = userRepository.findById(uuid)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + uuid));
+		log.info("Delete user with UUID: {}" , uuid);
+		userRepository.delete(users);
+	}
 
-		String email = jwtService.extractEmail(token);
+	@Override
+	public Page<UserResponse> findAll(Pageable pageable) {
+		Page<Users> users = userRepository.findAll(pageable);
+		return users.map(userMapper::toResponse);
+	}
 
-		Users user = userRepository.findByEmail(email)
-				.orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-		if (user.getVerificationToken() == null || jwtService.isTokenExpiration(token)
-				|| !user.getVerificationToken().equals(token)) {
-			throw new IllegalStateException("Invalid or expired reset token");
+	@Override
+	public Users getUser(UUID uuid) {
+		Users users = userRepository.findById(uuid)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with UUID: " + uuid));
+		if(!users.isVerified()) {
+			throw new RuntimeException("User isn't verified account.");
 		}
-
-		user.setPassword(passwordEncoder.encode(newPassword));
-		user.setVerificationToken(null);
-		userRepository.save(user);
-
-		return userMapper.toResponse(user);
+		return users;
 	}
 
 }

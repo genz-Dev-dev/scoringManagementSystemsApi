@@ -1,7 +1,6 @@
-package com.rupp.tola.dev.scoring_management_system.config;
+package com.rupp.tola.dev.scoring_management_system.security;
 
 import com.rupp.tola.dev.scoring_management_system.filter.JwtAuthenticationFilter;
-import com.rupp.tola.dev.scoring_management_system.security.AppUserDetailsService;
 import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAccessDeniedHandler;
 import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAuthenticationEntryPoint;
 
@@ -17,7 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;

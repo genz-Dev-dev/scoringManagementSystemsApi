@@ -28,13 +28,13 @@ public class Users implements UserDetails {
 	@Column(name = "user_id")
 	private UUID id;
 
-	@Column(name = "user_name", length = 50, nullable = false, unique = true)
+	@Column(name = "user_name", length = 25, nullable = false, unique = true)
 	private String fullName;
 
-	@Column(name = "email", length = 50, nullable = false, unique = true)
+	@Column(name = "email", length = 25, nullable = false, unique = true)
 	private String email;
 
-	@Column(name = "password_hash", nullable = false)
+	@Column(name = "password_hash", nullable = false , length = 255)
 	private String password;
 
 	@Column(name = "verification_token")
@@ -47,7 +47,7 @@ public class Users implements UserDetails {
 	private String otp;
 
 	@Column(name = "is_otp_verified")
-	private boolean isOtpVerified;
+	private boolean verifiedOtp;
 
 	@Column(name = "expiry_opt")
 	private Instant expiryOtp;
@@ -59,8 +59,15 @@ public class Users implements UserDetails {
 	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
 	private List<UploadBatches> uploadBatches;
 
-	@OneToMany(mappedBy = "users",fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "user_role",
+			joinColumns = @JoinColumn(name = "user_id" , referencedColumnName = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id" , referencedColumnName = "role_id")
+	)
 	private List<Roles> roles;
+
+	//	UserDetial config
 
 	@Override
 	@NullMarked

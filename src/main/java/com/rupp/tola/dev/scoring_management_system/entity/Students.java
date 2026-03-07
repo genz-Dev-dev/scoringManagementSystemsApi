@@ -17,9 +17,10 @@ indexes = {
 }
 )
 public class Students {
+
 	@Id
-	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
-	@Column(name = "student_id", columnDefinition = "uuid", updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "student_id")
 	private UUID id;
 
 	@Column(name = "student_code", updatable = false, nullable = false)

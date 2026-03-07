@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,4 +18,5 @@ public class UserResponse {
     private String email;
     private boolean verified;
     private String verificationToken;
+    private List<String> roles;
 }

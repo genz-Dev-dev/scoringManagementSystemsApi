@@ -18,7 +18,7 @@ public class Semesters {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "semester_id", columnDefinition = "uuid", updatable = false, nullable = false)
+	@Column(name = "semester_id")
 	private UUID id;
 
 	@Column(name = "semester_name", updatable = false, nullable = false)
