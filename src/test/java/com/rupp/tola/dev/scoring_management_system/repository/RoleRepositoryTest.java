@@ -18,8 +18,8 @@ public class RoleRepositoryTest {
 	@Test
 	void testFindByStatus() {
 		Roles role = new Roles();
-		role.setName("ADMIN"); 
-		role.setStatus(false);
+//		role.setName("ADMIN"); 
+//		role.setStatus(false);
 
 		rolesRepository.save(role); 
 

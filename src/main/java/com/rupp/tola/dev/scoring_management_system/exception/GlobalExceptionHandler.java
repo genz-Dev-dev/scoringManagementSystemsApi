@@ -35,8 +35,6 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.failure(errors));
 	}
-
-<<<<<<< HEAD
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiResponseDto<Void>> handleGeneral(Exception ex) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponseDto.failure(ex.getMessage()));
@@ -52,15 +50,14 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 }
-=======
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponseDto<Void>> handleGeneral(Exception ex) {
-        log.error("Unexpected error: ", ex);
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponseDto.failure(ex.getMessage()));
-    }
-}
+    // @ExceptionHandler(Exception.class)
+    // public ResponseEntity<ApiResponseDto<Void>> handleGeneral(Exception ex) {
+    //     log.error("Unexpected error: ", ex);
+    //     return ResponseEntity
+    //             .status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(ApiResponseDto.failure(ex.getMessage()));
+    // }
+
 
 // @ControllerAdvice
 // public class GlobalExceptionHandler {
@@ -96,4 +93,3 @@ public class GlobalExceptionHandler {
 // .body(Apiresponsedto.failure("An unexpected error occurred"));
 // }
 // }
->>>>>>> 9bfc6a03c9e812cece43d5ebac6224b74be05e57
