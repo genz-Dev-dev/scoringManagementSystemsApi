@@ -30,7 +30,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse<Object>> handleRuntimeException(RuntimeException ex) {
-        return ResponseEntity.badRequest().body(ErrorResponse.error(ex.getLocalizedMessage()));
+        String message = ex.getMessage() != null ? ex.getMessage()
+                : "An unexpected " + ex.getClass().getSimpleName() + " occurred";
+        log.error("Runtime exception: ", ex);
+        return ResponseEntity.badRequest().body(ErrorResponse.error(message));
     }
 
     @ExceptionHandler(JwtException.class)

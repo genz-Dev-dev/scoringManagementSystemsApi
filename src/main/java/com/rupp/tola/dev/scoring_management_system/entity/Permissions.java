@@ -19,6 +19,9 @@ public class Permissions {
 	@Column(name = "permission_name", length = 100, nullable = false)
 	private String name;
 
+	private String permission;
+
+
 	private Boolean status;
 
 

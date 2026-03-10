@@ -18,5 +18,6 @@ public class UserResponse {
     private String email;
     private boolean verified;
     private String verificationToken;
+    private String refreshToken;
     private List<String> roles;
 }

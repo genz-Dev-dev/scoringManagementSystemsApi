@@ -5,22 +5,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseEntity<I , T> {
+public class BaseEntity{
 
     @Id
-    private I id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @CreationTimestamp
-    @Column(name = "created_at" , nullable = false , updatable = false)
-    private T createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDate createdAt;
 
     @UpdateTimestamp
-    @Column(name = "update_at" , nullable = false)
-    private T updateAt;
+    @Column(name = "update_at")
+    private LocalDate updatedAt;
 }

@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import io.swagger.v3.oas.models.links.Link;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +31,6 @@ public class Roles {
 	private String status;
 
 	@ManyToMany(mappedBy = "roles" , cascade = {CascadeType.MERGE , CascadeType.PERSIST})
-	private List<Users> users = new LinkedList<>();
+	private List<Users> users = new ArrayList<>();
 
 }

@@ -3,6 +3,7 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +56,9 @@ public class Users implements UserDetails {
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
+	@OneToOne(mappedBy = "users" , cascade = CascadeType.ALL)
+	private RefreshTokens refreshTokens;
+
 	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
 	private List<UploadBatches> uploadBatches;
 
@@ -64,7 +68,7 @@ public class Users implements UserDetails {
 			joinColumns = @JoinColumn(name = "user_id" , referencedColumnName = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id" , referencedColumnName = "role_id")
 	)
-	private List<Roles> roles;
+	private List<Roles> roles = new ArrayList<>();
 
 	//	UserDetial config
 

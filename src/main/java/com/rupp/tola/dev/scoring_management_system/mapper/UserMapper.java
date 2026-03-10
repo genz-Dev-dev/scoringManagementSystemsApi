@@ -25,8 +25,10 @@ public interface UserMapper {
 	@Mapping(target = "verificationToken" , ignore = true)
 	@Mapping(target = "verified" , ignore = true)
 	@Mapping(target = "roles" , ignore = true)
+
 	Users toEntity(UserRequest request);
 
 	@Mapping(target = "roles", ignore = true)
+	@Mapping(target = "refreshToken" , ignore = true)
 	UserResponse toResponse(Users users);
 }

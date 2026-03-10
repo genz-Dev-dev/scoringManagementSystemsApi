@@ -14,6 +14,7 @@ import com.rupp.tola.dev.scoring_management_system.service.RoleService;
 import lombok.AllArgsConstructor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -47,11 +48,11 @@ public class RoleServiceImpl implements RoleService {
 						if (user.getRoles() != null && !user.getRoles().contains(roles)) {
 							user.getRoles().add(roles);
 						} else if (user.getRoles() == null) {
-							user.setRoles(List.of(roles));
+							user.setRoles(new ArrayList<>(List.of(roles)));
 						}
 						return user;
 					})
-					.toList();
+					.collect(Collectors.toCollection(ArrayList::new));
 			roles.setUsers(users);
 		}
 		Roles saved = rolesRepository.save(roles);
@@ -69,7 +70,7 @@ public class RoleServiceImpl implements RoleService {
 			if (!roleName.startsWith("ROLE_")) {
 				roleName = "ROLE_" + roleName;
 			}
-			if (rolesRepository.existsByNameAndIdNot(roleName , uuid)) {
+			if (rolesRepository.existsByNameAndIdNot(roleName, uuid)) {
 				log.info("Role already exists with the name {}", roleName);
 				throw new IllegalArgumentException("Role name already exists");
 			}
@@ -82,24 +83,23 @@ public class RoleServiceImpl implements RoleService {
 
 			List<Users> existsUsers = request.getUserIds().stream()
 					.map(authService::getUser)
-					.toList();
+					.collect(Collectors.toCollection(ArrayList::new));
 
 			if (roles.getUsers() != null) {
 				roles.getUsers().stream()
-					.filter(user -> !existsUsers.contains(user))
-					.forEach(user -> {
-						if (user.getRoles() != null) {
-							user.getRoles().remove(roles);
-						}
-					});
+						.filter(user -> !existsUsers.contains(user))
+						.forEach(user -> {
+							if (user.getRoles() != null) {
+								user.getRoles().remove(roles);
+							}
+						});
 			}
-
 
 			existsUsers.forEach(user -> {
 				if (user.getRoles() != null && !user.getRoles().contains(roles)) {
 					user.getRoles().add(roles);
 				} else if (user.getRoles() == null) {
-					user.setRoles(List.of(roles));
+					user.setRoles(new ArrayList<>(List.of(roles)));
 				}
 			});
 
@@ -117,7 +117,7 @@ public class RoleServiceImpl implements RoleService {
 
 		Roles saved = rolesRepository.save(roles);
 		log.info("Role updated with id {}", saved.getId());
-		return roleMapper.toResponse(saved);
+		return toResponse(roles);
 	}
 
 	@Override

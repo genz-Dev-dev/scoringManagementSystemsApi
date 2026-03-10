@@ -68,5 +68,4 @@ public class UserController {
         return ResponseEntity.ok().body(MultipleResponse.success("Retrieve all user with pagination.", responses));
     }
 
-
 }

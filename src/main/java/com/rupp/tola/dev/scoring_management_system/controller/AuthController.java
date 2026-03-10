@@ -1,10 +1,15 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
+import com.rupp.tola.dev.scoring_management_system.dto.request.RefreshTokenRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.ErrorResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.AuthRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.UserRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
+import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
+import com.rupp.tola.dev.scoring_management_system.service.RefreshTokenService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +20,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -22,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final AuthService authService;
+	private final RefreshTokenService refreshTokenService;
+	private final JwtService jwtService;
 
 	@Operation(summary = "Register a new user with fullName , email and password.")
 	@PostMapping("/signup")
@@ -46,5 +55,22 @@ public class AuthController {
 	public ResponseEntity<SingleResponse<UserResponse>> verifyEmail(@RequestParam String token) {
 		UserResponse user = authService.verifyEmail(token);
 		return ResponseEntity.ok(SingleResponse.success("Email successfully verified!", user));
+	}
+
+	@Operation(summary = "Retrieve new access token.")
+	@GetMapping("/refresh-token")
+	public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
+		return refreshTokenService.findByToken(request.getToken())
+				.map(refresh -> {
+					if(refreshTokenService.verify(refresh)) {
+						String token = jwtService.generateToken(refresh.getUsers().getEmail());
+						return ResponseEntity.ok(SingleResponse.success("Refresh successful!", Map.of("token" , token)));
+					}
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+							.body(ErrorResponse.error("Invalid refresh token."));
+				})
+				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+						ErrorResponse.error("User un authentication.")
+				));
 	}
 }

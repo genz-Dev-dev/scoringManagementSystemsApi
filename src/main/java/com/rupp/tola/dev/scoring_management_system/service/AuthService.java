@@ -72,4 +72,11 @@ public interface AuthService {
 	 * return Users Object but be care full make sure user is verfied
 	 */
 	Users getUser(UUID uuid);
+
+
+	/**
+	 * This method use to find user has been authentication. For retrieve foreign key
+	 * @return User object
+	 */
+	Users getUserAuthenticated();
 }
