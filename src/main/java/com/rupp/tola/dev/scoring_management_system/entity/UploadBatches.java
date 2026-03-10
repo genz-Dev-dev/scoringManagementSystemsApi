@@ -7,7 +7,6 @@ import com.rupp.tola.dev.scoring_management_system.enums.UploadBatchesStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "upload_batches")
@@ -29,7 +28,7 @@ public class UploadBatches {
 	@Column(nullable = false)
 	private UploadBatchesStatus status;
 
-	@Column(name = "total_rows", updatable = false, nullable = false, columnDefinition = "INT DEFAULT 0)")
+	@Column(name = "total_rows", updatable = false, nullable = false)
 	private Integer totalRow;
 
 	@Column(name = "success_rows", updatable = false, nullable = false)

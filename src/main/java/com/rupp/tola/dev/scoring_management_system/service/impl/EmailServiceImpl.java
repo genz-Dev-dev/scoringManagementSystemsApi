@@ -1,6 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -42,7 +41,26 @@ public class EmailServiceImpl implements EmailService {
 				"Click the button below to reset your password:");
 	}
 
-	// ------------------------------------------------------------------ private
+	@Override
+	public void sendOtpResetPassword(String email, String otp) {
+		try {
+			String content = buildEmailContent("Verify Password OTP" , otp , "");
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage , true);
+
+			helper.setTo(email);
+			helper.setSubject("Verify OTP Reset Password");
+			helper.setFrom(from);
+			helper.setText(content , true);
+
+			mailSender.send(mimeMessage);
+			log.info("Email send successfully to {}" ,email);
+		}catch (Exception ex) {
+			throw new RuntimeException(ex.getLocalizedMessage());
+		}
+	}
+
+// ------------------------------------------------------------------ private
 
 	private void sendEmail(String to, String token, String subject, String path, String message) {
 		try {
@@ -65,6 +83,18 @@ public class EmailServiceImpl implements EmailService {
 			log.error("Failed to send email to {}: {}", to, e.getMessage());
 			throw new RuntimeException("Failed to send email", e);
 		}
+	}
+
+
+	private String buildEmailContent(String subject , String message , int otp) {
+		return """
+				<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;
+				    border-radius: 8px; background-color: #f9f9f9; text-align: center;">
+				    <h2 style="color: #333;">%s</h2>
+				    <p style="font-size: 16px; color: #555;">%s</p>
+				    <h1>%s</h1>
+				</div>
+				""".formatted(subject , message , otp);
 	}
 
 	private String buildEmailContent(String subject, String message, String actionUrl) {

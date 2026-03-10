@@ -1,8 +1,11 @@
-package com.rupp.tola.dev.scoring_management_system.config;
+package com.rupp.tola.dev.scoring_management_system.security;
 
 import com.rupp.tola.dev.scoring_management_system.filter.JwtAuthenticationFilter;
 import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAccessDeniedHandler;
 import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAuthenticationEntryPoint;
+
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,11 +16,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final UserDetailsService userDetailsService;
+	private final AppUserDetailsService userDetailsService;
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final CustomeAccessDeniedHandler accessDeniedHandler;
 	private final CustomeAuthenticationEntryPoint authenticationEntryPoint;
@@ -40,11 +45,12 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 		return http
 				.csrf(AbstractHttpConfigurer::disable)
 				.httpBasic(AbstractHttpConfigurer::disable)
 				.formLogin(AbstractHttpConfigurer::disable)
+				.cors(cors -> cors.configurationSource(configurationSource()))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
 						registry -> registry.requestMatchers(PUBLIC_URLS).permitAll().anyRequest().authenticated())
@@ -59,7 +65,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
 		return config.getAuthenticationManager();
 	}
 
@@ -68,6 +74,19 @@ public class SecurityConfig {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
 		provider.setPasswordEncoder(passwordEncoder());
 		return provider;
+	}
+
+	@Bean
+	public CorsConfigurationSource configurationSource() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowedOrigins(List.of("http://localhost:4200" , "http://localhost:5371"));
+		config.setAllowedHeaders(List.of("*"));
+		config.setAllowedMethods(List.of("*"));
+		config.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource urlCorsConfig = new UrlBasedCorsConfigurationSource();
+		urlCorsConfig.registerCorsConfiguration("/**" , config);
+		return urlCorsConfig;
 	}
 
 

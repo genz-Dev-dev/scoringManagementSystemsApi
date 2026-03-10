@@ -4,19 +4,14 @@ spring:
         driver-class-name: org.h2.Driver
         username: sa
         password:
-
     jpa:
         hibernate:
             ddl-auto: create-drop
         show-sql: true
-
     h2:
         console:
             enabled: true
 
-    liquibase:
-        enabled: false
-
-app:
-    cors:
-        allowed-origins: http://localhost:4200
+jwt:
+    secret: test-secret-key
+    expiration-ms: 86400000 # Changed from 'expiration' to 'expiration-ms'

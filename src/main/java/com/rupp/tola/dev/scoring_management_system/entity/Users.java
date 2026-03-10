@@ -1,61 +1,19 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 //
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
-//import java.time.LocalDateTime;
-//import java.util.UUID;
-//
-//import org.hibernate.annotations.UuidGenerator;
-//
-//import jakarta.persistence.Column;
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.Id;
-//import jakarta.persistence.JoinColumn;
-//import jakarta.persistence.ManyToOne;
-//import jakarta.persistence.Table;
-//import lombok.AllArgsConstructor;
-//import lombok.Data;
-//import lombok.NoArgsConstructor;
-//
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Entity
-//@Table(name = "users")
-//public class Users {
-//	@Id
-//	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
-//	@Column(name = "user_id", columnDefinition = "uuid", updatable = false, nullable = false)
-//	private UUID id;
-//
-//	@Column(name = "user_name", updatable = false, nullable = false)
-//	private String name;
-//
-//	@Column(name = "password_hash", updatable = false, nullable = false)
-//	private String password;
-//
-//	@ManyToOne
-//	@JoinColumn(name = "role_id")
-//	private Roles roles;
-//
-////	private boolean isAccountNonExpired;
-////	
-////	private boolean isAccountNonLocked;
-////	
-////	private boolean isCredentialsNonExpired;
-////	
-////	private boolean isEnabled;
-//
-//	@Column(name = "created_at", updatable = false, nullable = false)
-//	private LocalDateTime date;
-//
-//}
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.jspecify.annotations.NullMarked;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
@@ -63,20 +21,20 @@ import org.hibernate.annotations.CreationTimestamp;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Users {
+public class Users implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "user_id")
 	private UUID id;
 
-	@Column(name = "user_name", nullable = false, unique = true)
-	private String username;
+	@Column(name = "user_name", length = 25, nullable = false, unique = true)
+	private String fullName;
 
-	@Column(name = "email", nullable = false, unique = true)
+	@Column(name = "email", length = 25, nullable = false, unique = true)
 	private String email;
 
-	@Column(name = "password_hash", nullable = false)
+	@Column(name = "password_hash", nullable = false , length = 255)
 	private String password;
 
 	@Column(name = "verification_token")
@@ -85,10 +43,69 @@ public class Users {
 	@Column(name = "verified", nullable = false)
 	private boolean verified;
 
+	@Column(name = "otp")
+	private String otp;
+
+	@Column(name = "is_otp_verified")
+	private boolean verifiedOtp;
+
+	@Column(name = "expiry_opt")
+	private Instant expiryOtp;
+
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
-	@OneToMany(mappedBy = "users" , cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
 	private List<UploadBatches> uploadBatches;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "user_role",
+			joinColumns = @JoinColumn(name = "user_id" , referencedColumnName = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id" , referencedColumnName = "role_id")
+	)
+	private List<Roles> roles;
+
+	//	UserDetial config
+
+	@Override
+	@NullMarked
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles.stream()
+				.map(role -> {
+					String roleName = role.getName().name();
+					if (!roleName.startsWith("ROLE_")) {
+						roleName = "ROLE_" + roleName;
+					}
+					return new SimpleGrantedAuthority(roleName);
+				})
+				.toList();
+	}
+
+	@Override
+	@NullMarked
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return UserDetails.super.isAccountNonExpired();
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return UserDetails.super.isAccountNonLocked();
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return UserDetails.super.isCredentialsNonExpired();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return UserDetails.super.isEnabled();
+	}
 }

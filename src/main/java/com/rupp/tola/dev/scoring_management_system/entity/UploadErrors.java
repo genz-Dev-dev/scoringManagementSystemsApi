@@ -3,14 +3,10 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
@@ -18,8 +14,8 @@ import lombok.Data;
 @Table(name = "upload_errors")
 public class UploadErrors {
 	@Id
-	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
-	@Column(name = "upload_error_id", columnDefinition = "uuid", updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "upload_error_id")
 	private UUID id;
 
 	@ManyToOne
@@ -32,8 +28,10 @@ public class UploadErrors {
 	@Column(name = "error_message", updatable = false, nullable = false)
 	private String errorMessage;
 
-	@Column(name = "raw_data", columnDefinition = "jsonb")
+	@Column(name = "raw_data", columnDefinition = "json")
 	private String rawData;
+
 	@Column(name = "create_at")
+	@CreationTimestamp
 	private LocalDateTime createAt;
 }

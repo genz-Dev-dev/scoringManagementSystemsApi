@@ -1,5 +1,9 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +14,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserRequest {
-    private String id;
-    private String username;
+
+    @NotBlank(message = "Full name is required.")
+    @Size(min = 2 , max = 25 , message = "Full name must be between 2 and 25 characters.")
+    private String fullName;
+
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Email must be valid.")
+    @Size(min = 5 , max = 100 , message = "Email must be between 5 and 100 characters.")
     private String email;
+
+    @NotBlank(message = "Password is required.")
+    @Size(min = 5 , message = "Password at least must be 5 characters up.")
     private String password;
 }

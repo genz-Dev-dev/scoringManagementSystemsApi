@@ -11,7 +11,6 @@ services:
       - "4321:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
-
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin_container

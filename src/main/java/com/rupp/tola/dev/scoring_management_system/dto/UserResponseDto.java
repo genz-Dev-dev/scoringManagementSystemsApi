@@ -1,7 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.dto;
 
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserResponseDto {
 
-	private UUID id;
+//	private UUID id;
 	private String username;
 	private String email;
 	private boolean verified;
