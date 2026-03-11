@@ -10,7 +10,6 @@ import com.rupp.tola.dev.scoring_management_system.entity.Roles;
 import com.rupp.tola.dev.scoring_management_system.enums.RoleName;
 import com.rupp.tola.dev.scoring_management_system.enums.Status;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
-import com.rupp.tola.dev.scoring_management_system.repository.RefreshTokenRepository;
 import com.rupp.tola.dev.scoring_management_system.repository.RolesRepository;
 import com.rupp.tola.dev.scoring_management_system.service.RefreshTokenService;
 import com.rupp.tola.dev.scoring_management_system.util.Util;
