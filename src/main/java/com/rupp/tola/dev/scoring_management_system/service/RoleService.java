@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.RoleRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.RoleResponse;
-import com.rupp.tola.dev.scoring_management_system.entity.Roles;
 import com.rupp.tola.dev.scoring_management_system.enums.RoleStatus;
 
 public interface RoleService {
