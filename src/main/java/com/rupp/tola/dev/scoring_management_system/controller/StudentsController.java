@@ -32,7 +32,7 @@ public class StudentsController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(StudentsMapper.iNSTANCE.toStudentsDTO(students));
 	}
 
-// get all students
+	// get all students
 	@GetMapping
 	public ResponseEntity<List<Students>> getStudents() {
 		return ResponseEntity.ok(studentService.getStudents());

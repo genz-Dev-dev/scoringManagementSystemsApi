@@ -1,11 +1,10 @@
 package com.rupp.tola.dev.scoring_management_system.exception;
 
-import com.rupp.tola.dev.scoring_management_system.dto.response.ErrorResponse;
-import io.jsonwebtoken.JwtException;
-import org.jspecify.annotations.Nullable;
-import org.springframework.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jspecify.annotations.Nullable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.rupp.tola.dev.scoring_management_system.dto.response.ErrorResponse;
+
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -51,8 +53,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
     @Override
-    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-																			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, Object> errorResponse = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach((error) -> {
             errorResponse.put(error.getField(), error.getDefaultMessage());
@@ -83,6 +84,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
 
+
 }
 
-
+// @

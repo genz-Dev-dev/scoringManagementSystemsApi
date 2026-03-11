@@ -67,10 +67,12 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
+		<!-- To using apache-poi for export data to excel -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.2.5</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- =====H2 Database ===== -->
