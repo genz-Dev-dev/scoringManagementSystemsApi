@@ -2,6 +2,7 @@ package com.rupp.tola.dev.scoring_management_system.util;
 
 import java.util.List;
 
+import org.apache.poi.sl.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -22,7 +23,7 @@ public class ExcelFileExporter {
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-Disposition", "attachment; filename=users.xlsx");
             Workbook workbook = new XSSFWorkbook();
-            org.apache.poi.ss.usermodel.Sheet sheet = workbook.createSheet("List of Students");
+            Sheet sheet = workbook.createCellStyle();
 
       }
 

@@ -14,13 +14,11 @@ import com.rupp.tola.dev.scoring_management_system.dto.StudentsDTO;
 import com.rupp.tola.dev.scoring_management_system.entity.Students;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
 import com.rupp.tola.dev.scoring_management_system.service.StudentService;
-
-import lombok.RequiredArgsConstructor;
-
 import com.rupp.tola.dev.scoring_management_system.util.ExcelFileExporter;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 
 @RestController
@@ -51,7 +49,7 @@ public class StudentsController {
 //		return ResponseEntity.ok(studentService.getByStatus(status));
 //	}
 
-	@GetMapping("path")
+	@GetMapping("/exportStudentToExcelFile")
 	public void exportStudentsToExcelFile(HttpServletResponse response) throws IOException {
 		List<Students> listOfStudents = studentService.getStudents();
 		ExcelFileExporter.exportStudentsToExcelFile(response, listOfStudents);
