@@ -3,7 +3,6 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 import java.util.UUID;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

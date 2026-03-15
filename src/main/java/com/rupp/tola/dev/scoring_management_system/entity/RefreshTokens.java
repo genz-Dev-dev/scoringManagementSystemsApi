@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "refresh_tokens")
