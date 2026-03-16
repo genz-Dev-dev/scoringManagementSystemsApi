@@ -7,7 +7,6 @@ import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,11 +21,11 @@ public class ExcelController {
     public ExcelService excelService;
     public StudentService studentService;
 
-    @GetMapping(path = "/exports")
-    public ResponseEntity<?> exportStudentsToExcelFile(HttpServletResponse response) throws IOException {
-        List<Students> listOfStudents = studentService.getStudents();
-        return ResponseEntity.ok(listOfStudents);
-    }
+//    @GetMapping(path = "/exports")
+//    public ResponseEntity<?> exportStudentsToExcelFile(HttpServletResponse response) throws IOException {
+//        List<Students> listOfStudents = studentService.getStudents();
+//        return ResponseEntity.ok(listOfStudents);
+//    }
 
     @PostMapping(path = "/uploads")
     public ResponseEntity<?> uploadStudentToExcel(@RequestParam("files") MultipartFile files) {
