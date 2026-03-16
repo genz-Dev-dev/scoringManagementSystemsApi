@@ -9,9 +9,6 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import org.springframework.data.domain.Page;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Students;
-
-
 
 public interface StudentService {
 
@@ -23,6 +20,6 @@ public interface StudentService {
 
 	List<StudentResponse> getStudents();
 
-	Page<Students> getByStatusPagination(Map<String, String> param, Boolean status);
+	Page<StudentResponse> getByStatusPagination(Map<String, String> param, Boolean status);
 
 }

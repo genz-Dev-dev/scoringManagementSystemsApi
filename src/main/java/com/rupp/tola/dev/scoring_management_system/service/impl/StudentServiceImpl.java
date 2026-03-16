@@ -1,6 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
-import java.lang.module.ResolutionException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -51,11 +50,11 @@ public class StudentServiceImpl implements StudentService {
 	public List<StudentResponse> getStudents() {
 		return studentsRepository.findAll().stream()
 				.map(studentsMapper::toResponse)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	@Override
-	public Page<Students> getByStatusPagination(Map<String, String> param, Boolean status) {
+	public Page<StudentResponse> getByStatusPagination(Map<String, String> param, Boolean status) {
 		
 		return null;
 	}

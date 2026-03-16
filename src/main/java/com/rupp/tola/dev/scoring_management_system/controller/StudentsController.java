@@ -3,6 +3,9 @@ package com.rupp.tola.dev.scoring_management_system.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,18 +33,17 @@ public class StudentsController {
 
 	private final StudentService studentService;
 
-//	@PostMapping
-//	public ResponseEntity<StudentsDTO> createStudents(@RequestBody StudentsDTO studentsDTO) {
-//		Students students = StudentsMapper.iNSTANCE.toStudents(studentsDTO);
-//		students = studentService.createStudents(students);
-//
-//		return ResponseEntity.status(HttpStatus.CREATED).body(StudentsMapper.iNSTANCE.toStudentsDTO(students));
-//	}
+	@PostMapping
+	public ResponseEntity<StudentResponse> createStudents(@Valid  @RequestBody StudentRequest request) {
+		StudentResponse response = studentService.createStudents(request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
 
 	// get all students
 	@GetMapping
-	public ResponseEntity<List<Students>> getStudents() {
-		return ResponseEntity.ok(studentService.getStudents());
+	public ResponseEntity<List<StudentResponse>> getAllStudents() {
+		List<StudentResponse> students = studentService.getStudents();
+		return ResponseEntity.ok(students);
 	}
 
 	// get all student 

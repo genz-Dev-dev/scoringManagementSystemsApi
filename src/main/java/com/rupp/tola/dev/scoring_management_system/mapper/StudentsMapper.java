@@ -1,9 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.mapper;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
+import org.apache.catalina.LifecycleState;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -22,6 +24,8 @@ public interface StudentsMapper {
 
 	@Mapping(target = "classId", source = "classes.id")
 	StudentResponse toResponse(Students students);
+
+	List<StudentResponse> toResponseList(List<Students> students);
 
 	// THIS METHOD SOLVES YOUR ERROR
 	default Classes map(UUID value) {
