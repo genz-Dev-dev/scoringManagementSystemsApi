@@ -2,9 +2,9 @@ package com.rupp.tola.dev.scoring_management_system;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.rupp.tola.dev.scoring_management_system.repository.UsersRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import com.rupp.tola.dev.scoring_management_system.repository.UsersRepository;
 @SpringBootTest(properties = "app.cors.allowed-origins=http://localhost:4200")
 
 class ScoringManagementSystemApplicationTests {
