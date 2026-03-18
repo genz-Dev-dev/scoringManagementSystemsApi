@@ -22,7 +22,7 @@ public interface StudentsMapper {
 	@Mapping(target = "classes", source = "classId")
 	Students toEntity(StudentRequest request);
 
-	@Mapping(target = "classId", source = "classes.id")
+	@Mapping(target = "classesId", source = "classes.id")
 	StudentResponse toResponse(Students students);
 
 	List<StudentResponse> toResponseList(List<Students> students);
