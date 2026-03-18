@@ -60,8 +60,11 @@ public class UserController {
 
     @Operation(summary = "Retrieve all user with verify email.")
     @GetMapping
-    public ResponseEntity<MultipleResponse<UserResponse>> findAll(@RequestParam(defaultValue = "1") int number ,@RequestParam(defaultValue = "10") int size ,
-                                                                      @RequestParam(defaultValue = "ASC") String sort ,@RequestParam(defaultValue = "id") String property) {
+    public ResponseEntity<MultipleResponse<UserResponse>> findAll(
+            @RequestParam(defaultValue = "1") int number ,@RequestParam(defaultValue = "10") int size ,
+            @RequestParam(defaultValue = "ASC") String sort ,
+            @RequestParam(defaultValue = "id") String property
+    ) {
         Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Pageable pageable = PageRequest.of(number - 1 , size , Sort.by(direction , property.equalsIgnoreCase("id") ? "id" : property));
         Page<UserResponse> responses = authService.findAll(pageable);

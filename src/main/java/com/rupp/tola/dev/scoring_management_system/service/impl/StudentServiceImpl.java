@@ -9,6 +9,9 @@ import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundExc
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.rupp.tola.dev.scoring_management_system.entity.Students;
@@ -41,24 +44,32 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
+	public Page<StudentResponse> getAll(Map<String, String> param) {
+		int number = Integer.parseInt(param.getOrDefault("number", "0"));
+		int size = Integer.parseInt(param.getOrDefault("size", "15"));
+		String sort = param.getOrDefault("sort", "ASC");
+		String property = param.getOrDefault("property", "id");
+
+		Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Pageable pageable = PageRequest.of(number, size, Sort.by(direction, property));
+
+		Page<Students> students = studentsRepository.findAll(pageable);
+		log.info("Students found with all {}", students.getContent());
+
+		return students.map(studentsMapper::toResponse);
+	}
+
+	@Override
 	public Optional<StudentResponse> findByClassesId(UUID id) {
 		return studentsRepository.findByClassesId(id)
 				.map(studentsMapper::toResponse);
 	}
 
 	@Override
-	public List<StudentResponse> getAll() {
-		return studentsRepository.findAll().stream()
-				.map(studentsMapper::toResponse)
-				.toList();
-	}
-
-	@Override
-	public List<StudentResponse> findByStatus(boolean status) {
-		List<Students> students = studentsRepository.findByStatus(status);
-		return students.stream()
-				.map(studentsMapper::toResponse)
-				.toList();
+	public Page<StudentResponse> findByStatus(boolean status, Pageable pageable) {
+		log.info("findByStatus: {}, pageable: {}", status, pageable);
+		return studentsRepository.findByStatus(status, pageable)
+				.map(studentsMapper::toResponse);
 	}
 
 	@Override
@@ -66,7 +77,13 @@ public class StudentServiceImpl implements StudentService {
 		Students students = studentsRepository.findById(uuid)
 				.orElseThrow(() -> new NoSuchElementException("Student not found with ID: " + uuid));
 
-		return null;
+		students.setFirstname(request.getFirstName());
+		students.setLastName(request.getLastName());
+		students.setClasses(studentsMapper.map(request.getClassesId()));
+
+		Students updated = studentsRepository.save(students);
+		log.info("Student Update with ID: {}", uuid);
+        return studentsMapper.toResponse(updated);
 	}
 
 	@Override
@@ -79,8 +96,15 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Page<StudentResponse> getByStatusPagination(Map<String, String> param, Boolean status) {
-
-		return null;
+		int number = Integer.parseInt(param.getOrDefault("number", "0"));
+		int size = Integer.parseInt(param.getOrDefault("size", "15"));
+		String sort = param.getOrDefault("sort", "ASC");
+		String property = param.getOrDefault("property", "id");
+		Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Pageable pageable = PageRequest.of(number, size, Sort.by(direction, property));
+		return studentsRepository.findByStatus(status, pageable)
+				.map(studentsMapper::toResponse);
 	}
 
 }
+

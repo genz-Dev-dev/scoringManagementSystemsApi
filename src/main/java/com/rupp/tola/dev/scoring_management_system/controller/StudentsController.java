@@ -1,23 +1,30 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.dto.StudentsDTO;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.MultipleResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.rupp.tola.dev.scoring_management_system.service.StudentService;
 
 import lombok.RequiredArgsConstructor;
 
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/students")
@@ -26,23 +33,49 @@ public class StudentsController {
 	private final StudentService studentService;
 
 	@PostMapping
-	public ResponseEntity<StudentResponse> createStudents(@Valid  @RequestBody StudentRequest request) {
+	public ResponseEntity<StudentResponse> create(@Valid  @RequestBody StudentRequest request) {
 		StudentResponse response = studentService.create(request);
+		log.info("create: {}", request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	// get all students
 	@GetMapping
-	public ResponseEntity<List<StudentResponse>> getAllStudents() {
-		List<StudentResponse> students = studentService.getAll();
-		return ResponseEntity.ok(students);
+	public ResponseEntity<MultipleResponse<StudentResponse>> findAll(
+			@RequestParam Map<String, String> param
+	) {
+		Page<StudentResponse> responses = studentService.getAll(param);
+		return ResponseEntity.ok().body(MultipleResponse.success("Retrieve all students with pagination.", responses));
 	}
 
-	// get all student 
-	//	@GetMapping("/getByStatus")
-	//	public ResponseEntity<List<Students>> getByStatus(@RequestParam(defaultValue = "false") Boolean status,
-	//			Map<String, String> param) {
-	//		return ResponseEntity.ok(studentService.getByStatus(status));
-	//	}
+	@GetMapping(path = "/{uuid}")
+	public ResponseEntity<StudentResponse> getByUuid(@PathVariable UUID uuid) {
+		log.info("getByUuid: {}", uuid);
+		return null;
+	}
+
+	@PutMapping(path = "/{uuid}")
+	public ResponseEntity<StudentResponse> updateByUuid(
+			@PathVariable UUID uuid,
+			@RequestBody StudentsDTO studentsDTO
+			) {
+		log.info("UpdateByUuid: uuid{}, studentsDto: {}",uuid, studentsDTO);
+		return null;
+	}
+
+	@DeleteMapping(path = "/{uuid}")
+	public ResponseEntity<SingleResponse<Void>> deleteByUuid(@PathVariable UUID uuid) {
+		studentService.delete(uuid);
+		log.info("DeleteByUuid: {}", uuid);
+		return ResponseEntity.ok().body(SingleResponse.success("Delete student successfully.", null));
+	}
+
+	@GetMapping("/getByStatus")
+	public ResponseEntity<MultipleResponse<StudentResponse>> getByStatus(
+			@RequestParam(defaultValue = "false") Boolean status,
+			@RequestParam Map<String, String> param
+	) {
+		Page<StudentResponse> responses = studentService.getByStatusPagination(param, status);
+		return ResponseEntity.ok().body(MultipleResponse.success("Retrieve students by status.", responses));
+	}
 	
 }

@@ -24,7 +24,7 @@ public class StudentRequest {
     @Size(min = 10, max = 30, message = "Last name must be between 10 - 30 characters.")
     private String lastName;
 
-    private UUID classes;
+    private UUID classesId;
 
     private boolean status;
 }

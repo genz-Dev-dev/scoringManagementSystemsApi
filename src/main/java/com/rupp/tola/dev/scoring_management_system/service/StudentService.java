@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface StudentService {
@@ -16,11 +17,11 @@ public interface StudentService {
 
 	StudentResponse findById(UUID uuid);
 
+	Page<StudentResponse> getAll(Map<String, String> param);
+
 	Optional<StudentResponse> findByClassesId(UUID id);
 
-	List<StudentResponse> getAll();
-
-	List<StudentResponse> findByStatus(boolean status);
+	Page<StudentResponse> findByStatus(boolean status, Pageable pageable);
 
 	StudentResponse update(UUID uuid, StudentRequest request);
 
