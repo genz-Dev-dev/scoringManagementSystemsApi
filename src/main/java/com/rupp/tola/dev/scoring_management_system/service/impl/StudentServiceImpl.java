@@ -44,7 +44,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public StudentResponse findById(UUID uuid) {
+	public StudentResponse getById(UUID uuid) {
 		Students students = studentsRepository.findById(uuid)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found with id : " + uuid));
 		log.info("Student found with id {}", students.getId());

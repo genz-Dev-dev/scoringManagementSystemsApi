@@ -15,7 +15,7 @@ public interface StudentService {
 
 	StudentResponse create(StudentRequest request);
 
-	StudentResponse findById(UUID uuid);
+	StudentResponse getById(UUID uuid);
 
 	Page<StudentResponse> getAll(Map<String, String> param);
 

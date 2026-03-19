@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -22,19 +23,23 @@ public class Students {
 	@Column(name = "student_id")
 	private UUID id;
 
-	@NotNull
+	@NotBlank
 	@Column(name = "student_code", updatable = false, nullable = false)
 	private String studentCode;
 
+	@NotBlank
 	@Column(name = "kh_first_name", updatable = false, nullable = false)
 	private String khFirstName;
 
+	@NotBlank
 	@Column(name = "kh_lastname", updatable = false, nullable = false)
 	private String khLastName;
 
+	@NotBlank
 	@Column(name = "en_first_name", updatable = false, nullable = false)
 	private String enFirstname;
 
+	@NotBlank
 	@Column(name = "en_last_name", updatable = false, nullable = false)
 	private String enlastName;
 

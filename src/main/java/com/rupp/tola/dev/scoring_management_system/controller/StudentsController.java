@@ -9,6 +9,8 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
+import com.rupp.tola.dev.scoring_management_system.entity.Students;
+import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class StudentsController {
 
 	private final StudentService studentService;
+	private final StudentsMapper studentsMapper;
 
 	@PostMapping
 	public ResponseEntity<StudentResponse> create(@Valid  @RequestBody StudentRequest request) {
@@ -49,8 +52,9 @@ public class StudentsController {
 
 	@GetMapping(path = "/{uuid}")
 	public ResponseEntity<StudentResponse> getByUuid(@PathVariable UUID uuid) {
+		StudentResponse studentsResponse = studentService.getById(uuid);
 		log.info("getByUuid: {}", uuid);
-		return null;
+		return ResponseEntity.ok(studentsResponse);
 	}
 
 	@PutMapping(path = "/{uuid}")
