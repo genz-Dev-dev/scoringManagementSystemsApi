@@ -12,7 +12,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Subjects {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "subject_id")

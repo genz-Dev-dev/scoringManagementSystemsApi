@@ -67,17 +67,14 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
+		<!-- To using apache-poi for export data to excel -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.2.5</version>
+			<scope>compile</scope>
 		</dependency>
-		<!-- ===== OAuth2 ===== -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security-oauth2-client</artifactId>
-			<version>4.0.3</version>
-		</dependency>
+
 		<!-- =====H2 Database ===== -->
 		<dependency>
 			<groupId>com.h2database</groupId>

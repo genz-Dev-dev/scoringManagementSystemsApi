@@ -5,18 +5,28 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Students;
 
 public interface StudentService {
-	Students createStudents(Students students);
 
-	Students getById(UUID id);
+	StudentResponse create(StudentRequest request);
 
-	Optional<Students> findByClassesId(UUID id);
+	StudentResponse getById(UUID uuid);
 
-	List<Students> getStudents();
+	Page<StudentResponse> getAll(Map<String, String> param);
 
-	Page<Students> getByStatusPagination(Map<String, String> param, Boolean status);
+	Optional<StudentResponse> findByClassesId(UUID id);
+
+	Page<StudentResponse> findByStatus(boolean status, Pageable pageable);
+
+	StudentResponse update(UUID uuid, StudentRequest request);
+
+	void delete(UUID uuid);
+
+	Page<StudentResponse> getByStatusPagination(Map<String, String> param, Boolean status);
+
 }
