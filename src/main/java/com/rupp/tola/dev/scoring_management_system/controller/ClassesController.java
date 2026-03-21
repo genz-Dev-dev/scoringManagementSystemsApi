@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/req/class")
+@RequestMapping("/classes")
 public class ClassesController {
 
 	private final ClassesService classesService;

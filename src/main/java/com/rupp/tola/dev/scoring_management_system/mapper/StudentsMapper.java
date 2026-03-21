@@ -5,12 +5,10 @@ import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
-import org.apache.catalina.LifecycleState;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.rupp.tola.dev.scoring_management_system.dto.StudentsDTO;
 import com.rupp.tola.dev.scoring_management_system.entity.Classes;
 import com.rupp.tola.dev.scoring_management_system.entity.Students;
 import com.rupp.tola.dev.scoring_management_system.service.StudentService;

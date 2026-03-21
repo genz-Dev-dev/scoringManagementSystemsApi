@@ -15,3 +15,4 @@ spring:
 jwt:
     secret: test-secret-key
     expiration-ms: 86400000 # Changed from 'expiration' to 'expiration-ms'
+    expiration-refresh: 604800000 # 7 day

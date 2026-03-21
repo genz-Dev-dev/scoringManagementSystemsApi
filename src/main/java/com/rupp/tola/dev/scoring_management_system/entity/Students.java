@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,31 +21,25 @@ public class Students {
 	@Column(name = "student_id")
 	private UUID id;
 
-	@NotBlank
 	@Column(name = "student_code", updatable = false, nullable = false)
 	private String studentCode;
 
-	@NotBlank
 	@Column(name = "kh_first_name", updatable = false, nullable = false)
 	private String khFirstName;
 
-	@NotBlank
 	@Column(name = "kh_lastname", updatable = false, nullable = false)
 	private String khLastName;
 
-	@NotBlank
 	@Column(name = "en_first_name", updatable = false, nullable = false)
-	private String enFirstname;
+	private String enFirstName;
 
-	@NotBlank
 	@Column(name = "en_last_name", updatable = false, nullable = false)
-	private String enlastName;
+	private String enLastName;
 
 	@ManyToOne
 	@JoinColumn(name = "class_id")
 	private Classes classes;
 
-	@NotNull
 	@Pattern(regexp = "[MF]", message = "Gender must be M or F")
 	@Column(name = "M/F", length = 1, nullable = false)
 	private String gender;

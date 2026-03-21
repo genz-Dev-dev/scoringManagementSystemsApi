@@ -90,6 +90,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
 	}
 
+	@ExceptionHandler(ExcelException.class)
+	public ResponseEntity<ErrorResponse<?>> handleExcelException(ExcelException ex) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.error(ex.getLocalizedMessage()));
+	}
+
 }
 
 

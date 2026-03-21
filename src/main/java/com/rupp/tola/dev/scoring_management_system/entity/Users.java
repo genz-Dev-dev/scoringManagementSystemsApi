@@ -1,10 +1,9 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
-//
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,6 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Roles;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

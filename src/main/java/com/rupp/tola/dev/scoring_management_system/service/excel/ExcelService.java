@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public interface ExcelService {
 
     Map<Integer, String> uploadToExcelFile(MultipartFile file);

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.StudentsDTO;
+import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +26,14 @@ import lombok.RequiredArgsConstructor;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/students")
+@RequestMapping("/students")
 public class StudentsController {
 
 	private final StudentService studentService;
 	private final StudentsMapper studentsMapper;
 
 	@PostMapping
-	public ResponseEntity<StudentResponse> create(@Valid  @RequestBody StudentRequest request) {
+	public ResponseEntity<StudentResponse> create(@Valid @RequestBody StudentRequest request) {
 		StudentResponse response = studentService.create(request);
 		log.info("create: {}", request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -75,6 +77,12 @@ public class StudentsController {
 	) {
 		Page<StudentResponse> responses = studentService.getByStatusPagination(param, status);
 		return ResponseEntity.ok().body(MultipleResponse.success("Retrieve students by status.", responses));
+	}
+
+	@PostMapping(path = "/import-student", consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SingleResponse<?>> importStudent(@ModelAttribute ImportStudentRequest request) {
+		studentService.importStudent(request);
+		return ResponseEntity.ok().build();
 	}
 	
 }
