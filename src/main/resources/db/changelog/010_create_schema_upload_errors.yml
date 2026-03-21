@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: upload_errors
+                    tableName: tbl_uplaod_erorr
                     columns:
                         - column:
                               name: upload_error_id
@@ -33,8 +33,8 @@ databaseChangeLog:
                               name: create_at
                               type: timestamp
               - addForeignKeyConstraint:
-                    baseTableName: upload_errors
+                    baseTableName: tbl_uplaod_erorr
                     baseColumnNames: upload_batch_id
-                    referencedTableName: upload_batches
+                    referencedTableName: tbl_uplaod_batches
                     referencedColumnNames: upload_batch_id
                     constraintName: fk_upload_errors_batches

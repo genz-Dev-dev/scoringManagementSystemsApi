@@ -53,7 +53,7 @@ public class User implements UserDetails {
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
-	@OneToOne(mappedBy = "users" , cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
 	private RefreshToken refreshToken;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -64,13 +64,8 @@ public class User implements UserDetails {
 	@NullMarked
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<>();
-
 		authorities.add(new SimpleGrantedAuthority(role.getName()));
-
-		role.getPermissions().forEach(permission -> {
-			authorities.add(new SimpleGrantedAuthority(permission.getName()));
-		});
-
+		role.getPermissions().forEach(permission -> authorities.add(new SimpleGrantedAuthority(permission.getName())));
         return authorities;
 	}
 

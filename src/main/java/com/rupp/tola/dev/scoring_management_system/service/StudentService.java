@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public interface StudentService {
 
 	Page<StudentResponse> getAll(Map<String, String> param);
 
-	Optional<StudentResponse> findByClassesId(UUID id);
+	Optional<StudentResponse> findByClazzId(UUID id);
 
 	Page<StudentResponse> findByStatus(boolean status, Pageable pageable);
 
@@ -29,6 +30,6 @@ public interface StudentService {
 
 	Page<StudentResponse> getByStatusPagination(Map<String, String> param, Boolean status);
 
-	StudentResponse importStudent(ImportStudentRequest request);
+	List<StudentResponse> importStudent(ImportStudentRequest request);
 
 }

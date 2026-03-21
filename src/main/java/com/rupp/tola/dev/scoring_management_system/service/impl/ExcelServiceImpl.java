@@ -4,6 +4,7 @@ import com.rupp.tola.dev.scoring_management_system.entity.Address;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.exception.ExcelException;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
+import com.rupp.tola.dev.scoring_management_system.util.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +36,8 @@ public class ExcelServiceImpl implements ExcelService {
 
                 for (int i = 1; i <= 14; i++) {
                     Cell cell = row.getCell(i);
-                    String cellValue = getCellValueAsString(cell);
-                    
+                    String cellValue = Util.getCellValueAsString(cell);
+                    if(cellValue.isBlank()) continue;
                     switch (i) {
                         case 1:
                             student.setKhFirstName(cellValue);
@@ -55,13 +55,7 @@ public class ExcelServiceImpl implements ExcelService {
                             student.setGender(cellValue);
                             break;
                         case 6:
-                            if (cellValue != null && !cellValue.isEmpty()) {
-                                try {
-                                    student.setDateOfBirth(LocalDate.parse(cellValue));
-                                } catch (Exception e) {
-                                    log.warn("Failed to parse date: {}", cellValue);
-                                }
-                            }
+                            student.setDateOfBirth(Util.convertToLocalDate(cellValue));
                             break;
                         case 7:
                             student.setEmail(cellValue);
@@ -92,22 +86,11 @@ public class ExcelServiceImpl implements ExcelService {
                     }
                 }
                 
-            
-                String khFirstName = student.getKhFirstName() != null ? student.getKhFirstName().trim() : "";
-                String khLastName = student.getKhLastName() != null ? student.getKhLastName().trim() : "";
-                String enFirstName = student.getEnFirstName() != null ? student.getEnFirstName().trim() : "";
-                String enLastName = student.getEnLastName() != null ? student.getEnLastName().trim() : "";
-                
-
-                if ((khFirstName.isEmpty() && khLastName.isEmpty()) && (enFirstName.isEmpty() && enLastName.isEmpty())) {
-                    log.warn("Skipping row {} - all name fields are empty", row.getRowNum());
-                    continue;
-                }
-                
                 student.setAddress(address);
                 students.add(student);
             }
             log.info("Export students successfully: {}" , students.size());
+            workbook.close();
             return students;
         }catch (IOException ex) {
             log.error("Could not open Excel file.", ex);
@@ -116,40 +99,6 @@ public class ExcelServiceImpl implements ExcelService {
         catch (ExcelException ex) {
             log.error("Error while reading Excel file.", ex);
             throw new ExcelException("Error while reading Excel file.");
-        }
-    }
-
-    private String getCellValueAsString(Cell cell) {
-        if (cell == null) {
-            return "";
-        }
-        
-        switch (cell.getCellType()) {
-            case STRING:
-                return cell.getStringCellValue();
-            case NUMERIC:
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    return cell.getLocalDateTimeCellValue().toLocalDate().toString();
-                } else {
-                    double numericValue = cell.getNumericCellValue();
-                    if (numericValue == (long) numericValue) {
-                        return String.format("%d", (long) numericValue);
-                    } else {
-                        return String.valueOf(numericValue);
-                    }
-                }
-            case BOOLEAN:
-                return String.valueOf(cell.getBooleanCellValue());
-            case FORMULA:
-                try {
-                     return cell.getStringCellValue();
-                } catch (IllegalStateException e) {
-                     return String.valueOf(cell.getNumericCellValue());
-                }
-            case BLANK:
-                return "";
-            default:
-                return "";
         }
     }
 }

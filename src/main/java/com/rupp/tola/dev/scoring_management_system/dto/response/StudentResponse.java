@@ -40,4 +40,8 @@ public class StudentResponse {
     private Address address;
 
     private boolean status;
+
+    private LocalDate creationAt;
+
+    private LocalDate updatedAt;
 }

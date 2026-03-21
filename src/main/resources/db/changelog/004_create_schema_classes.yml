@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: classes
+                    tableName: tbl_class
                     columns:
                         - column:
                               name: class_id

@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: permissions
+                    tableName: tbl_permission
                     columns:
                         - column:
                               name: permission_id

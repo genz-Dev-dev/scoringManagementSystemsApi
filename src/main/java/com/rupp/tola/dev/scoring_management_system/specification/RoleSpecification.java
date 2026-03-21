@@ -21,7 +21,6 @@ public class RoleSpecification implements Specification<Role> {
 	@Override
 	public Predicate toPredicate(@NonNull Root<Role> root, @NonNull CriteriaQuery<?> query,
                                  @NonNull CriteriaBuilder criteriaBuilder) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

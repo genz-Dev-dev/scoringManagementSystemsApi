@@ -6,13 +6,10 @@ import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "tbl_student",
-		indexes = {
-		@Index(name = "idx_student_code", columnList = "student_code", unique = true)
-})
+@Table(name = "tbl_student")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -59,7 +56,7 @@ public class Student {
 
 	private Boolean status;
 
-	@CreatedDate
+	@CreationTimestamp
 	@Column(updatable = false)
 	private LocalDateTime createdAt;
 

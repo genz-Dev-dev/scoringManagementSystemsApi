@@ -75,8 +75,8 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public Optional<StudentResponse> findByClassesId(UUID id) {
-		return studentsRepository.findByClassesId(id)
+	public Optional<StudentResponse> findByClazzId(UUID id) {
+		return studentsRepository.findByClazzId(id)
 				.map(studentsMapper::toResponse);
 	}
 
@@ -130,7 +130,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public StudentResponse importStudent(ImportStudentRequest request) {
+	public List<StudentResponse> importStudent(ImportStudentRequest request) {
 		if(request.getFile() != null && request.getFile().isEmpty()) {
 			throw new ResourceNotFoundException("Student file not found");
 		}
@@ -159,7 +159,11 @@ public class StudentServiceImpl implements StudentService {
 		List<Student> savedStudents = studentsRepository.saveAll(studentList);
 		log.info("Imported {} students successfully", savedStudents.size());
 
-		return null;
+
+		//create response as list mapper later
+		return studentList.stream()
+				.map(studentsMapper::toResponse)
+				.toList();
 	}
 }
 

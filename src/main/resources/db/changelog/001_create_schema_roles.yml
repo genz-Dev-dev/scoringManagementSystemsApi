@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: roles
+                    tableName: tbl_role
                     columns:
                         - column:
                               name: role_id

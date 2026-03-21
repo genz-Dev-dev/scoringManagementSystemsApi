@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: subjects
+                    tableName: tbl_subject
                     columns:
                         - column:
                               name: subject_id
