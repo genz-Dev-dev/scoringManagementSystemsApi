@@ -5,16 +5,18 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "students", indexes = { @Index(name = "idx_student_code", columnList = "student_code", unique = true) })
-public class Students {
+@Table(name = "tbl_student",
+		indexes = {
+		@Index(name = "idx_student_code", columnList = "student_code", unique = true)
+})
+@Getter
+@Setter
+@NoArgsConstructor
+public class Student {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -38,7 +40,7 @@ public class Students {
 
 	@ManyToOne
 	@JoinColumn(name = "class_id")
-	private Classes classes;
+	private Class clazz;
 
 	@Column(name = "gender", length = 1, nullable = false)
 	private String gender;

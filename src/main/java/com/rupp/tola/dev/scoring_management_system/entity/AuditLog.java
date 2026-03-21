@@ -13,8 +13,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "audit_logs")
-public class AuditLogs {
+@Table(name = "tbl_audit_log")
+public class AuditLog {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

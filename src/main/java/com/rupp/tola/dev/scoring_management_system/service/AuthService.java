@@ -5,7 +5,7 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPasswordRequ
 import com.rupp.tola.dev.scoring_management_system.dto.request.UserRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.VerifyOtpRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
-import com.rupp.tola.dev.scoring_management_system.entity.Users;
+import com.rupp.tola.dev.scoring_management_system.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -71,12 +71,12 @@ public interface AuthService {
 	 * This method use for set foreign into weak entity set
 	 * return Users Object but be care full make sure user is verfied
 	 */
-	Users getUser(UUID uuid);
+	User getUser(UUID uuid);
 
 
 	/**
 	 * This method use to find user has been authentication. For retrieve foreign key
 	 * @return User object
 	 */
-	Users getUserAuthenticated();
+	User getUserAuthenticated();
 }

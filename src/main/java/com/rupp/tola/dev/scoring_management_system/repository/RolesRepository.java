@@ -8,20 +8,20 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Roles;
+import com.rupp.tola.dev.scoring_management_system.entity.Role;
 
 @Repository
-public interface RolesRepository extends JpaRepository<Roles, UUID> {
+public interface RolesRepository extends JpaRepository<Role, UUID> {
 
-	Optional<Roles> findByName(String name);
+	Optional<Role> findByName(String name);
 
 	boolean existsByName(String name);
 
-	List<Roles> findByStatus(String status);
+	List<Role> findByStatus(String status);
 
-	Optional<Roles> findByNameAndStatus(String name, String name1);
+	Optional<Role> findByNameAndStatus(String name, String name1);
 
 	boolean existsByNameAndIdNot(String roleName, UUID uuid);
 
-	Set<Roles> findByIdIn(Set<UUID> uuids);
+	Set<Role> findByIdIn(Set<UUID> uuids);
 }

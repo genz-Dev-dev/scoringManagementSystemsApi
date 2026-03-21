@@ -14,12 +14,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name = "users")
+@Table(name = "tbl_user")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class Users implements UserDetails {
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -55,20 +54,20 @@ public class Users implements UserDetails {
 	private LocalDateTime createdAt;
 
 	@OneToOne(mappedBy = "users" , cascade = CascadeType.ALL)
-	private RefreshTokens refreshTokens;
+	private RefreshToken refreshToken;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id" , referencedColumnName = "role_id")
-	private Roles roles;
+	private Role role;
 
 	@Override
 	@NullMarked
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<>();
 
-		authorities.add(new SimpleGrantedAuthority(roles.getName()));
+		authorities.add(new SimpleGrantedAuthority(role.getName()));
 
-		roles.getPermissions().forEach(permission -> {
+		role.getPermissions().forEach(permission -> {
 			authorities.add(new SimpleGrantedAuthority(permission.getName()));
 		});
 

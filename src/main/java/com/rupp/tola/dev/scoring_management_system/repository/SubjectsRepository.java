@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Subjects;
+import com.rupp.tola.dev.scoring_management_system.entity.Subject;
 @Repository
-public interface SubjectsRepository extends JpaRepository<Subjects, UUID> {
+public interface SubjectsRepository extends JpaRepository<Subject, UUID> {
 
 }

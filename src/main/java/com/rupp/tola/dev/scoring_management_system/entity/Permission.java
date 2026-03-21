@@ -1,7 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,12 +11,11 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "permissions")
+@Table(name = "tbl_permission")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Permissions {
+public class Permission {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -38,6 +36,6 @@ public class Permissions {
 	private LocalDate createdAt;
 
 	@ManyToMany(mappedBy = "permissions" , fetch = FetchType.LAZY , cascade = {CascadeType.MERGE , CascadeType.PERSIST})
-	private Set<Roles> roles;
+	private Set<Role> roles;
 
 }

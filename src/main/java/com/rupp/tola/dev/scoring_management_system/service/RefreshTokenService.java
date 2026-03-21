@@ -1,11 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.service;
 
-import com.rupp.tola.dev.scoring_management_system.entity.RefreshTokens;
+import com.rupp.tola.dev.scoring_management_system.entity.RefreshToken;
 
 import java.util.Optional;
 
 public interface RefreshTokenService {
-    RefreshTokens create();
-    Optional<RefreshTokens> findByToken(String refresh);
-    boolean verify(RefreshTokens refreshTokens);
+    RefreshToken create();
+    Optional<RefreshToken> findByToken(String refresh);
+    boolean verify(RefreshToken refreshToken);
 }

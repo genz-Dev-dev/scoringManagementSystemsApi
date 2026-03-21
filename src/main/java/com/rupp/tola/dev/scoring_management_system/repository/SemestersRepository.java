@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Semesters;
+import com.rupp.tola.dev.scoring_management_system.entity.Semester;
 
 @Repository
-public interface SemestersRepository extends JpaRepository<Semesters, UUID> {
+public interface SemestersRepository extends JpaRepository<Semester, UUID> {
 
 }

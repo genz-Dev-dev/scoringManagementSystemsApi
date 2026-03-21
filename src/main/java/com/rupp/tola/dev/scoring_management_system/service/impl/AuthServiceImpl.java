@@ -5,8 +5,9 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPasswordRequ
 import com.rupp.tola.dev.scoring_management_system.dto.request.UserRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.VerifyOtpRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
-import com.rupp.tola.dev.scoring_management_system.entity.RefreshTokens;
-import com.rupp.tola.dev.scoring_management_system.entity.Roles;
+import com.rupp.tola.dev.scoring_management_system.entity.RefreshToken;
+import com.rupp.tola.dev.scoring_management_system.entity.Role;
+import com.rupp.tola.dev.scoring_management_system.entity.User;
 import com.rupp.tola.dev.scoring_management_system.enums.RoleName;
 import com.rupp.tola.dev.scoring_management_system.enums.Status;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
@@ -25,7 +26,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Users;
 import com.rupp.tola.dev.scoring_management_system.mapper.UserMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.UsersRepository;
 import com.rupp.tola.dev.scoring_management_system.service.EmailService;
@@ -66,16 +66,16 @@ public class AuthServiceImpl implements AuthService {
 						request.getEmail(),
 						request.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authToken);
-		Users users = userRepository.findByEmail(request.getEmail())
+		User user = userRepository.findByEmail(request.getEmail())
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
-		Users saved = userRepository.save(users);
+		User saved = userRepository.save(user);
 		return toResponse(saved);
 	}
 
 	@Override
 	public UserResponse verifyEmail(String token) {
 		String userEmail = jwtService.extractEmail(token);
-		Users user = userRepository.findByEmail(userEmail)
+		User user = userRepository.findByEmail(userEmail)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
 		if (jwtService.isTokenExpiration(token) && !token.equals(user.getVerificationToken())) {
 			throw new JwtException("Jwt token is Expiry or isn't correct.");
@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
 		return toResponse(user);
 	}
 
-	private UserResponse handleExistingUser(Users existingUser) {
+	private UserResponse handleExistingUser(User existingUser) {
 		if (existingUser.isVerified()) {
 			throw new IllegalStateException("User already exists and is verified");
 		}
@@ -104,30 +104,30 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private UserResponse createNewUser(UserRequest request) {
-		Users users = userMapper.toEntity(request);
-		users.setPassword(passwordEncoder.encode(request.getPassword()));
+		User user = userMapper.toEntity(request);
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-		RefreshTokens refresh = refreshTokenService.create();
-		refresh.setUsers(users);
-		users.setRefreshTokens(refresh);
-		users.setRefreshTokens(refresh);
-		String token = jwtService.generateToken(users.getEmail());
-		users.setVerificationToken(token);
-		users.setVerified(false);
+		RefreshToken refresh = refreshTokenService.create();
+		refresh.setUser(user);
+		user.setRefreshToken(refresh);
+		user.setRefreshToken(refresh);
+		String token = jwtService.generateToken(user.getEmail());
+		user.setVerificationToken(token);
+		user.setVerified(false);
 
-		Roles roles = rolesRepository.findByNameAndStatus(RoleName.ROLE_STAFF.name(), Status.ACTIVE.name())
+		Role role = rolesRepository.findByNameAndStatus(RoleName.ROLE_STAFF.name(), Status.ACTIVE.name())
 				.orElseGet(() -> {
-					Roles role = new Roles();
-					role.setName(RoleName.ROLE_STAFF.name());
-					role.setStatus(Status.ACTIVE.name());
-					role.setDescription("Default role using for new user registration.");
-					return rolesRepository.save(role);
+					Role  newRole = new Role();
+					newRole.setName(RoleName.ROLE_STAFF.name());
+					newRole.setStatus(Status.ACTIVE.name());
+					newRole.setDescription("Default role using for new user registration.");
+					return rolesRepository.save(newRole);
 				});
 
-		roles.setUsers(Set.of(users));
-		users.setRoles(roles);
-		log.info("New user created: {}", users);
-		Users saved = userRepository.save(users);
+		role.setUsers(Set.of(user));
+		user.setRole(role);
+		log.info("New user created: {}", user);
+		User saved = userRepository.save(user);
 		emailService.sendVerificationEmail(saved.getEmail(), saved.getVerificationToken());
 		return toResponse(saved);
 	}
@@ -137,13 +137,13 @@ public class AuthServiceImpl implements AuthService {
 		try {
 			String otp = Util.generateOtp();
 			emailService.sendOtpResetPassword(email, otp);
-			Users users = userRepository.findByEmail(email)
+			User user = userRepository.findByEmail(email)
 					.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-			users.setOtp(otp);
-			users.setExpiryOtp(Instant.now().plusSeconds(600));
+			user.setOtp(otp);
+			user.setExpiryOtp(Instant.now().plusSeconds(600));
 			log.info("OTP have been you email please check you box.");
-			userRepository.save(users);
-			return Map.of("email", users.getEmail(), "otp", otp);
+			userRepository.save(user);
+			return Map.of("email", user.getEmail(), "otp", otp);
 		} catch (Exception e) {
 			throw new RuntimeException("Something went wrong");
 		}
@@ -152,82 +152,82 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public Map<String, Object> verifyOtpResetPassword(String token, VerifyOtpRequest request) {
 		String userEmail = jwtService.extractEmail(token);
-		Users users = userRepository.findByEmail(userEmail)
+		User user = userRepository.findByEmail(userEmail)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
-		if (request.getOtp() == null || !request.getOtp().equals(users.getOtp())) {
+		if (request.getOtp() == null || !request.getOtp().equals(user.getOtp())) {
 			throw new RuntimeException("OTP is not matching.");
 		}
-		if (users.getExpiryOtp().isBefore(Instant.now())) {
+		if (user.getExpiryOtp().isBefore(Instant.now())) {
 			throw new RuntimeException("OTP is expired.");
 		}
-		users.setVerifiedOtp(true);
-		users.setOtp(null);
+		user.setVerifiedOtp(true);
+		user.setOtp(null);
 		log.info("OTP verified successfully.");
-		userRepository.save(users);
-		return Map.of("userEmail", users.getEmail(), "verifiedOtp", users.isVerifiedOtp());
+		userRepository.save(user);
+		return Map.of("userEmail", user.getEmail(), "verifiedOtp", user.isVerifiedOtp());
 	}
 
 	@Override
 	public UserResponse resetPassword(String token, ResetPasswordRequest request) {
 		String userEmail = jwtService.extractEmail(token);
-		Users users = userRepository.findByEmail(userEmail)
+		User user = userRepository.findByEmail(userEmail)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
 
-		if (!users.isVerifiedOtp()) {
+		if (!user.isVerifiedOtp()) {
 			throw new RuntimeException("Your OTP is not verified.");
 		}
 
-		if (users.getExpiryOtp().isBefore(Instant.now())) {
-			users.setVerifiedOtp(false);
-			users.setExpiryOtp(null);
-			userRepository.save(users);
+		if (user.getExpiryOtp().isBefore(Instant.now())) {
+			user.setVerifiedOtp(false);
+			user.setExpiryOtp(null);
+			userRepository.save(user);
 			throw new RuntimeException("Your OTP is expired you cannot change password.");
 		}
 
-		users.setVerifiedOtp(false);
-		users.setExpiryOtp(null);
-		users.setPassword(passwordEncoder.encode(request.getPassword()));
+		user.setVerifiedOtp(false);
+		user.setExpiryOtp(null);
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		log.info("Password have been reset by user email {}.", userEmail);
-		userRepository.save(users);
-		return toResponse(users);
+		userRepository.save(user);
+		return toResponse(user);
 	}
 
 	@Override
 	public void delete(UUID uuid) {
-		Users users = userRepository.findById(uuid)
+		User user = userRepository.findById(uuid)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + uuid));
 		log.info("Delete user with UUID: {}", uuid);
-		userRepository.delete(users);
+		userRepository.delete(user);
 	}
 
 	@Override
 	public Page<UserResponse> findAll(Pageable pageable) {
-		Page<Users> users = userRepository.findAll(pageable);
+		Page<User> users = userRepository.findAll(pageable);
 		return users.map(this::toResponse);
 	}
 
 	@Override
-	public Users getUser(UUID uuid) {
-		Users users = userRepository.findById(uuid)
+	public User getUser(UUID uuid) {
+		User user = userRepository.findById(uuid)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with UUID: " + uuid));
-		if (!users.isVerified()) {
+		if (!user.isVerified()) {
 			throw new RuntimeException("User isn't verified account.");
 		}
-		return users;
+		return user;
 	}
 
 	@Override
-	public Users getUserAuthenticated() {
+	public User getUserAuthenticated() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
         return userRepository.findByEmail(authentication.getName())
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with Email: " + authentication.getName()));
 	}
 
-	private UserResponse toResponse(Users users) {
-		UserResponse response = userMapper.toResponse(users);
-		response.setRefreshToken(users.getRefreshTokens().getToken());
-		response.setRole(users.getRoles().getName());
+	private UserResponse toResponse(User user) {
+		UserResponse response = userMapper.toResponse(user);
+		response.setRefreshToken(user.getRefreshToken().getToken());
+		response.setRole(user.getRole().getName());
 		return response;
 	}
 

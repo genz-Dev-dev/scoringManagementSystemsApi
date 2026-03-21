@@ -8,16 +8,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "semesters")
-public class Semesters {
+@Table(name = "tbl_semester")
+@Getter
+@Setter
+@NoArgsConstructor
+public class Semester {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

@@ -1,7 +1,7 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
 import com.rupp.tola.dev.scoring_management_system.entity.Address;
-import com.rupp.tola.dev.scoring_management_system.entity.Students;
+import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.exception.ExcelException;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,8 @@ import java.util.List;
 public class ExcelServiceImpl implements ExcelService {
 
     @Override
-    public List<Students> exportStudents(MultipartFile file) {
-        List<Students> students = new ArrayList<>();
+    public List<Student> exportStudents(MultipartFile file) {
+        List<Student> students = new ArrayList<>();
         try {
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
@@ -31,7 +31,7 @@ public class ExcelServiceImpl implements ExcelService {
                 if(row.getRowNum() == 0) {
                     continue;
                 }
-                Students student = new Students();
+                Student student = new Student();
                 Address address = new Address();
 
                 for (int i = 1; i <= 14; i++) {
@@ -60,7 +60,6 @@ public class ExcelServiceImpl implements ExcelService {
                                     student.setDateOfBirth(LocalDate.parse(cellValue));
                                 } catch (Exception e) {
                                     log.warn("Failed to parse date: {}", cellValue);
-                                    // Handle date parsing error or set to null/default
                                 }
                             }
                             break;
@@ -92,6 +91,19 @@ public class ExcelServiceImpl implements ExcelService {
                             break;
                     }
                 }
+                
+            
+                String khFirstName = student.getKhFirstName() != null ? student.getKhFirstName().trim() : "";
+                String khLastName = student.getKhLastName() != null ? student.getKhLastName().trim() : "";
+                String enFirstName = student.getEnFirstName() != null ? student.getEnFirstName().trim() : "";
+                String enLastName = student.getEnLastName() != null ? student.getEnLastName().trim() : "";
+                
+
+                if ((khFirstName.isEmpty() && khLastName.isEmpty()) && (enFirstName.isEmpty() && enLastName.isEmpty())) {
+                    log.warn("Skipping row {} - all name fields are empty", row.getRowNum());
+                    continue;
+                }
+                
                 student.setAddress(address);
                 students.add(student);
             }

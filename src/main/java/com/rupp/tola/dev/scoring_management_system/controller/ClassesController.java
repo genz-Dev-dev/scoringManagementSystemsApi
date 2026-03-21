@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rupp.tola.dev.scoring_management_system.dto.ClassDTO;
-import com.rupp.tola.dev.scoring_management_system.entity.Classes;
+import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.mapper.ClassesMapper;
 import com.rupp.tola.dev.scoring_management_system.service.ClassesService;
 
@@ -30,21 +30,21 @@ public class ClassesController {
 
 	@PostMapping
 	public ResponseEntity<ClassDTO> createClass(@RequestBody ClassDTO classDTO) {
-		Classes classes = ClassesMapper.INSTANCE.toClass(classDTO);
-		Classes saved = classesService.createClasses(classes);
+		Class aClass = ClassesMapper.INSTANCE.toClass(classDTO);
+		Class saved = classesService.createClasses(aClass);
 		return ResponseEntity.ok(ClassesMapper.INSTANCE.toClassesDto(saved)); // ← return saved object
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Classes>> getClasses(@RequestParam(defaultValue = "false") Boolean status) {
+	public ResponseEntity<List<Class>> getClasses(@RequestParam(defaultValue = "false") Boolean status) {
 		return ResponseEntity.ok(classesService.getClasses(status));
 	}
 
 	@PutMapping("{classId}")
 	public ResponseEntity<ClassDTO> updateClasses(@PathVariable("classId") UUID id,
 			@RequestBody @Valid ClassDTO classDTO) {
-		Classes classes = ClassesMapper.INSTANCE.toClass(classDTO);
-		classes = classesService.editclasses(id, classes);
-		return ResponseEntity.ok(ClassesMapper.INSTANCE.toClassesDto(classes));
+		Class aClass = ClassesMapper.INSTANCE.toClass(classDTO);
+		aClass = classesService.editclasses(id, aClass);
+		return ResponseEntity.ok(ClassesMapper.INSTANCE.toClassesDto(aClass));
 	}
 }

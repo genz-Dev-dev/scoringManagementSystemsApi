@@ -3,6 +3,9 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -13,12 +16,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
 
-@Data
 @Entity
-@Table(name = "upload_errors")
-public class UploadErrors {
+@Table(name = "tbl_uplaod_erorr")
+@Getter
+@Setter
+@NoArgsConstructor
+public class UploadError {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

@@ -18,17 +18,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "upload_batches")
+@Table(name = "tbl_uplaod_batches")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class UploadBatches {
 
 	@Id
@@ -61,5 +59,5 @@ public class UploadBatches {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id" , referencedColumnName = "user_id")
-	private Users users;
+	private User user;
 }

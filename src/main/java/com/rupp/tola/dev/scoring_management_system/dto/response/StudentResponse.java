@@ -1,14 +1,10 @@
 package com.rupp.tola.dev.scoring_management_system.dto.response;
 
 import com.rupp.tola.dev.scoring_management_system.entity.Address;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.scheduling.support.SimpleTriggerContext;
 
 import java.time.LocalDate;
 import java.util.UUID;

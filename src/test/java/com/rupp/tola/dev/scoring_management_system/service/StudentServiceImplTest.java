@@ -2,8 +2,8 @@ package com.rupp.tola.dev.scoring_management_system.service;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
-import com.rupp.tola.dev.scoring_management_system.entity.Classes;
-import com.rupp.tola.dev.scoring_management_system.entity.Students;
+import com.rupp.tola.dev.scoring_management_system.entity.Class;
+import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ClassesRepository;
 import com.rupp.tola.dev.scoring_management_system.repository.StudentsRepository;
@@ -47,21 +47,21 @@ class StudentServiceImplTest {
         MultipartFile file = mock(MultipartFile.class);
         request.setFile(file);
 
-        Students student = new Students();
-        List<Students> studentsList = Collections.singletonList(student);
+        Student student = new Student();
+        List<Student> studentList = Collections.singletonList(student);
 
         when(file.isEmpty()).thenReturn(false);
-        when(excelService.exportStudents(file)).thenReturn(studentsList);
-        when(classesRepository.findById(classId)).thenReturn(Optional.of(new Classes()));
-        when(studentsRepository.saveAll(studentsList)).thenReturn(studentsList);
-        when(studentsMapper.toResponse(any(Students.class))).thenReturn(new StudentResponse());
+        when(excelService.exportStudents(file)).thenReturn(studentList);
+        when(classesRepository.findById(classId)).thenReturn(Optional.of(new Class()));
+        when(studentsRepository.saveAll(studentList)).thenReturn(studentList);
+        when(studentsMapper.toResponse(any(Student.class))).thenReturn(new StudentResponse());
 
         // Act
         studentService.importStudent(request);
 
         // Assert
         verify(classesRepository).findById(classId);
-        verify(studentsRepository).saveAll(studentsList);
-        verify(studentsMapper).toResponse(any(Students.class));
+        verify(studentsRepository).saveAll(studentList);
+        verify(studentsMapper).toResponse(any(Student.class));
     }
 }

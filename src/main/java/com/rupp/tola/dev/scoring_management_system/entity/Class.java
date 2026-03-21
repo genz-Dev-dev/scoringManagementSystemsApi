@@ -9,13 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
 @Entity
-@Table(name = "classes")
-public class Classes {
+@Table(name = "tbl_class")
+@Getter
+@Setter
+@NoArgsConstructor
+public class Class {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

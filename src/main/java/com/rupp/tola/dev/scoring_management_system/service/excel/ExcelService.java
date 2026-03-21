@@ -1,6 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.service.excel;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Students;
+import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +13,6 @@ public interface ExcelService {
 
     Map<Integer, String> uploadToExcelFile(MultipartFile file);
 
-    void exportToExcelFile(HttpServletResponse response, List<Students> studentsList)throws IOException;
+    void exportToExcelFile(HttpServletResponse response, List<Student> studentList)throws IOException;
 
 }

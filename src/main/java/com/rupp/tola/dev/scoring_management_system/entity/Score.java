@@ -4,20 +4,18 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "scores", uniqueConstraints = {
+@Table(name = "tbl_score", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "student_id", "subject_id", "semester_id" })
 })
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Scores {
+public class Score {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -26,15 +24,15 @@ public class Scores {
 
 	@ManyToOne
 	@JoinColumn(name = "student_id")
-	private Students students;
+	private Student student;
 
 	@ManyToOne
 	@JoinColumn(name = "subject_id")
-	private Subjects subjects;
+	private Subject subject;
 
 	@ManyToOne
 	@JoinColumn(name = "semester_id")
-	private Semesters semesters;
+	private Semester semester;
 
 	@Column(name = "score")
 	private Double score;
@@ -44,7 +42,7 @@ public class Scores {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private Users users;
+	private User user;
 
 	@Column(name = "create_at", updatable = false, nullable = false)
 	private LocalDateTime create;

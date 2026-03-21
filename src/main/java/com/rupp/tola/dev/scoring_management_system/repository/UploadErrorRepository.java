@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rupp.tola.dev.scoring_management_system.entity.UploadErrors;
+import com.rupp.tola.dev.scoring_management_system.entity.UploadError;
 
 @Repository
-public interface UploadErrorRepository extends JpaRepository<UploadErrors, UUID> {
+public interface UploadErrorRepository extends JpaRepository<UploadError, UUID> {
 
 }

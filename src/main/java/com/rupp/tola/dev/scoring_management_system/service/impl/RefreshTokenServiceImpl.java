@@ -1,6 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
-import com.rupp.tola.dev.scoring_management_system.entity.RefreshTokens;
+import com.rupp.tola.dev.scoring_management_system.entity.RefreshToken;
 import com.rupp.tola.dev.scoring_management_system.repository.RefreshTokenRepository;
 import com.rupp.tola.dev.scoring_management_system.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private Long expiration;
 
     @Override
-    public RefreshTokens create() {
-        RefreshTokens refresh = new RefreshTokens();
+    public RefreshToken create() {
+        RefreshToken refresh = new RefreshToken();
         String randomRefreshToken = UUID.randomUUID().toString();
         refresh.setToken(randomRefreshToken);
         refresh.setExpiryAt(Instant.now().plusMillis(expiration));
@@ -33,15 +33,15 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public Optional<RefreshTokens> findByToken(String refresh) {
+    public Optional<RefreshToken> findByToken(String refresh) {
         return refreshTokenRepository.findByToken(refresh);
     }
 
     @Override
-    public boolean verify(RefreshTokens refreshTokens) {
-        if(refreshTokens.getExpiryAt().isBefore(Instant.now())) {
+    public boolean verify(RefreshToken refreshToken) {
+        if(refreshToken.getExpiryAt().isBefore(Instant.now())) {
             log.info("Refresh token is expiration.");
-            refreshTokenRepository.delete(refreshTokens);
+            refreshTokenRepository.delete(refreshToken);
             return false;
         }
         return true;

@@ -6,12 +6,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "subjects")
+@Table(name = "tbl_subject")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class Subjects {
+public class Subject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "subject_id")

@@ -85,7 +85,7 @@ public class AuthController {
 		return refreshTokenService.findByToken(request.getToken())
 				.map(refresh -> {
 					if(refreshTokenService.verify(refresh)) {
-						String token = jwtService.generateToken(refresh.getUsers().getEmail());
+						String token = jwtService.generateToken(refresh.getUser().getEmail());
 						return ResponseEntity.ok(SingleResponse.success("Refresh successful!", Map.of("token" , token)));
 					}
 					return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -3,9 +3,9 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 import com.rupp.tola.dev.scoring_management_system.dto.request.AssignPermissionRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.RoleRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.RoleResponse;
-import com.rupp.tola.dev.scoring_management_system.entity.Permissions;
-import com.rupp.tola.dev.scoring_management_system.entity.Roles;
-import com.rupp.tola.dev.scoring_management_system.entity.Users;
+import com.rupp.tola.dev.scoring_management_system.entity.Permission;
+import com.rupp.tola.dev.scoring_management_system.entity.Role;
+import com.rupp.tola.dev.scoring_management_system.entity.User;
 import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.RoleMapper;
@@ -40,33 +40,33 @@ public class RoleServiceImpl implements RoleService {
 			throw new DuplicateResourceException("Role name already exists");
 		}
 
-		Roles roles = roleMapper.toEntity(request);
+		Role role = roleMapper.toEntity(request);
 		String roleName = request.getName().toUpperCase();
 		if (!roleName.startsWith("ROLE_")) {
 			roleName = "ROLE_" + roleName;
 		}
 
-		roles.setName(roleName);
+		role.setName(roleName);
 		if (request.getUserIds() != null) {
-			Set<Users> users = request.getUserIds().stream()
+			Set<User> users = request.getUserIds().stream()
 					.map(userId -> {
-						Users user = authService.getUser(userId);
+						User user = authService.getUser(userId);
 						if(user != null) {
-							user.setRoles(roles);
+							user.setRole(role);
 						}
 						return user;
 					})
 					.collect(Collectors.toSet());
-			roles.setUsers(users);
+			role.setUsers(users);
 		}
-		Roles saved = rolesRepository.save(roles);
+		Role saved = rolesRepository.save(role);
 		log.info("Role created with id {}", saved.getId());
 		return toResponse(saved);
 	}
 
 	@Override
 	public RoleResponse update(UUID uuid, RoleRequest request) {
-		Roles roles = findByIdOrThrow(uuid);
+		Role role = findByIdOrThrow(uuid);
 
 		if (request.getName() != null) {
 			String roleName = request.getName().toUpperCase();
@@ -80,26 +80,26 @@ public class RoleServiceImpl implements RoleService {
 			request.setName(roleName);
 		}
 
-		roleMapper.updateFromRequest(roles, request);
+		roleMapper.updateFromRequest(role, request);
 
 		if(request.getUserIds() != null && !request.getUserIds().isEmpty()) {
-			Set<Users> users = request.getUserIds()
+			Set<User> users = request.getUserIds()
 					.stream()
 					.map(authService::getUser)
 					.collect(Collectors.toSet());
-			roles.setUsers(users);
+			role.setUsers(users);
 		}else {
-			roles.setUsers(new HashSet<>());
+			role.setUsers(new HashSet<>());
 		}
 
-		Roles saved = rolesRepository.save(roles);
+		Role saved = rolesRepository.save(role);
 		log.info("Role updated with id {}", saved.getId());
-		return toResponse(roles);
+		return toResponse(role);
 	}
 
 	@Override
 	public List<RoleResponse> findAll() {
-		List<Roles> roles = rolesRepository.findAll();
+		List<Role> roles = rolesRepository.findAll();
 		log.info("Roles found with all {}", roles);
 		return roles.stream()
 				.map(this::toResponse)
@@ -108,21 +108,21 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public RoleResponse findById(UUID uuid) {
-		Roles roles = findByIdOrThrow(uuid);
-		log.info("Role found with id {}", roles.getId());
-		return toResponse(roles);
+		Role role = findByIdOrThrow(uuid);
+		log.info("Role found with id {}", role.getId());
+		return toResponse(role);
 	}
 
 	@Override
 	public void updateStatus(UUID uuid, String status) {
-		Roles roles = findByIdOrThrow(uuid);
-		roles.setStatus(status);
-		rolesRepository.save(roles);
+		Role role = findByIdOrThrow(uuid);
+		role.setStatus(status);
+		rolesRepository.save(role);
 	}
 
 	@Override
 	public List<RoleResponse> findByActive(String status) {
-		List<Roles> roles = rolesRepository.findByStatus(status);
+		List<Role> roles = rolesRepository.findByStatus(status);
 		log.info("Roles found with status {}", roles);
 		return roles.stream()
 				.map(this::toResponse)
@@ -132,43 +132,43 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public RoleResponse addPermission(UUID roleId, AssignPermissionRequest request) {
 
-		Roles roles = findByIdOrThrow(roleId);
-		Set<Permissions> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
-		roles.getPermissions().addAll(permissions);
-		Roles saved = rolesRepository.save(roles);
+		Role role = findByIdOrThrow(roleId);
+		Set<Permission> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
+		role.getPermissions().addAll(permissions);
+		Role saved = rolesRepository.save(role);
 		log.info("Role added with id {}" , saved.getId());
 		return toResponse(saved);
 	}
 
 	@Override
 	public RoleResponse setPermission(UUID roleId, AssignPermissionRequest request) {
-		Roles roles = findByIdOrThrow(roleId);
-		Set<Permissions> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
-		roles.getPermissions().clear();
-		roles.getPermissions().addAll(permissions);
-		log.info("Role added with id {}" , roles.getId());
-		Roles saved = rolesRepository
-				.save(roles);
+		Role role = findByIdOrThrow(roleId);
+		Set<Permission> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
+		role.getPermissions().clear();
+		role.getPermissions().addAll(permissions);
+		log.info("Role added with id {}" , role.getId());
+		Role saved = rolesRepository
+				.save(role);
 		return toResponse(saved);
 	}
 
 	@Override
 	public void deletePermission(UUID roleId, UUID permissionId) {
-		Roles roles = findByIdOrThrow(roleId);
-		roles.getPermissions().removeIf(permission -> permission.getId().equals(permissionId));
-		rolesRepository.save(roles);
+		Role role = findByIdOrThrow(roleId);
+		role.getPermissions().removeIf(permission -> permission.getId().equals(permissionId));
+		rolesRepository.save(role);
 	}
 
-	private Roles findByIdOrThrow(UUID roleId) {
+	private Role findByIdOrThrow(UUID roleId) {
 		return rolesRepository.findById(roleId)
 				.orElseThrow(() -> new ResourceNotFoundException("Role not found with ID: " + roleId));
 	}
 
-	private RoleResponse toResponse(Roles role) {
+	private RoleResponse toResponse(Role role) {
 		RoleResponse response = roleMapper.toResponse(role);
 		if(role.getUsers() != null && !role.getUsers().isEmpty()) {
 			List<UUID> uuids = role.getUsers().stream()
-					.map(Users::getId)
+					.map(User::getId)
 					.toList();
 			response.setUserIds(uuids);
 		}

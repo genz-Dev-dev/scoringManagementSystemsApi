@@ -1,6 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.service.excel;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Students;
+import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.util.ExcelFileExporter;
 import com.rupp.tola.dev.scoring_management_system.util.StudentCodeGenerateUtils;
 import jakarta.servlet.ServletOutputStream;
@@ -117,7 +117,7 @@ public class ExcelServiceImpl implements ExcelService{
     }
 
     @Override
-    public void exportToExcelFile(HttpServletResponse response, List<Students> studentsList)throws IOException {
+    public void exportToExcelFile(HttpServletResponse response, List<Student> studentList)throws IOException {
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=students.xlsx");
@@ -146,7 +146,7 @@ public class ExcelServiceImpl implements ExcelService{
             field4.setCellValue("Status");
             field4.setCellStyle(headerStyle);
 
-            for (Students student : studentsList) {
+            for (Student student : studentList) {
 
                 Row row = sheet.createRow(rowIndex++);
 
