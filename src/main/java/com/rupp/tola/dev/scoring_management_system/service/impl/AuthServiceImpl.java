@@ -11,7 +11,7 @@ import com.rupp.tola.dev.scoring_management_system.entity.User;
 import com.rupp.tola.dev.scoring_management_system.enums.RoleName;
 import com.rupp.tola.dev.scoring_management_system.enums.Status;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
-import com.rupp.tola.dev.scoring_management_system.repository.RolesRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.RoleRepository;
 import com.rupp.tola.dev.scoring_management_system.service.RefreshTokenService;
 import com.rupp.tola.dev.scoring_management_system.util.Util;
 import io.jsonwebtoken.JwtException;
@@ -27,7 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rupp.tola.dev.scoring_management_system.mapper.UserMapper;
-import com.rupp.tola.dev.scoring_management_system.repository.UsersRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.UserRepository;
 import com.rupp.tola.dev.scoring_management_system.service.EmailService;
 import com.rupp.tola.dev.scoring_management_system.service.AuthService;
 
@@ -42,13 +42,13 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-	private final UsersRepository userRepository;
+	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final EmailService emailService;
 	private final UserMapper userMapper;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
-	private final RolesRepository rolesRepository;
+	private final RoleRepository roleRepository;
 	private final RefreshTokenService refreshTokenService;
 
 	@Override
@@ -115,13 +115,13 @@ public class AuthServiceImpl implements AuthService {
 		user.setVerificationToken(token);
 		user.setVerified(false);
 
-		Role role = rolesRepository.findByNameAndStatus(RoleName.ROLE_STAFF.name(), Status.ACTIVE.name())
+		Role role = roleRepository.findByNameAndStatus(RoleName.ROLE_STAFF.name(), Status.ACTIVE.name())
 				.orElseGet(() -> {
 					Role  newRole = new Role();
 					newRole.setName(RoleName.ROLE_STAFF.name());
 					newRole.setStatus(Status.ACTIVE.name());
 					newRole.setDescription("Default role using for new user registration.");
-					return rolesRepository.save(newRole);
+					return roleRepository.save(newRole);
 				});
 
 		role.setUsers(Set.of(user));

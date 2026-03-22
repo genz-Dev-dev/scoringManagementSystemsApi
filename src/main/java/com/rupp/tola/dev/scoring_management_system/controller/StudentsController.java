@@ -81,7 +81,7 @@ public class StudentsController {
 
 	@PostMapping(path = "/import-student", consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SingleResponse<?>> importStudent(@ModelAttribute ImportStudentRequest request) {
-		return ResponseEntity.ok(SingleResponse.success("Import student successfully.", studentService.importStudent(request)));
+		return ResponseEntity.ok(SingleResponse.success("Import student successfully.", studentService.importStudents(request)));
 	}
 	
 }

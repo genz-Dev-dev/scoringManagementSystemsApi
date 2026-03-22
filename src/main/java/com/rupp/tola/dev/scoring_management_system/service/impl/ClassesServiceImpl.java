@@ -8,7 +8,7 @@ import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import org.springframework.stereotype.Service;
 
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
-import com.rupp.tola.dev.scoring_management_system.repository.ClassesRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ClassesService;
 
 import lombok.RequiredArgsConstructor;
@@ -16,16 +16,16 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ClassesServiceImpl implements ClassesService {
-	private final ClassesRepository classesRepository;
+	private final ClassRepository classRepository;
 
 	@Override
 	public Class createClasses(Class aClass) {
-		return classesRepository.save(aClass);
+		return classRepository.save(aClass);
 	}
 
 	@Override
 	public List<Class> getClasses(Boolean status) {
-		return Optional.of(classesRepository.findBystatus(status)).filter(list -> !list.isEmpty())
+		return Optional.of(classRepository.findByStatus(status)).filter(list -> !list.isEmpty())
 				.orElseThrow(() -> new ResourceNotFoundException("No classes found" + status));
 	}
 
@@ -33,13 +33,13 @@ public class ClassesServiceImpl implements ClassesService {
 	public Class editclasses(UUID id, Class aClass) {
 		Class class2 = getById(id);
 		class2.setName(aClass.getName());
-		return classesRepository.save(class2);
+		return classRepository.save(class2);
 	}
 
 	@Override
 	public Class getById(UUID id) {
 		String message = "class id is not have.!";
-		return classesRepository.findById(id)
+		return classRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(message + " " + id));
 	}
 

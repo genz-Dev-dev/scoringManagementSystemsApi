@@ -1,9 +1,12 @@
 package com.rupp.tola.dev.scoring_management_system.util;
 
+import com.rupp.tola.dev.scoring_management_system.entity.Address;
+import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Util {
@@ -28,6 +31,15 @@ public class Util {
         }catch (Exception e){
             throw new RuntimeException(e.getLocalizedMessage());
         }
+    }
+
+    /**
+     * if value null return empty string
+     * @param value
+     * @return
+     */
+    public static String text(String value) {
+        return Objects.toString(value, "");
     }
 
     /**

@@ -10,7 +10,7 @@ import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceEx
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.RoleMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.PermissionRepository;
-import com.rupp.tola.dev.scoring_management_system.repository.RolesRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.RoleRepository;
 import com.rupp.tola.dev.scoring_management_system.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
-	private final RolesRepository rolesRepository;
+	private final RoleRepository roleRepository;
 	private final RoleMapper roleMapper;
 	private final AuthService authService;
 	private final PermissionRepository permissionRepository;
@@ -35,7 +35,7 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public RoleResponse create(RoleRequest request) {
 
-		if (rolesRepository.existsByName(request.getName())) {
+		if (roleRepository.existsByName(request.getName())) {
 			log.info("Role already exists with the name {}", request.getName());
 			throw new DuplicateResourceException("Role name already exists");
 		}
@@ -59,7 +59,7 @@ public class RoleServiceImpl implements RoleService {
 					.collect(Collectors.toSet());
 			role.setUsers(users);
 		}
-		Role saved = rolesRepository.save(role);
+		Role saved = roleRepository.save(role);
 		log.info("Role created with id {}", saved.getId());
 		return toResponse(saved);
 	}
@@ -73,7 +73,7 @@ public class RoleServiceImpl implements RoleService {
 			if (!roleName.startsWith("ROLE_")) {
 				roleName = "ROLE_" + roleName;
 			}
-			if (rolesRepository.existsByNameAndIdNot(roleName, uuid)) {
+			if (roleRepository.existsByNameAndIdNot(roleName, uuid)) {
 				log.info("Role already exists with the name {}", roleName);
 				throw new IllegalArgumentException("Role name already exists");
 			}
@@ -92,14 +92,14 @@ public class RoleServiceImpl implements RoleService {
 			role.setUsers(new HashSet<>());
 		}
 
-		Role saved = rolesRepository.save(role);
+		Role saved = roleRepository.save(role);
 		log.info("Role updated with id {}", saved.getId());
 		return toResponse(role);
 	}
 
 	@Override
 	public List<RoleResponse> findAll() {
-		List<Role> roles = rolesRepository.findAll();
+		List<Role> roles = roleRepository.findAll();
 		log.info("Roles found with all {}", roles);
 		return roles.stream()
 				.map(this::toResponse)
@@ -117,12 +117,12 @@ public class RoleServiceImpl implements RoleService {
 	public void updateStatus(UUID uuid, String status) {
 		Role role = findByIdOrThrow(uuid);
 		role.setStatus(status);
-		rolesRepository.save(role);
+		roleRepository.save(role);
 	}
 
 	@Override
 	public List<RoleResponse> findByActive(String status) {
-		List<Role> roles = rolesRepository.findByStatus(status);
+		List<Role> roles = roleRepository.findByStatus(status);
 		log.info("Roles found with status {}", roles);
 		return roles.stream()
 				.map(this::toResponse)
@@ -135,7 +135,7 @@ public class RoleServiceImpl implements RoleService {
 		Role role = findByIdOrThrow(roleId);
 		Set<Permission> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
 		role.getPermissions().addAll(permissions);
-		Role saved = rolesRepository.save(role);
+		Role saved = roleRepository.save(role);
 		log.info("Role added with id {}" , saved.getId());
 		return toResponse(saved);
 	}
@@ -147,7 +147,7 @@ public class RoleServiceImpl implements RoleService {
 		role.getPermissions().clear();
 		role.getPermissions().addAll(permissions);
 		log.info("Role added with id {}" , role.getId());
-		Role saved = rolesRepository
+		Role saved = roleRepository
 				.save(role);
 		return toResponse(saved);
 	}
@@ -156,11 +156,11 @@ public class RoleServiceImpl implements RoleService {
 	public void deletePermission(UUID roleId, UUID permissionId) {
 		Role role = findByIdOrThrow(roleId);
 		role.getPermissions().removeIf(permission -> permission.getId().equals(permissionId));
-		rolesRepository.save(role);
+		roleRepository.save(role);
 	}
 
 	private Role findByIdOrThrow(UUID roleId) {
-		return rolesRepository.findById(roleId)
+		return roleRepository.findById(roleId)
 				.orElseThrow(() -> new ResourceNotFoundException("Role not found with ID: " + roleId));
 	}
 

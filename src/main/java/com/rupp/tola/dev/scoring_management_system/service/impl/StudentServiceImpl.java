@@ -9,7 +9,7 @@ import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
-import com.rupp.tola.dev.scoring_management_system.repository.ClassesRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
 import com.rupp.tola.dev.scoring_management_system.util.StudentCodeGenerateUtils;
 import com.rupp.tola.dev.scoring_management_system.util.Util;
@@ -21,7 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.rupp.tola.dev.scoring_management_system.repository.StudentsRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.StudentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.StudentService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,8 +32,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class StudentServiceImpl implements StudentService {
 
-	private final StudentsRepository studentsRepository;
-	private final ClassesRepository classesRepository;
+	private final StudentRepository studentRepository;
+	private final ClassRepository classRepository;
 	private final StudentsMapper studentsMapper;
 	private final ExcelService excelService;
 
@@ -43,16 +43,16 @@ public class StudentServiceImpl implements StudentService {
 		student.setStudentCode(StudentCodeGenerateUtils.generator());
 		student.setStatus(true);
 		
-		Class aClass = classesRepository.findById(request.getClassId())
+		Class aClass = classRepository.findById(request.getClassId())
 				.orElseThrow(() -> new ResourceNotFoundException("Classes not found: " + request.getClassId()));
 		student.setClazz(aClass);
-		Student saved = studentsRepository.save(student);
+		Student saved = studentRepository.save(student);
 		return studentsMapper.toResponse(saved);
 	}
 
 	@Override
 	public StudentResponse getById(UUID uuid) {
-		Student student = studentsRepository.findById(uuid)
+		Student student = studentRepository.findById(uuid)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found with id : " + uuid));
 		log.info("Student found with id {}", student.getId());
 		return studentsMapper.toResponse(student);
@@ -68,7 +68,7 @@ public class StudentServiceImpl implements StudentService {
 		Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
 		Pageable pageable = PageRequest.of(number, size, Sort.by(direction, property));
 
-		Page<Student> students = studentsRepository.findAll(pageable);
+		Page<Student> students = studentRepository.findAll(pageable);
 		log.info("Students found with all {}", students.getContent());
 
 		return students.map(studentsMapper::toResponse);
@@ -76,45 +76,45 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Optional<StudentResponse> findByClazzId(UUID id) {
-		return studentsRepository.findByClazzId(id)
+		return studentRepository.findByClazzId(id)
 				.map(studentsMapper::toResponse);
 	}
 
 	@Override
 	public Page<StudentResponse> findByStatus(boolean status, Pageable pageable) {
 		log.info("findByStatus: {}, pageable: {}", status, pageable);
-		return studentsRepository.findByStatus(status, pageable)
+		return studentRepository.findByStatus(status, pageable)
 				.map(studentsMapper::toResponse);
 	}
 
 	@Override
-	public StudentResponse update(UUID uuid, StudentRequest studentRequest) {
-		Student student = studentsRepository.findById(uuid)
+	public StudentResponse update(UUID uuid, StudentRequest request) {
+		Student student = studentRepository.findById(uuid)
 				.orElseThrow(() -> new NoSuchElementException("Student not found with ID: " + uuid));
 
 		student.setStudentCode(StudentCodeGenerateUtils.generator());
-		student.setClazz(studentsMapper.map(studentRequest.getClassId()));
-		student.setKhFirstName(studentRequest.getKhFirstName());
-		student.setKhLastName(studentRequest.getKhLastName());
-		student.setEnFirstName(studentRequest.getEnFirstName());
-		student.setEnLastName(studentRequest.getEnLastName());
-		student.setGender(studentRequest.getGender());
-		student.setDateOfBirth(Util.convertToLocalDate(studentRequest.getDateOfBirth()));
-		student.setEmail(studentRequest.getEmail());
-		student.setPhoneNumber(studentRequest.getPhoneNumber());
-		student.setAddress(studentRequest.getAddress());
+		student.setClazz(studentsMapper.map(request.getClassId()));
+		student.setKhFirstName(request.getKhFirstName());
+		student.setKhLastName(request.getKhLastName());
+		student.setEnFirstName(request.getEnFirstName());
+		student.setEnLastName(request.getEnLastName());
+		student.setGender(request.getGender());
+		student.setDateOfBirth(Util.convertToLocalDate(request.getDateOfBirth()));
+		student.setEmail(request.getEmail());
+		student.setPhoneNumber(request.getPhoneNumber());
+		student.setAddress(request.getAddress());
 
-		Student updated = studentsRepository.save(student);
+		Student updated = studentRepository.save(student);
 		log.info("Student Update with ID: {}", uuid);
         return studentsMapper.toResponse(updated);
 	}
 
 	@Override
 	public void delete(UUID uuid) {
-		Student student = studentsRepository.findById(uuid)
+		Student student = studentRepository.findById(uuid)
 			.orElseThrow(() -> new ResourceNotFoundException("Student not found with ID : " + uuid));
 		log.info("Student delete with id {}", student.getId());
-		studentsRepository.delete(student);
+		studentRepository.delete(student);
 	}
 
 	@Override
@@ -125,17 +125,17 @@ public class StudentServiceImpl implements StudentService {
 		String property = param.getOrDefault("property", "id");
 		Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
 		Pageable pageable = PageRequest.of(number, size, Sort.by(direction, property));
-		return studentsRepository.findByStatus(status, pageable)
+		return studentRepository.findByStatus(status, pageable)
 				.map(studentsMapper::toResponse);
 	}
 
 	@Override
-	public List<StudentResponse> importStudent(ImportStudentRequest request) {
+	public List<StudentResponse> importStudents(ImportStudentRequest request) {
 		if(request.getFile() != null && request.getFile().isEmpty()) {
 			throw new ResourceNotFoundException("Student file not found");
 		}
 		
-		List<Student> studentList = excelService.exportStudents(request.getFile());
+		List<Student> studentList = excelService.importStudents(request.getFile());
 		if (studentList.isEmpty()) {
 			log.warn("No students found in the imported file");
 			throw new RuntimeException("No students found in the imported file");
@@ -144,7 +144,7 @@ public class StudentServiceImpl implements StudentService {
 		Class aClass;
 		try {
 			UUID classId = UUID.fromString(request.getClassId());
-			aClass = classesRepository.findById(classId)
+			aClass = classRepository.findById(classId)
 					.orElseThrow(() -> new ResourceNotFoundException("Classes not found: " + request.getClassId()));
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException("Invalid Class ID format: " + request.getClassId());
@@ -156,14 +156,20 @@ public class StudentServiceImpl implements StudentService {
 			student.setClazz(aClass);
 		}
 		
-		List<Student> savedStudents = studentsRepository.saveAll(studentList);
+		List<Student> savedStudents = studentRepository.saveAll(studentList);
 		log.info("Imported {} students successfully", savedStudents.size());
 
-
-		//create response as list mapper later
 		return studentList.stream()
 				.map(studentsMapper::toResponse)
 				.toList();
 	}
+
+	@Override
+	public void exportStudents() {
+
+		
+	}
+
+
 }
 

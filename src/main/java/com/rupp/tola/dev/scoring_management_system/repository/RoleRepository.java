@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.rupp.tola.dev.scoring_management_system.entity.Role;
 
 @Repository
-public interface RolesRepository extends JpaRepository<Role, UUID> {
+public interface RoleRepository extends JpaRepository<Role, UUID> {
 
 	Optional<Role> findByName(String name);
 

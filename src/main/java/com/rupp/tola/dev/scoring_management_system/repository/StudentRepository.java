@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StudentsRepository extends JpaRepository<Student, UUID>, JpaSpecificationExecutor<Student> {
+public interface StudentRepository extends JpaRepository<Student, UUID>, JpaSpecificationExecutor<Student> {
 	Optional<Student> findByClazzId(UUID id);
 	Page<Student> findByStatus(Boolean status, Pageable pageable);
 }

@@ -6,8 +6,8 @@ import com.rupp.tola.dev.scoring_management_system.entity.Role;
 import com.rupp.tola.dev.scoring_management_system.entity.User;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
 import com.rupp.tola.dev.scoring_management_system.repository.PermissionRepository;
-import com.rupp.tola.dev.scoring_management_system.repository.RolesRepository;
-import com.rupp.tola.dev.scoring_management_system.repository.UsersRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.RoleRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.UserRepository;
 import com.rupp.tola.dev.scoring_management_system.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,8 +23,8 @@ import java.util.Set;
 public class DataSeeder implements CommandLineRunner {
     Logger logger = LoggerFactory.getLogger(DataSeeder.class);
 
-    private final UsersRepository usersRepository;
-    private final RolesRepository rolesRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
@@ -43,7 +43,7 @@ public class DataSeeder implements CommandLineRunner {
 
         createRole("ROLE_STAFF" , "Only staff can use this role." , "ACTIVE" , Set.of(adminRead, adminWrite, adminDelete));
 
-        if(!usersRepository.existsByEmail("admin@gmail.com")) {
+        if(!userRepository.existsByEmail("admin@gmail.com")) {
             User admin = new User();
             admin.setFullName("admin");
             admin.setEmail("admin@gmail.com");
@@ -54,7 +54,7 @@ public class DataSeeder implements CommandLineRunner {
             RefreshToken refreshToken = refreshTokenService.create();
             refreshToken.setUser(admin);
             admin.setRefreshToken(refreshToken);
-            usersRepository.save(admin);
+            userRepository.save(admin);
         }
 
     }
@@ -71,14 +71,14 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     public Role createRole(String name , String description , String status , Set<Permission> permissions) {
-        return rolesRepository.findByName(name)
+        return roleRepository.findByName(name)
                 .orElseGet(() -> {
                     Role role = new Role();
                     role.setName(name);
                     role.setDescription(description);
                     role.setStatus(status);
                     role.setPermissions(permissions);
-                    return rolesRepository.save(role);
+                    return roleRepository.save(role);
                 });
     }
 }

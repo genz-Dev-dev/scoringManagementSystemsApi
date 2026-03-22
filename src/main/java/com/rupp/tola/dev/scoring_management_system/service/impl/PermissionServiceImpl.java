@@ -8,7 +8,7 @@ import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceEx
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.PermissionMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.PermissionRepository;
-import com.rupp.tola.dev.scoring_management_system.repository.RolesRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.RoleRepository;
 import com.rupp.tola.dev.scoring_management_system.service.PermissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     private final PermissionRepository permissionRepository;
     private final PermissionMapper permissionMapper;
-    private final RolesRepository rolesRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public PermissionResponse create(PermissionRequest request) {
@@ -34,7 +34,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
         Permission permission = permissionMapper.toEntity(request);
         if (request.getRoleIds() != null && !request.getRoleIds().isEmpty()) {
-            Set<Role> roles = rolesRepository.findByIdIn(request.getRoleIds());
+            Set<Role> roles = roleRepository.findByIdIn(request.getRoleIds());
             permission.setRoles(roles);
         }
         Permission saved = permissionRepository.save(permission);
@@ -50,7 +50,7 @@ public class PermissionServiceImpl implements PermissionService {
         Permission permission = findByIdOrThrow(id);
         permissionMapper.updateFromRequest(permission, request);
         if (request.getRoleIds() != null && !request.getRoleIds().isEmpty()) {
-            Set<Role> roles = rolesRepository.findByIdIn(request.getRoleIds());
+            Set<Role> roles = roleRepository.findByIdIn(request.getRoleIds());
             permission.setRoles(roles);
         }
         Permission updated = permissionRepository.save(permission);
