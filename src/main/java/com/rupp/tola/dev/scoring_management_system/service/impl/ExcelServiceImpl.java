@@ -14,9 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +62,7 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public void exportStudent() {
+    public ByteArrayInputStream exportStudent() {
         try {
             List<Student> students = studentRepository.findAll();
 
@@ -77,19 +75,12 @@ public class ExcelServiceImpl implements ExcelService {
                 writeStudentToRow(row, student);
             }
 
-            File file = new File(".");
-            String path = file.getAbsolutePath();
-            String baseDir = path.substring(0, path.length() - 1);
-            File uploadsDir = new File(baseDir + "/uploads");
-            if (!uploadsDir.exists()) {
-                uploadsDir.mkdirs();
-            }
-            String fileDir = baseDir + "/uploads/students.xlsx";
-            try (FileOutputStream fos = new FileOutputStream(fileDir)) {
-                workbook.write(fos);
-            }
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+                workbook.write(out);
+
             workbook.close();
 
+            return new ByteArrayInputStream(out.toByteArray());
         } catch (IOException ex) {
             log.info("Could not open Excel file.", ex);
             throw new ExcelException("Could not open Excel file.");

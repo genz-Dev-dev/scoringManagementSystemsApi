@@ -31,6 +31,4 @@ public interface StudentService {
 	Page<StudentResponse> getByStatusPagination(Map<String, String> param, Boolean status);
 
 	List<StudentResponse> importStudents(ImportStudentRequest request);
-
-	void exportStudents();
 }

@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,12 +11,13 @@ import com.rupp.tola.dev.scoring_management_system.dto.response.MultipleResponse
 import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
+import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.rupp.tola.dev.scoring_management_system.service.StudentService;
@@ -30,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class StudentsController {
 
 	private final StudentService studentService;
-	private final StudentsMapper studentsMapper;
+	private final ExcelService excelService;
 
 	@PostMapping
 	public ResponseEntity<StudentResponse> create(@Valid @RequestBody StudentRequest request) {
@@ -82,6 +84,18 @@ public class StudentsController {
 	@PostMapping(path = "/import-student", consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SingleResponse<?>> importStudent(@ModelAttribute ImportStudentRequest request) {
 		return ResponseEntity.ok(SingleResponse.success("Import student successfully.", studentService.importStudents(request)));
+
 	}
-	
+
+	@GetMapping(path = "/export-student")
+	public ResponseEntity<Resource> exportStudent() {
+		ByteArrayInputStream stream = excelService.exportStudent();
+		ByteArrayResource recourse = new ByteArrayResource(stream.readAllBytes());
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=students.xlsx")
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(recourse);
+	}
+
 }
