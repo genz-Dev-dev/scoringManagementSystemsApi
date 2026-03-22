@@ -1,4 +1,4 @@
-package com.rupp.tola.dev.scoring_management_system.service;
+package com.rupp.tola.dev.scoring_management_system.security;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.AuthRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPasswordRequest;

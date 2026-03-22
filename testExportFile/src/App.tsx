@@ -22,6 +22,7 @@ const App: React.FC = () => {
 
         let filename = "students.xlsx";
         const disposition = response.headers["content-disposition"];
+        console.log(disposition)
         if (disposition && disposition.includes("filename=")) {
           filename = disposition.split("filename=")[1].replace(/"/g, "");
         }

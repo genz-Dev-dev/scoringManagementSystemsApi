@@ -30,7 +30,7 @@ public class ClassesServiceImpl implements ClassesService {
 	}
 
 	@Override
-	public Class editclasses(UUID id, Class aClass) {
+	public Class editclass(UUID id, Class aClass) {
 		Class class2 = getById(id);
 		class2.setName(aClass.getName());
 		return classRepository.save(class2);

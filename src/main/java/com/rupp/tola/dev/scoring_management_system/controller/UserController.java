@@ -1,11 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
-import com.rupp.tola.dev.scoring_management_system.dto.response.MultipleResponse;
-import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
+import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPasswordRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.VerifyOtpRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
-import com.rupp.tola.dev.scoring_management_system.service.AuthService;
+import com.rupp.tola.dev.scoring_management_system.security.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

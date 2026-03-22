@@ -11,7 +11,7 @@ import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundExc
 import com.rupp.tola.dev.scoring_management_system.mapper.RoleMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.PermissionRepository;
 import com.rupp.tola.dev.scoring_management_system.repository.RoleRepository;
-import com.rupp.tola.dev.scoring_management_system.service.AuthService;
+import com.rupp.tola.dev.scoring_management_system.security.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.rupp.tola.dev.scoring_management_system.service.impl;
+package com.rupp.tola.dev.scoring_management_system.security.impl;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.AuthRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPasswordRequest;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 import com.rupp.tola.dev.scoring_management_system.mapper.UserMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.UserRepository;
 import com.rupp.tola.dev.scoring_management_system.service.EmailService;
-import com.rupp.tola.dev.scoring_management_system.service.AuthService;
+import com.rupp.tola.dev.scoring_management_system.security.AuthService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

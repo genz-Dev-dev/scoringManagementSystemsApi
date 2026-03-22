@@ -30,12 +30,6 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public void sendForgotPasswordEmail(String email, String resetToken) {
-		sendEmail(email, resetToken, "Password Reset Request", "/reset-password",
-				"Click the button below to reset your password:");
-	}
-
-	@Override
 	public void sendOtpResetPassword(String email, String otp) {
 		try {
 			String content = buildEmailContent("Verify Password OTP" , otp , "");

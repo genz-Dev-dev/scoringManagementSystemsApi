@@ -20,8 +20,10 @@ public interface StudentService {
 
 	Page<StudentResponse> getAll(Map<String, String> param);
 
+	@Deprecated
 	Optional<StudentResponse> findByClazzId(UUID id);
 
+	@Deprecated
 	Page<StudentResponse> findByStatus(boolean status, Pageable pageable);
 
 	StudentResponse update(UUID uuid, StudentRequest request);

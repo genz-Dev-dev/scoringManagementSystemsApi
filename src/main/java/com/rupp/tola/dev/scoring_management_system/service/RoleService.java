@@ -26,4 +26,5 @@ public interface RoleService {
 	RoleResponse setPermission(UUID roleId , AssignPermissionRequest request);
 
 	void deletePermission(UUID roleId , UUID permissionId);
+
 }

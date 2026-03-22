@@ -1,7 +1,7 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.AssignPermissionRequest;
-import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.RoleRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.RoleResponse;
 import com.rupp.tola.dev.scoring_management_system.service.RoleService;
@@ -77,6 +77,13 @@ public class RoleController {
     public ResponseEntity<SingleResponse<RoleResponse>> updatePermission(@PathVariable UUID roleId, @Valid @RequestBody AssignPermissionRequest request) {
         RoleResponse response = roleService.setPermission(roleId, request);
         return ResponseEntity.ok().body(SingleResponse.success("Successfully updated role.", response));
+    }
+
+    @Operation(summary = "Remove permission from role.")
+    @DeleteMapping("/{roleId/permission/{permissionId}")
+    public ResponseEntity<SingleResponse<Void>> removePermission(@PathVariable UUID roleId, @PathVariable UUID permissionId) {
+        roleService.deletePermission(roleId, permissionId);
+        return ResponseEntity.ok().body(SingleResponse.success("Successfully removed role.", null));
     }
 
 }

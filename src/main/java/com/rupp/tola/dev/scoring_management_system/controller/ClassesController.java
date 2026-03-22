@@ -44,7 +44,7 @@ public class ClassesController {
 	public ResponseEntity<ClassDTO> updateClasses(@PathVariable("classId") UUID id,
 			@RequestBody @Valid ClassDTO classDTO) {
 		Class aClass = ClassesMapper.INSTANCE.toClass(classDTO);
-		aClass = classesService.editclasses(id, aClass);
+		aClass = classesService.editclass(id, aClass);
 		return ResponseEntity.ok(ClassesMapper.INSTANCE.toClassesDto(aClass));
 	}
 }

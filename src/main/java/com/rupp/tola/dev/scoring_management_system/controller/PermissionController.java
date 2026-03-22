@@ -2,7 +2,7 @@ package com.rupp.tola.dev.scoring_management_system.controller;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.PermissionRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.PermissionResponse;
-import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.service.PermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

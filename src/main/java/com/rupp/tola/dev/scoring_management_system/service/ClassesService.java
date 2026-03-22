@@ -12,5 +12,5 @@ public interface ClassesService {
 
 	Class getById(UUID id);
 
-	Class editclasses(UUID id, Class aClass);
+	Class editclass(UUID id, Class aClass);
 }

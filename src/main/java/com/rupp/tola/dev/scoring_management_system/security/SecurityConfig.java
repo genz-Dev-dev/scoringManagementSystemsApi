@@ -1,6 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.security;
 
-import com.rupp.tola.dev.scoring_management_system.jwt.JwtAuthenticationFilter;
+import com.rupp.tola.dev.scoring_management_system.filter.JwtAuthenticationFilter;
 import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAccessDeniedHandler;
 import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAuthenticationEntryPoint;
 

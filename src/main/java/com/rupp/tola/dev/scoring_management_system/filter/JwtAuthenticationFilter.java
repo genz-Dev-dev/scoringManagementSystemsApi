@@ -1,5 +1,6 @@
-package com.rupp.tola.dev.scoring_management_system.jwt;
+package com.rupp.tola.dev.scoring_management_system.filter;
 
+import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
 import jakarta.servlet.http.Cookie;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

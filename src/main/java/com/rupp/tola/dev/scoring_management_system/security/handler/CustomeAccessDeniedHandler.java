@@ -1,7 +1,7 @@
 package com.rupp.tola.dev.scoring_management_system.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rupp.tola.dev.scoring_management_system.dto.response.ErrorResponse;
+import com.rupp.tola.dev.scoring_management_system.data.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
