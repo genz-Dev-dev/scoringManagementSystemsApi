@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -21,4 +22,7 @@ public class Subject {
 
 	@Column(name = "subject_name", updatable = false, nullable = false)
 	private String subjectName;
+
+	@OneToMany(mappedBy = "subject" , cascade = CascadeType.ALL)
+	private List<Score> scores;
 }

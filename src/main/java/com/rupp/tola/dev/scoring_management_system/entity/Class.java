@@ -20,7 +20,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Class {
+public class Class extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -32,12 +32,4 @@ public class Class {
 	
 	private Boolean status;
 
-	@Column(name = "created_at" , nullable = false)
-	@CreationTimestamp
-	private LocalDate createdAt;
-
-
-	@Column(name = "updated_at")
-	@UpdateTimestamp
-	private LocalDate updatedAt;
 }

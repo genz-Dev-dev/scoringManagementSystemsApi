@@ -2,6 +2,7 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -13,7 +14,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Student {
+public class Student extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -56,8 +57,7 @@ public class Student {
 
 	private Boolean status;
 
-	@CreationTimestamp
-	@Column(updatable = false)
-	private LocalDateTime createdAt;
+	@OneToMany(mappedBy = "student" , cascade = CascadeType.ALL)
+	private List<Score> scores;
 
 }

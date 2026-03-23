@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,38 +16,30 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Score {
+public class Score extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "score_id")
 	private UUID id;
 
-	@ManyToOne
-	@JoinColumn(name = "student_id")
-	private Student student;
-
-	@ManyToOne
-	@JoinColumn(name = "subject_id")
-	private Subject subject;
-
-	@ManyToOne
-	@JoinColumn(name = "semester_id")
-	private Semester semester;
-
-	@Column(name = "score")
-	private Double score;
+	@Column(name = "score" , nullable = false)
+	private BigDecimal score;
 
 	@Column(name = "version", nullable = false)
 	private Integer version = 1;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "student_id" , referencedColumnName = "student_id")
+	private Student student;
 
-	@Column(name = "create_at", updatable = false, nullable = false)
-	private LocalDateTime create;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "subject_id" , referencedColumnName = "subject_id")
+	private Subject subject;
 
-	@Column(name = "upload_at", updatable = false, nullable = false)
-	private LocalDateTime upload;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "semester_id" , referencedColumnName = "semester_id")
+	private Semester semester;
+
+
 }

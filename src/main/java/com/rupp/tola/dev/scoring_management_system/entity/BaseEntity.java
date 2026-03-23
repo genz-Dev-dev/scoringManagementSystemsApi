@@ -18,13 +18,9 @@ import java.util.UUID;
 @MappedSuperclass
 public class BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDate createdAt;
+    @Column(name = "creation_at", nullable = false, updatable = false)
+    private LocalDate creationAt;
 
     @UpdateTimestamp
     @Column(name = "update_at")

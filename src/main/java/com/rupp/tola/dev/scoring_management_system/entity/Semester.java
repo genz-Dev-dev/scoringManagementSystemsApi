@@ -1,14 +1,10 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -31,5 +27,8 @@ public class Semester {
 
 	@Column(name = "semester_end_at" , nullable = false)
 	private LocalDate endAt;
+
+	@OneToMany(mappedBy = "score" , cascade = CascadeType.ALL)
+	private List<Score> scores;
 
 }
