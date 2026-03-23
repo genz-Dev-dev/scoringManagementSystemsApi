@@ -22,16 +22,16 @@ public class PermissionController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Retrieve permission by id.")
-    public ResponseEntity<SingleResponse<PermissionResponse>> findById(@PathVariable UUID id) {
-        PermissionResponse response = permissionService.findById(id);
+    public ResponseEntity<SingleResponse<PermissionResponse>> getById(@PathVariable UUID id) {
+        PermissionResponse response = permissionService.getById(id);
         return ResponseEntity.ok().body(SingleResponse.success("Success to retrieve permission by id."
                 ,response));
     }
 
     @GetMapping
     @Operation(summary = "Retrieve all permissions.")
-    public ResponseEntity<SingleResponse<List<PermissionResponse>>> findAll() {
-        List<PermissionResponse> responses = permissionService.findAll();
+    public ResponseEntity<SingleResponse<List<PermissionResponse>>> getAll() {
+        List<PermissionResponse> responses = permissionService.getAll();
         return ResponseEntity.ok()
                 .body(SingleResponse.success("Success to retrieve all permissions.", responses));
     }

@@ -14,9 +14,9 @@ public interface PermissionService {
 
     void delete(UUID id);
 
-    List<PermissionResponse> findAll();
+    List<PermissionResponse> getAll();
 
-    PermissionResponse findById(UUID id);
+    PermissionResponse getById(UUID id);
 
     List<PermissionResponse> findByModule(String module);
 }

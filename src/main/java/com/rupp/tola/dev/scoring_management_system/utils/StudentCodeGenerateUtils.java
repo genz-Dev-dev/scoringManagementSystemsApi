@@ -1,4 +1,4 @@
-package com.rupp.tola.dev.scoring_management_system.util;
+package com.rupp.tola.dev.scoring_management_system.utils;
 
 import java.time.Year;
 

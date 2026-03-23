@@ -18,19 +18,11 @@ public interface StudentService {
 
 	StudentResponse getById(UUID uuid);
 
-	Page<StudentResponse> getAll(Map<String, String> param);
-
-	@Deprecated
-	Optional<StudentResponse> findByClazzId(UUID id);
-
-	@Deprecated
-	Page<StudentResponse> findByStatus(boolean status, Pageable pageable);
+	Page<StudentResponse> getAll(Pageable pageable);
 
 	StudentResponse update(UUID uuid, StudentRequest request);
 
 	void delete(UUID uuid);
-
-	Page<StudentResponse> getByStatusPagination(Map<String, String> param, Boolean status);
 
 	List<StudentResponse> importStudents(ImportStudentRequest request);
 }

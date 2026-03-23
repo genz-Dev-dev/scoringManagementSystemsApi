@@ -2,6 +2,7 @@ package com.rupp.tola.dev.scoring_management_system.controller;
 
 import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.request.PaginationRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPasswordRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.VerifyOtpRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
@@ -62,12 +63,11 @@ public class UserController {
 
     @Operation(summary = "Retrieve all user with verify email.")
     @GetMapping
-    public ResponseEntity<MultipleResponse<UserResponse>> findAll(@RequestParam(defaultValue = "1") int number ,@RequestParam(defaultValue = "10") int size ,
-                                                                      @RequestParam(defaultValue = "ASC") String sort ,@RequestParam(defaultValue = "id") String property) {
-        Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(number - 1 , size , Sort.by(direction , property.equalsIgnoreCase("id") ? "id" : property));
-        Page<UserResponse> responses = authService.findAll(pageable);
-        return ResponseEntity.ok().body(MultipleResponse.success("Retrieve all user with pagination.", responses));
+    public ResponseEntity<MultipleResponse<UserResponse>> getAll(PaginationRequest request) {
+        Page<UserResponse> responses = authService.findAll(request.toPageable());
+        return ResponseEntity.ok(MultipleResponse
+                .success("Retrieve all user with pagination.",
+                        responses));
     }
 
     @GetMapping("/is-authenticated")

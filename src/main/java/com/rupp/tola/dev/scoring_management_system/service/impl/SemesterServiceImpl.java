@@ -8,7 +8,7 @@ import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundExc
 import com.rupp.tola.dev.scoring_management_system.mapper.SemesterMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.SemesterRepository;
 import com.rupp.tola.dev.scoring_management_system.service.SemesterService;
-import com.rupp.tola.dev.scoring_management_system.util.Util;
+import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public SemesterResponse update(UUID id, SemesterRequest request) {
-        Semester semester = this.findByIdOrThrow(id);
+        Semester semester = this.findByOrThrow(id);
         semesterMapper.updateFromRequest(request, semester);
         semester.setStartAt(Util.convertToLocalDate(request.getStartAt()));
         semester.setEndAt(Util.convertToLocalDate(request.getEndAt()));
@@ -53,7 +53,7 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public void delete(UUID id) {
-        Semester semester = this.findByIdOrThrow(id);
+        Semester semester = this.findByOrThrow(id);
         log.info("Deleting semester with id {}", id);
         semesterRepository.delete(semester);
     }
@@ -68,12 +68,12 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public SemesterResponse getById(UUID id) {
-        Semester semester = this.findByIdOrThrow(id);
+        Semester semester = this.findByOrThrow(id);
         log.info("Returning Semester with id {}", id);
         return semesterMapper.toResponse(semester);
     }
 
-    private Semester findByIdOrThrow(UUID id) {
+    private Semester findByOrThrow(UUID id) {
         return semesterRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Semester not found with ID: " + id));
     }

@@ -66,7 +66,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public RoleResponse update(UUID uuid, RoleRequest request) {
-		Role role = findByIdOrThrow(uuid);
+		Role role = findByOrThrow(uuid);
 
 		if (request.getName() != null) {
 			String roleName = request.getName().toUpperCase();
@@ -108,14 +108,14 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public RoleResponse findById(UUID uuid) {
-		Role role = findByIdOrThrow(uuid);
+		Role role = findByOrThrow(uuid);
 		log.info("Role found with id {}", role.getId());
 		return toResponse(role);
 	}
 
 	@Override
 	public void updateStatus(UUID uuid, String status) {
-		Role role = findByIdOrThrow(uuid);
+		Role role = findByOrThrow(uuid);
 		role.setStatus(status);
 		roleRepository.save(role);
 	}
@@ -132,7 +132,7 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public RoleResponse addPermission(UUID roleId, AssignPermissionRequest request) {
 
-		Role role = findByIdOrThrow(roleId);
+		Role role = findByOrThrow(roleId);
 		Set<Permission> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
 		role.getPermissions().addAll(permissions);
 		Role saved = roleRepository.save(role);
@@ -142,7 +142,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public RoleResponse setPermission(UUID roleId, AssignPermissionRequest request) {
-		Role role = findByIdOrThrow(roleId);
+		Role role = findByOrThrow(roleId);
 		Set<Permission> permissions = permissionRepository.findByIdIn(request.getPermissionIds());
 		role.getPermissions().clear();
 		role.getPermissions().addAll(permissions);
@@ -154,12 +154,12 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public void deletePermission(UUID roleId, UUID permissionId) {
-		Role role = findByIdOrThrow(roleId);
+		Role role = findByOrThrow(roleId);
 		role.getPermissions().removeIf(permission -> permission.getId().equals(permissionId));
 		roleRepository.save(role);
 	}
 
-	private Role findByIdOrThrow(UUID roleId) {
+	private Role findByOrThrow(UUID roleId) {
 		return roleRepository.findById(roleId)
 				.orElseThrow(() -> new ResourceNotFoundException("Role not found with ID: " + roleId));
 	}

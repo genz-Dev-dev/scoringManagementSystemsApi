@@ -5,18 +5,11 @@ import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
-import com.rupp.tola.dev.scoring_management_system.service.ClassesService;
+import com.rupp.tola.dev.scoring_management_system.service.ClassService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,24 +19,30 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/classes")
 public class ClassesController {
 
-	private final ClassesService classesService;
+	private final ClassService classService;
 
 	@PostMapping
-	public ResponseEntity<SingleResponse<ClassResponse>> createClass(@Valid @RequestBody ClassRequest classRequest) {
-		ClassResponse response = classesService.create(classRequest);
+	public ResponseEntity<SingleResponse<ClassResponse>> create(@Valid @RequestBody ClassRequest classRequest) {
+		ClassResponse response = classService.create(classRequest);
 		return ResponseEntity.ok(SingleResponse.success("Successfully created class.", response));
 	}
 
 	@GetMapping
-	public ResponseEntity<SingleResponse<List<ClassResponse>>> getClasses(@RequestParam(defaultValue = "false") Boolean status) {
-		List<ClassResponse> responses = classesService.getAllByStatus(status);
+	public ResponseEntity<SingleResponse<List<ClassResponse>>> getAll(@RequestParam(defaultValue = "false") Boolean status) {
+		List<ClassResponse> responses = classService.getAllByStatus(status);
 		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved classes.", responses));
 	}
 
-	@PutMapping("{classId}")
-	public ResponseEntity<SingleResponse<ClassResponse>> updateClasses(@PathVariable("classId") UUID id,
+	@PutMapping("/{id}")
+	public ResponseEntity<SingleResponse<ClassResponse>> getById(@PathVariable UUID id,
 			@RequestBody @Valid ClassRequest classRequest) {
-		ClassResponse response = classesService.update(id, classRequest);
+		ClassResponse response = classService.update(id, classRequest);
 		return ResponseEntity.ok(SingleResponse.success("Successfully updated class.", response));
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<SingleResponse<ClassResponse>> deleteById(@PathVariable UUID id) {
+		classService.delete(id);
+		return ResponseEntity.ok(SingleResponse.success("Successfully to delete class." , null));
 	}
 }

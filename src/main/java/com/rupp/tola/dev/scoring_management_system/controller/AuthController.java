@@ -9,10 +9,7 @@ import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
 import com.rupp.tola.dev.scoring_management_system.service.RefreshTokenService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +50,7 @@ public class AuthController {
 	}
 
 	@Operation(summary = "Login with email and password.")
-	@PostMapping("/signin")
+	@PostMapping(value = "/signin")
 	public ResponseEntity<SingleResponse<UserResponse>> login(@Valid @RequestBody AuthRequest request) {
 		try {
 			UserResponse response = authService.login(request);

@@ -13,7 +13,7 @@ import com.rupp.tola.dev.scoring_management_system.enums.Status;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
 import com.rupp.tola.dev.scoring_management_system.repository.RoleRepository;
 import com.rupp.tola.dev.scoring_management_system.service.RefreshTokenService;
-import com.rupp.tola.dev.scoring_management_system.util.Util;
+import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

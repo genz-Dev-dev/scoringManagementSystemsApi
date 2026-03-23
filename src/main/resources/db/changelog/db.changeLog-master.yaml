@@ -1,5 +1,5 @@
 databaseChangeLog:
-    - include:
+  - include:
           file: db/changelog/001_create_schema_roles.yml
     - include:
           file: db/changelog/002_create_schema_permissions.yml
@@ -23,3 +23,5 @@ databaseChangeLog:
           file: db/changelog/011_create_schema_audit_logs.yml
     - include:
           file: db/changelog/012_add_active_to_roles.yml
+  - include:
+      file: com/rupp/tola/dev/scoring_management_system/entity/23-01-changelog.xml

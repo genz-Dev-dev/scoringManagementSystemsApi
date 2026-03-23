@@ -11,14 +11,12 @@ import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundExc
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
-import com.rupp.tola.dev.scoring_management_system.util.StudentCodeGenerateUtils;
-import com.rupp.tola.dev.scoring_management_system.util.Util;
+import com.rupp.tola.dev.scoring_management_system.utils.StudentCodeGenerateUtils;
+import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.rupp.tola.dev.scoring_management_system.repository.StudentRepository;
@@ -45,53 +43,30 @@ public class StudentServiceImpl implements StudentService {
 		
 		Class aClass = classRepository.findById(request.getClassId())
 				.orElseThrow(() -> new ResourceNotFoundException("Classes not found: " + request.getClassId()));
+
 		student.setClazz(aClass);
+
 		Student saved = studentRepository.save(student);
 		return studentsMapper.toResponse(saved);
 	}
 
 	@Override
 	public StudentResponse getById(UUID uuid) {
-		Student student = studentRepository.findById(uuid)
-				.orElseThrow(() -> new ResourceNotFoundException("Student not found with id : " + uuid));
+		Student student =  this.findByOrThrow(uuid);
 		log.info("Student found with id {}", student.getId());
 		return studentsMapper.toResponse(student);
 	}
 
 	@Override
-	public Page<StudentResponse> getAll(Map<String, String> param) {
-		int number = Integer.parseInt(param.getOrDefault("number", "0"));
-		int size = Integer.parseInt(param.getOrDefault("size", "15"));
-		String sort = param.getOrDefault("sort", "ASC");
-		String property = param.getOrDefault("property", "id");
-
-		Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-		Pageable pageable = PageRequest.of(number, size, Sort.by(direction, property));
-
+	public Page<StudentResponse> getAll(Pageable pageable) {
 		Page<Student> students = studentRepository.findAll(pageable);
 		log.info("Students found with all {}", students.getContent());
-
 		return students.map(studentsMapper::toResponse);
 	}
 
 	@Override
-	public Optional<StudentResponse> findByClazzId(UUID id) {
-		return studentRepository.findByClazzId(id)
-				.map(studentsMapper::toResponse);
-	}
-
-	@Override
-	public Page<StudentResponse> findByStatus(boolean status, Pageable pageable) {
-		log.info("findByStatus: {}, pageable: {}", status, pageable);
-		return studentRepository.findByStatus(status, pageable)
-				.map(studentsMapper::toResponse);
-	}
-
-	@Override
 	public StudentResponse update(UUID uuid, StudentRequest request) {
-		Student student = studentRepository.findById(uuid)
-				.orElseThrow(() -> new NoSuchElementException("Student not found with ID: " + uuid));
-
+		Student student = this.findByOrThrow(uuid);
 		student.setStudentCode(StudentCodeGenerateUtils.generator());
 		student.setClazz(studentsMapper.map(request.getClassId()));
 		student.setKhFirstName(request.getKhFirstName());
@@ -111,22 +86,9 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public void delete(UUID uuid) {
-		Student student = studentRepository.findById(uuid)
-			.orElseThrow(() -> new ResourceNotFoundException("Student not found with ID : " + uuid));
+		Student student = this.findByOrThrow(uuid);
 		log.info("Student delete with id {}", student.getId());
 		studentRepository.delete(student);
-	}
-
-	@Override
-	public Page<StudentResponse> getByStatusPagination(Map<String, String> param, Boolean status) {
-		int number = Integer.parseInt(param.getOrDefault("number", "0"));
-		int size = Integer.parseInt(param.getOrDefault("size", "15"));
-		String sort = param.getOrDefault("sort", "ASC");
-		String property = param.getOrDefault("property", "id");
-		Sort.Direction direction = sort.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-		Pageable pageable = PageRequest.of(number, size, Sort.by(direction, property));
-		return studentRepository.findByStatus(status, pageable)
-				.map(studentsMapper::toResponse);
 	}
 
 	@Override
@@ -141,10 +103,10 @@ public class StudentServiceImpl implements StudentService {
 			throw new RuntimeException("No students found in the imported file");
 		}
 
-		Class aClass;
+		Class clazz;
 		try {
 			UUID classId = UUID.fromString(request.getClassId());
-			aClass = classRepository.findById(classId)
+			clazz = classRepository.findById(classId)
 					.orElseThrow(() -> new ResourceNotFoundException("Classes not found: " + request.getClassId()));
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException("Invalid Class ID format: " + request.getClassId());
@@ -153,7 +115,7 @@ public class StudentServiceImpl implements StudentService {
 		for (Student student : studentList) {
 			student.setStudentCode(StudentCodeGenerateUtils.generator());
 			student.setStatus(true);
-			student.setClazz(aClass);
+			student.setClazz(clazz);
 		}
 		
 		List<Student> savedStudents = studentRepository.saveAll(studentList);
@@ -162,6 +124,12 @@ public class StudentServiceImpl implements StudentService {
 		return studentList.stream()
 				.map(studentsMapper::toResponse)
 				.toList();
+	}
+
+	private Student findByOrThrow(UUID uuid) {
+		return studentRepository
+				.findById(uuid)
+				.orElseThrow(() -> new ResourceNotFoundException("Student not found with id : " + uuid));
 	}
 
 

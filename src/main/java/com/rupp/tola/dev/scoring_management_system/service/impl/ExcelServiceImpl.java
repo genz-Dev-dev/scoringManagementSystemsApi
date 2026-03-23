@@ -5,7 +5,7 @@ import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.exception.ExcelException;
 import com.rupp.tola.dev.scoring_management_system.repository.StudentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
-import com.rupp.tola.dev.scoring_management_system.util.Util;
+import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
