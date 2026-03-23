@@ -1,13 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "tbl_student")
@@ -52,10 +50,10 @@ public class Student extends BaseEntity{
 	@Column(name = "std_phoneNumber")
 	private String phoneNumber;
 
-	@Embedded
-	private Address address;
-
 	private Boolean status;
+
+	@OneToOne(mappedBy = "student",cascade = CascadeType.ALL)
+	private StudentAddress address;
 
 	@OneToMany(mappedBy = "student" , cascade = CascadeType.ALL)
 	private List<Score> scores;

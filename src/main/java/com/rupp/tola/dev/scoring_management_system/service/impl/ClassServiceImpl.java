@@ -6,8 +6,10 @@ import java.util.UUID;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
-import com.rupp.tola.dev.scoring_management_system.mapper.ClassesMapper;
+import com.rupp.tola.dev.scoring_management_system.mapper.ClassMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
@@ -21,33 +23,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClassServiceImpl implements ClassService {
 	private final ClassRepository classRepository;
-	private final ClassesMapper classesMapper;
+	private final ClassMapper classMapper;
 
 	@Override
 	public ClassResponse create(ClassRequest request) {
-		Class clazz = classesMapper.toEntity(request);
+		Class clazz = classMapper.toEntity(request);
 		clazz.setStatus(true);
 		Class saved = classRepository.save(clazz);
-		return classesMapper.toResponse(saved);
+		return classMapper.toResponse(saved);
 	}
 
 	@Override
-	public List<ClassResponse> getAllByStatus(Boolean status) {
-		List<Class> classes = classRepository.findByStatus(status);
-		if (classes.isEmpty()) {
-			throw new ResourceNotFoundException("No classes found with status: " + status);
-		}
-		return classes.stream()
-				.map(classesMapper::toResponse)
-				.toList();
+	public Page<ClassResponse> getAll(Pageable pageable) {
+		Page<Class> classes = classRepository.findAll(pageable);
+		return classes.map(classMapper::toResponse);
 	}
 
 	@Override
 	public ClassResponse update(UUID id, ClassRequest request) {
 		Class classEntity = findByOrThrow(id);
-		classesMapper.updateFromRequest(request, classEntity);
+		classMapper.updateFromRequest(request, classEntity);
 		Class saved = classRepository.save(classEntity);
-		return classesMapper.toResponse(saved);
+		return classMapper.toResponse(saved);
 	}
 
 	@Override
@@ -60,7 +57,7 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public ClassResponse getById(UUID id) {
 		Class classEntity = findByOrThrow(id);
-		return classesMapper.toResponse(classEntity);
+		return classMapper.toResponse(classEntity);
 	}
 
 	private Class findByOrThrow(UUID id) {

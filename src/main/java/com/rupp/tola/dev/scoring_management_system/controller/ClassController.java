@@ -3,7 +3,10 @@ package com.rupp.tola.dev.scoring_management_system.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.request.PaginationRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/classes")
-public class ClassesController {
+public class ClassController {
 
 	private final ClassService classService;
 
@@ -28,9 +31,9 @@ public class ClassesController {
 	}
 
 	@GetMapping
-	public ResponseEntity<SingleResponse<List<ClassResponse>>> getAll(@RequestParam(defaultValue = "false") Boolean status) {
-		List<ClassResponse> responses = classService.getAllByStatus(status);
-		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved classes.", responses));
+	public ResponseEntity<MultipleResponse<ClassResponse>> getAll(PaginationRequest request) {
+		Page<ClassResponse> responses = classService.getAll(request.toPageable());
+		return ResponseEntity.ok(MultipleResponse.success("Successfully to retrieve all class with pagination" , responses));
 	}
 
 	@PutMapping("/{id}")

@@ -8,8 +8,10 @@ import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
+import com.rupp.tola.dev.scoring_management_system.mapper.StudentAddressMapper;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
+import com.rupp.tola.dev.scoring_management_system.service.ClassService;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
 import com.rupp.tola.dev.scoring_management_system.utils.StudentCodeGenerateUtils;
 import com.rupp.tola.dev.scoring_management_system.utils.Util;
@@ -33,6 +35,7 @@ public class StudentServiceImpl implements StudentService {
 	private final StudentRepository studentRepository;
 	private final ClassRepository classRepository;
 	private final StudentsMapper studentsMapper;
+	private final StudentAddressMapper studentAddressMapper;
 	private final ExcelService excelService;
 
 	@Override
@@ -41,10 +44,14 @@ public class StudentServiceImpl implements StudentService {
 		student.setStudentCode(StudentCodeGenerateUtils.generator());
 		student.setStatus(true);
 		
-		Class aClass = classRepository.findById(request.getClassId())
+		Class clazz = classRepository.findById(request.getClassId())
 				.orElseThrow(() -> new ResourceNotFoundException("Classes not found: " + request.getClassId()));
 
-		student.setClazz(aClass);
+		student.setClazz(clazz);
+
+		if (request.getAddress() != null) {
+			student.getAddress().setStudent(student);
+		}
 
 		Student saved = studentRepository.save(student);
 		return studentsMapper.toResponse(saved);
@@ -68,7 +75,8 @@ public class StudentServiceImpl implements StudentService {
 	public StudentResponse update(UUID uuid, StudentRequest request) {
 		Student student = this.findByOrThrow(uuid);
 		student.setStudentCode(StudentCodeGenerateUtils.generator());
-		student.setClazz(studentsMapper.map(request.getClassId()));
+		student.setClazz(classRepository.findById(request
+				.getClassId()).orElseThrow(() -> new ResourceNotFoundException("Classes not found: " + request.getClassId())));
 		student.setKhFirstName(request.getKhFirstName());
 		student.setKhLastName(request.getKhLastName());
 		student.setEnFirstName(request.getEnFirstName());
@@ -77,7 +85,21 @@ public class StudentServiceImpl implements StudentService {
 		student.setDateOfBirth(Util.convertToLocalDate(request.getDateOfBirth()));
 		student.setEmail(request.getEmail());
 		student.setPhoneNumber(request.getPhoneNumber());
-		student.setAddress(request.getAddress());
+		
+		if (request.getAddress() != null) {
+			if (student.getAddress() == null) {
+				student.setAddress(studentAddressMapper.toEntity(request.getAddress()));
+				student.getAddress().setStudent(student);
+			} else {
+				// Manual update of address fields as requested "menaul"
+				student.getAddress().setHouseNumber(request.getAddress().getHouseNumber());
+				student.getAddress().setStreet(request.getAddress().getStreet());
+				student.getAddress().setSangkat(request.getAddress().getSangkat());
+				student.getAddress().setKhan(request.getAddress().getKhan());
+				student.getAddress().setProvince(request.getAddress().getProvince());
+				student.getAddress().setCountry(request.getAddress().getCountry());
+			}
+		}
 
 		Student updated = studentRepository.save(student);
 		log.info("Student Update with ID: {}", uuid);

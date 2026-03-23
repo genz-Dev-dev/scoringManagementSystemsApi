@@ -1,7 +1,7 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Address;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
+import com.rupp.tola.dev.scoring_management_system.entity.StudentAddress;
 import com.rupp.tola.dev.scoring_management_system.exception.ExcelException;
 import com.rupp.tola.dev.scoring_management_system.repository.StudentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
@@ -36,7 +36,7 @@ public class ExcelServiceImpl implements ExcelService {
                     continue;
                 }
                 Student student = new Student();
-                Address address = new Address();
+                StudentAddress address = new StudentAddress();
 
                 for (int i = 1; i <= 14; i++) {
                     Cell cell = row.getCell(i);
@@ -93,7 +93,7 @@ public class ExcelServiceImpl implements ExcelService {
      * @param student
      */
     private void writeStudentToRow(Row row, Student student) {
-        Address address = student.getAddress();
+        StudentAddress address = student.getAddress();
 
         row.createCell(0).setCellValue(student.getId().toString());
         row.createCell(1).setCellValue(Util.text(student.getKhFirstName()));
@@ -164,7 +164,7 @@ public class ExcelServiceImpl implements ExcelService {
         return sheet;
     }
 
-    private void excelStudentMapping(int index , Student student, Address address, String cellValue) {
+    private void excelStudentMapping(int index , Student student, StudentAddress address, String cellValue) {
         switch (index) {
             case 1:
                 student.setKhFirstName(cellValue);

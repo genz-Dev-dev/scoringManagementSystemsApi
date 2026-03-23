@@ -9,7 +9,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 
-public class ExcelFileExporter {
+public class ExcelUtil {
 
       public static void setBorder(CellStyle style) {
             style.setBorderTop(BorderStyle.THIN);

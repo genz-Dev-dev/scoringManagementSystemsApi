@@ -1,7 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;

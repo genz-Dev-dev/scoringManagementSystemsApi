@@ -1,19 +1,19 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
-import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "tbl_class")
@@ -31,5 +31,8 @@ public class Class extends BaseEntity {
 	private String name;
 	
 	private Boolean status;
+	
+	@OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL)
+	private List<Student> students;
 
 }

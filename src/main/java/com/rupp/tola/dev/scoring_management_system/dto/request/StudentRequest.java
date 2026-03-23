@@ -1,7 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
-
-import com.rupp.tola.dev.scoring_management_system.entity.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -41,6 +39,6 @@ public class StudentRequest {
 
     private String phoneNumber;
 
-    private Address address;
+    private StudentAddressRequest address;
 
 }

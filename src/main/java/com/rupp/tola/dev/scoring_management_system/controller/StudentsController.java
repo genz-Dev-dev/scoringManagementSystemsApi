@@ -1,10 +1,10 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
 import java.io.ByteArrayInputStream;
-import java.util.Map;
 import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.request.PaginationRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
@@ -40,22 +40,20 @@ public class StudentsController {
 	}
 
 	@GetMapping
-	public ResponseEntity<MultipleResponse<StudentResponse>> findAll(
-			@RequestParam Map<String, String> param
-	) {
-		Page<StudentResponse> responses = studentService.getAll(param);
+	public ResponseEntity<MultipleResponse<StudentResponse>> findAll(PaginationRequest request) {
+		Page<StudentResponse> responses = studentService.getAll(request.toPageable());
 		return ResponseEntity.ok().body(MultipleResponse.success("Retrieve all students with pagination.", responses));
 	}
 
 	@GetMapping(path = "/{uuid}")
-	public ResponseEntity<StudentResponse> getByUuid(@PathVariable UUID uuid) {
+	public ResponseEntity<StudentResponse> getById(@PathVariable UUID uuid) {
 		StudentResponse studentsResponse = studentService.getById(uuid);
 		log.info("getByUuid: {}", uuid);
 		return ResponseEntity.ok(studentsResponse);
 	}
 
 	@PutMapping(path = "/{uuid}")
-	public ResponseEntity<StudentResponse> updateByUuid(
+	public ResponseEntity<StudentResponse> update(
 			@PathVariable UUID uuid,
 			@RequestBody StudentRequest studentRequest
 			) {
@@ -64,19 +62,10 @@ public class StudentsController {
 	}
 
 	@DeleteMapping(path = "/{uuid}")
-	public ResponseEntity<SingleResponse<Void>> deleteByUuid(@PathVariable UUID uuid) {
+	public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID uuid) {
 		studentService.delete(uuid);
 		log.info("DeleteByUuid: {}", uuid);
 		return ResponseEntity.ok().body(SingleResponse.success("Delete student successfully.", null));
-	}
-
-	@GetMapping("/getByStatus")
-	public ResponseEntity<MultipleResponse<StudentResponse>> getByStatus(
-			@RequestParam(defaultValue = "false") Boolean status,
-			@RequestParam Map<String, String> param
-	) {
-		Page<StudentResponse> responses = studentService.getByStatusPagination(param, status);
-		return ResponseEntity.ok().body(MultipleResponse.success("Retrieve students by status.", responses));
 	}
 
 	@PostMapping(path = "/import-student", consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)

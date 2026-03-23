@@ -1,6 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.dto.response;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +18,6 @@ public class StudentResponse {
 
     private String studentCode;
 
-    private UUID classId;
-
-    private String className;
-
     private String khFirstName;
 
     private String khLastName;
@@ -39,7 +34,7 @@ public class StudentResponse {
 
     private String phoneNumber;
 
-    private Address address;
+    private StudentAddressResponse address;
 
     private boolean status;
 

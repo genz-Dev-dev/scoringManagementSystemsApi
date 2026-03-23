@@ -1,15 +1,21 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.*;
 
-@Embeddable
+import java.util.UUID;
+
+@Entity
+@Table(name = "tbl_student_address")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class Address {
+public class StudentAddress {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "address_id")
+    private UUID id;
 
     @Column(name = "No")
     private String houseNumber;
@@ -28,4 +34,8 @@ public class Address {
 
     @Column(name = "country", nullable = false, length = 50)
     private String country;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id" , referencedColumnName = "student_id")
+    private Student student;
 }
