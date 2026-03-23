@@ -32,7 +32,7 @@ public class Class extends BaseEntity {
 	
 	private Boolean status;
 	
-	@OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Student> students;
 
 }

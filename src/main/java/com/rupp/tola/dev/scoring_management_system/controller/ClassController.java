@@ -1,6 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
-import java.util.List;
 import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
@@ -33,11 +32,18 @@ public class ClassController {
 	@GetMapping
 	public ResponseEntity<MultipleResponse<ClassResponse>> getAll(PaginationRequest request) {
 		Page<ClassResponse> responses = classService.getAll(request.toPageable());
-		return ResponseEntity.ok(MultipleResponse.success("Successfully to retrieve all class with pagination" , responses));
+		return ResponseEntity
+				.ok(MultipleResponse.success("Successfully retrieved all classes with pagination.", responses));
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<SingleResponse<ClassResponse>> getById(@PathVariable UUID id) {
+		ClassResponse response = classService.getById(id);
+		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved class.", response));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<SingleResponse<ClassResponse>> getById(@PathVariable UUID id,
+	public ResponseEntity<SingleResponse<ClassResponse>> update(@PathVariable UUID id,
 			@RequestBody @Valid ClassRequest classRequest) {
 		ClassResponse response = classService.update(id, classRequest);
 		return ResponseEntity.ok(SingleResponse.success("Successfully updated class.", response));
@@ -46,6 +52,6 @@ public class ClassController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<SingleResponse<ClassResponse>> deleteById(@PathVariable UUID id) {
 		classService.delete(id);
-		return ResponseEntity.ok(SingleResponse.success("Successfully to delete class." , null));
+		return ResponseEntity.ok(SingleResponse.success("Successfully deleted class.", null));
 	}
 }

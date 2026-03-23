@@ -8,19 +8,17 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
 
-@Mapper(componentModel = "spring", uses = { StudentsMapper.class })
+@Mapper(componentModel = "spring", uses = { StudentMapper.class , StudentAddressMapper.class })
 public interface ClassMapper {
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "status" , ignore = true)
-//	@Mapping(target = "students" , ignore = true)
-	Class toEntity(ClassRequest classRequest);
+	Class toEntity(ClassRequest request);
 
 	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "students" , ignore = true)
-	void updateFromRequest(ClassRequest classRequest, @MappingTarget Class entity);
+	void updateFromRequest(ClassRequest classRequest, @MappingTarget Class clazz);
 
 	@Mapping(target = "students", source = "students")
-	ClassResponse toResponse(Class entity);
+	ClassResponse toResponse(Class clazz);
 
 }

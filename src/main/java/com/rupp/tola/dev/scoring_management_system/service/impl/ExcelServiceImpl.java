@@ -76,7 +76,7 @@ public class ExcelServiceImpl implements ExcelService {
             }
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-                workbook.write(out);
+            workbook.write(out);
 
             workbook.close();
 

@@ -9,9 +9,8 @@ import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentAddressMapper;
-import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
+import com.rupp.tola.dev.scoring_management_system.mapper.StudentMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
-import com.rupp.tola.dev.scoring_management_system.service.ClassService;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
 import com.rupp.tola.dev.scoring_management_system.utils.StudentCodeGenerateUtils;
 import com.rupp.tola.dev.scoring_management_system.utils.Util;
@@ -34,13 +33,13 @@ public class StudentServiceImpl implements StudentService {
 
 	private final StudentRepository studentRepository;
 	private final ClassRepository classRepository;
-	private final StudentsMapper studentsMapper;
+	private final StudentMapper studentMapper;
 	private final StudentAddressMapper studentAddressMapper;
 	private final ExcelService excelService;
 
 	@Override
 	public StudentResponse create(StudentRequest request) {
-		Student student = studentsMapper.toEntity(request);
+		Student student = studentMapper.toEntity(request);
 		student.setStudentCode(StudentCodeGenerateUtils.generator());
 		student.setStatus(true);
 		
@@ -54,21 +53,21 @@ public class StudentServiceImpl implements StudentService {
 		}
 
 		Student saved = studentRepository.save(student);
-		return studentsMapper.toResponse(saved);
+		return studentMapper.toResponse(saved);
 	}
 
 	@Override
 	public StudentResponse getById(UUID uuid) {
 		Student student =  this.findByOrThrow(uuid);
 		log.info("Student found with id {}", student.getId());
-		return studentsMapper.toResponse(student);
+		return studentMapper.toResponse(student);
 	}
 
 	@Override
 	public Page<StudentResponse> getAll(Pageable pageable) {
 		Page<Student> students = studentRepository.findAll(pageable);
 		log.info("Students found with all {}", students.getContent());
-		return students.map(studentsMapper::toResponse);
+		return students.map(studentMapper::toResponse);
 	}
 
 	@Override
@@ -91,7 +90,6 @@ public class StudentServiceImpl implements StudentService {
 				student.setAddress(studentAddressMapper.toEntity(request.getAddress()));
 				student.getAddress().setStudent(student);
 			} else {
-				// Manual update of address fields as requested "menaul"
 				student.getAddress().setHouseNumber(request.getAddress().getHouseNumber());
 				student.getAddress().setStreet(request.getAddress().getStreet());
 				student.getAddress().setSangkat(request.getAddress().getSangkat());
@@ -103,7 +101,7 @@ public class StudentServiceImpl implements StudentService {
 
 		Student updated = studentRepository.save(student);
 		log.info("Student Update with ID: {}", uuid);
-        return studentsMapper.toResponse(updated);
+        return studentMapper.toResponse(updated);
 	}
 
 	@Override
@@ -144,7 +142,7 @@ public class StudentServiceImpl implements StudentService {
 		log.info("Imported {} students successfully", savedStudents.size());
 
 		return studentList.stream()
-				.map(studentsMapper::toResponse)
+				.map(studentMapper::toResponse)
 				.toList();
 	}
 

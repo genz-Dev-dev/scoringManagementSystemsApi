@@ -5,7 +5,6 @@ import com.rupp.tola.dev.scoring_management_system.dto.response.StudentAddressRe
 import com.rupp.tola.dev.scoring_management_system.entity.StudentAddress;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface StudentAddressMapper {

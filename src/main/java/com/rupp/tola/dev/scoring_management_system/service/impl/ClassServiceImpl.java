@@ -1,6 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
@@ -16,11 +15,13 @@ import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundExc
 import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ClassService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ClassServiceImpl implements ClassService {
 	private final ClassRepository classRepository;
 	private final ClassMapper classMapper;
@@ -29,6 +30,16 @@ public class ClassServiceImpl implements ClassService {
 	public ClassResponse create(ClassRequest request) {
 		Class clazz = classMapper.toEntity(request);
 		clazz.setStatus(true);
+		
+		if (clazz.getStudents() != null) {
+			clazz.getStudents().forEach(student -> {
+				student.setClazz(clazz);
+				if (student.getAddress() != null) {
+					student.getAddress().setStudent(student);
+				}
+			});
+		}
+		
 		Class saved = classRepository.save(clazz);
 		return classMapper.toResponse(saved);
 	}
@@ -43,6 +54,16 @@ public class ClassServiceImpl implements ClassService {
 	public ClassResponse update(UUID id, ClassRequest request) {
 		Class classEntity = findByOrThrow(id);
 		classMapper.updateFromRequest(request, classEntity);
+		
+		if (classEntity.getStudents() != null) {
+			classEntity.getStudents().forEach(student -> {
+				student.setClazz(classEntity);
+				if (student.getAddress() != null) {
+					student.getAddress().setStudent(student);
+				}
+			});
+		}
+		
 		Class saved = classRepository.save(classEntity);
 		return classMapper.toResponse(saved);
 	}
