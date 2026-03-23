@@ -8,7 +8,7 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
 
-@Mapper(componentModel = "spring", uses = { StudentMapper.class , StudentAddressMapper.class })
+@Mapper(componentModel = "spring", uses = { StudentMapper.class})
 public interface ClassMapper {
 
 	@Mapping(target = "id", ignore = true)

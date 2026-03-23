@@ -13,12 +13,12 @@ import org.mapstruct.MappingTarget;
 
 import com.rupp.tola.dev.scoring_management_system.service.StudentService;
 
-@Mapper(componentModel = "spring", uses = { StudentService.class, StudentAddressMapper.class })
+@Mapper(componentModel = "spring", uses = { StudentAddressMapper.class })
 public interface StudentMapper {
 
 	@Mapping(target = "clazz", ignore = true)
 	@Mapping(target = "studentCode" , ignore = true)
-    Student toEntity(StudentRequest studentRequest);
+    Student toEntity(StudentRequest request);
 
 	@Mapping(target = "address", source = "address")
 	StudentResponse toResponse(Student student);
