@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Map;
 import java.util.UUID;
 
-import com.rupp.tola.dev.scoring_management_system.dto.StudentsDTO;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
@@ -58,9 +57,9 @@ public class StudentsController {
 	@PutMapping(path = "/{uuid}")
 	public ResponseEntity<StudentResponse> updateByUuid(
 			@PathVariable UUID uuid,
-			@RequestBody StudentsDTO studentsDTO
+			@RequestBody StudentRequest studentRequest
 			) {
-		log.info("UpdateByUuid: uuid{}, studentsDto: {}",uuid, studentsDTO);
+		log.info("UpdateByUuid: uuid{}, studentRequest: {}",uuid, studentRequest);
 		return null;
 	}
 

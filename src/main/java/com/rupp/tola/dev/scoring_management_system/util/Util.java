@@ -1,7 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.util;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Address;
-import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 

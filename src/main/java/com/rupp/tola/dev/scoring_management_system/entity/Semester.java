@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -22,7 +23,13 @@ public class Semester {
 	@Column(name = "semester_id")
 	private UUID id;
 
-	@Column(name = "semester_name", updatable = false, nullable = false)
-	private String name;
+	@Column(name = "semester_no", updatable = false, nullable = false)
+	private int semesterNo;
+
+	@Column(name = "semester_start_at", nullable = false)
+	private LocalDate startAt;
+
+	@Column(name = "semester_end_at" , nullable = false)
+	private LocalDate endAt;
 
 }

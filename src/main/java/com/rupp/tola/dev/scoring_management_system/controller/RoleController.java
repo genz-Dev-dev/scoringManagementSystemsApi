@@ -80,7 +80,7 @@ public class RoleController {
     }
 
     @Operation(summary = "Remove permission from role.")
-    @DeleteMapping("/{roleId/permission/{permissionId}")
+    @DeleteMapping("/{roleId}/permission/{permissionId}")
     public ResponseEntity<SingleResponse<Void>> removePermission(@PathVariable UUID roleId, @PathVariable UUID permissionId) {
         roleService.deletePermission(roleId, permissionId);
         return ResponseEntity.ok().body(SingleResponse.success("Successfully removed role.", null));

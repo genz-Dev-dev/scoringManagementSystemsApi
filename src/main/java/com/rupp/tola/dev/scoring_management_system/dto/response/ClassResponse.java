@@ -5,21 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class SemesterResponse {
-
+public class ClassResponse {
     private UUID id;
-
-    private int semesterNo;
-
-    private LocalDate startAt;
-
-    private LocalDate endAt;
-
+    private String name;
+    private Boolean status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
