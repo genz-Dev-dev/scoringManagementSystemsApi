@@ -3,14 +3,15 @@ package com.rupp.tola.dev.scoring_management_system.service;
 import java.util.List;
 import java.util.UUID;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Class;
+import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 
 public interface ClassesService {
-	Class createClasses(Class aClass);
+	ClassResponse create(ClassRequest request);
 
-	List<Class> getClasses(Boolean status);
+	List<ClassResponse> getAllByStatus(Boolean status);
 
-	Class getById(UUID id);
+	ClassResponse getById(UUID id);
 
-	Class editclass(UUID id, Class aClass);
+	ClassResponse update(UUID id, ClassRequest request);
 }

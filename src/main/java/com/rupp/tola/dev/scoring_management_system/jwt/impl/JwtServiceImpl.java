@@ -7,7 +7,6 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -20,8 +19,6 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 public class JwtServiceImpl extends JwtConfig implements JwtService {
-
-    private final UserDetailsService userDetailsService;
 
     @Override
     public SecretKey getSigningKey() {

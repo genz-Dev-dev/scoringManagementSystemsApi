@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ClassRequest {
+
     @NotBlank(message = "Class name is required.")
     private String name;
-    private Boolean status = false;
 }

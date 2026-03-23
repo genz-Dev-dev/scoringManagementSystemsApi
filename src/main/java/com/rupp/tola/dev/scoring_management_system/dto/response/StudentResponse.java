@@ -21,6 +21,8 @@ public class StudentResponse {
 
     private UUID classId;
 
+    private String className;
+
     private String khFirstName;
 
     private String khLastName;

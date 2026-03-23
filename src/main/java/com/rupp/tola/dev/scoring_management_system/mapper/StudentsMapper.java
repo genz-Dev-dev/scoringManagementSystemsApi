@@ -21,6 +21,7 @@ public interface StudentsMapper {
     Student toEntity(StudentRequest studentRequest);
 
 	@Mapping(target = "classId", source = "clazz.id")
+	@Mapping(target = "className" , source = "clazz.name")
 	StudentResponse toResponse(Student student);
 
 	List<StudentResponse> toResponseList(List<Student> students);
