@@ -12,6 +12,8 @@ import java.util.UUID;
 @Builder
 public class StudentRequest {
 
+    private UUID id;
+
     private UUID classId;
 
     @NotBlank(message = "Khmer First name is required.")

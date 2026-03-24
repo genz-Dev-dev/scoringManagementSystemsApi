@@ -5,7 +5,11 @@ import java.util.UUID;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
+import com.rupp.tola.dev.scoring_management_system.entity.StudentAddress;
+import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
 import com.rupp.tola.dev.scoring_management_system.mapper.ClassMapper;
+import com.rupp.tola.dev.scoring_management_system.mapper.StudentAddressMapper;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,22 +19,26 @@ import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundExc
 import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ClassService;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ClassServiceImpl implements ClassService {
 	private final ClassRepository classRepository;
 	private final ClassMapper classMapper;
+	private final StudentAddressMapper studentAddressMapper;
+	private final EntityManager entityManager;
 
 	@Override
 	public ClassResponse create(ClassRequest request) {
+		if (classRepository.existsByName(request.getName())) {
+			throw new DuplicateResourceException("Class with name " + request.getName() + " already exists");
+		}
 		Class clazz = classMapper.toEntity(request);
 		clazz.setStatus(true);
-		
+
 		if (clazz.getStudents() != null) {
 			clazz.getStudents().forEach(student -> {
 				student.setClazz(clazz);
@@ -39,8 +47,9 @@ public class ClassServiceImpl implements ClassService {
 				}
 			});
 		}
-		
+
 		Class saved = classRepository.save(clazz);
+		log.info("Class created: {}", saved);
 		return classMapper.toResponse(saved);
 	}
 
@@ -52,19 +61,26 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public ClassResponse update(UUID id, ClassRequest request) {
-		Class classEntity = findByOrThrow(id);
-		classMapper.updateFromRequest(request, classEntity);
-		
-		if (classEntity.getStudents() != null) {
-			classEntity.getStudents().forEach(student -> {
-				student.setClazz(classEntity);
+		Class clazz = findByOrThrow(id);
+		classMapper.updateFromRequest(request, clazz);
+
+		if (clazz.getStudents() != null) {
+			clazz.getStudents().forEach(student -> {
+				student.setClazz(clazz);
 				if (student.getAddress() != null) {
-					student.getAddress().setStudent(student);
+					StudentAddress address = student.getAddress();
+					address.setStudent(student);
+
+					if (address.getId() != null) {
+						StudentAddress managedAddress = entityManager.merge(address);
+						student.setAddress(managedAddress);
+					}
 				}
 			});
 		}
-		
-		Class saved = classRepository.save(classEntity);
+
+		Class saved = classRepository.save(clazz);
+		log.info("Class with id {} updated successfully", saved.getId());
 		return classMapper.toResponse(saved);
 	}
 
@@ -77,11 +93,13 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public ClassResponse getById(UUID id) {
-		Class classEntity = findByOrThrow(id);
-		return classMapper.toResponse(classEntity);
+		Class clazz = findByOrThrow(id);
+		log.info("Class with id {} retrieved successfully", id);
+		return classMapper.toResponse(clazz);
 	}
 
-	private Class findByOrThrow(UUID id) {
+	@Transactional(readOnly = true)
+    protected Class findByOrThrow(UUID id) {
 		return classRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Class not found with id: " + id));
 	}

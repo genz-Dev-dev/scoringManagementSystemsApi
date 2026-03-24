@@ -15,4 +15,6 @@ public class ScoreRequest {
 
     private UUID id;
 
+    //TODO: do it by your Bunchean
+
 }

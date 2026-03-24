@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +34,6 @@ public class Class extends BaseEntity {
 	private Boolean status;
 	
 	@OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Student> students;
+	private List<Student> students = new ArrayList<>();
 
 }
