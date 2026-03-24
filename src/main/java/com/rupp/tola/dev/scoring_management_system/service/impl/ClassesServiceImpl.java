@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ClassesServiceImpl implements ClassesService {
+	
 	private final ClassesRepository classesRepository;
 
 	@Override

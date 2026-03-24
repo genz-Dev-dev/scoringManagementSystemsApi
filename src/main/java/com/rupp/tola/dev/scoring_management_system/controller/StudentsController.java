@@ -1,6 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,14 +8,11 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
-import com.rupp.tola.dev.scoring_management_system.entity.Students;
-import com.rupp.tola.dev.scoring_management_system.mapper.StudentsMapper;
+
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class StudentsController {
 
 	private final StudentService studentService;
-	private final StudentsMapper studentsMapper;
 
 	@PostMapping
 	public ResponseEntity<StudentResponse> create(@Valid  @RequestBody StudentRequest request) {
