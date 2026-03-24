@@ -40,5 +40,4 @@ public class Score extends BaseEntity {
 	@JoinColumn(name = "semester_id" , referencedColumnName = "semester_id")
 	private Semester semester;
 
-
 }

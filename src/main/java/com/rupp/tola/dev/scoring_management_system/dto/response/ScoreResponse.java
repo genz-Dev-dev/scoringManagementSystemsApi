@@ -4,20 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.codec.StringEncoder;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SubjectResponse {
+public class ScoreResponse {
 
     private UUID id;
-    private String subjectCode;
-    private String subjectName;
-    private List<ScoreResponse> scores;
+    private BigDecimal score;
+    private UUID studentId;
 
 }
