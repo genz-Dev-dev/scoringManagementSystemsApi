@@ -1,14 +1,18 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
+import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.entity.StudentAddress;
 import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
 import com.rupp.tola.dev.scoring_management_system.mapper.ClassMapper;
-import com.rupp.tola.dev.scoring_management_system.mapper.StudentAddressMapper;
+import com.rupp.tola.dev.scoring_management_system.service.handler.ClazzServiceHandler;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClassServiceImpl implements ClassService {
 	private final ClassRepository classRepository;
 	private final ClassMapper classMapper;
-	private final StudentAddressMapper studentAddressMapper;
 	private final EntityManager entityManager;
 
 	@Override
@@ -61,23 +64,45 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public ClassResponse update(UUID id, ClassRequest request) {
+
 		Class clazz = findByOrThrow(id);
-		classMapper.updateFromRequest(request, clazz);
+		clazz.setName(request.getName());
+		clazz.setStatus(Optional.of(request.isStatus()).orElse(true));
 
-		if (clazz.getStudents() != null) {
-			clazz.getStudents().forEach(student -> {
-				student.setClazz(clazz);
-				if (student.getAddress() != null) {
-					StudentAddress address = student.getAddress();
-					address.setStudent(student);
+		List<Student> list = new ArrayList<>();
 
-					if (address.getId() != null) {
-						StudentAddress managedAddress = entityManager.merge(address);
-						student.setAddress(managedAddress);
+		if(clazz.getStudents() != null) {
+			List<Student> students = clazz.getStudents();
+			request.getStudents().forEach(req -> {
+				if(req.getId() != null) {
+					Student student = students.stream().filter(st -> st.getId()
+									.equals(req.getId()))
+							.findFirst()
+							.orElseThrow(()->
+									new ResourceNotFoundException("Student not found with ID: " + req.getId()));
+					ClazzServiceHandler.updateToClassStudent(student , req , clazz);
+					if(req.getAddress() != null) {
+						if(req.getAddress().getId() != null) {
+							StudentAddress address = student.getAddress();
+							ClazzServiceHandler.updateToStudentAddress(address , req , student);
+							student.setAddress(address);
+						}else {
+							StudentAddress address = student.getAddress();
+							ClazzServiceHandler.updateToStudentAddress(address , req , student);
+							student.setAddress(address);
+						}
 					}
+					list.add(student);
+				}else {
+					Student student = new Student();
+					student.setClazz(clazz);
+					ClazzServiceHandler.updateToClassStudent(student , req , clazz);
+					list.add(student);
 				}
 			});
 		}
+
+		clazz.setStudents(list);
 
 		Class saved = classRepository.save(clazz);
 		log.info("Class with id {} updated successfully", saved.getId());

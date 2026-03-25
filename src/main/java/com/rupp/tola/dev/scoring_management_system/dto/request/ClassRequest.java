@@ -19,6 +19,8 @@ public class ClassRequest {
     @NotBlank(message = "Class name is required.")
     private String name;
 
+    private boolean status;
+
     @JsonProperty("students")
     private List<StudentRequest> students;
 }

@@ -11,8 +11,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import com.rupp.tola.dev.scoring_management_system.service.StudentService;
-
 @Mapper(componentModel = "spring", uses = { StudentAddressMapper.class })
 public interface StudentMapper {
 
