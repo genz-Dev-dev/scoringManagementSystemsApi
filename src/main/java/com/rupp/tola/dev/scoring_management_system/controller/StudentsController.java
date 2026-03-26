@@ -8,6 +8,7 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.PaginationRequest
 import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentStatisticsResponse;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
@@ -58,6 +59,12 @@ public class StudentsController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=students.xlsx")
 				.contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(recourse);
+	}
+
+	@GetMapping("/statistics")
+	public ResponseEntity<SingleResponse<StudentStatisticsResponse>> getStatistics() {
+		StudentStatisticsResponse response = studentService.statistics();
+		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved student statistics response.", response));
 	}
 
 }

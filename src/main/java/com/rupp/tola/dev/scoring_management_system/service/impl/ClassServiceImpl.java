@@ -12,6 +12,7 @@ import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.entity.StudentAddress;
 import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
 import com.rupp.tola.dev.scoring_management_system.mapper.ClassMapper;
+import com.rupp.tola.dev.scoring_management_system.repository.StudentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.handler.ClazzServiceHandler;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClassServiceImpl implements ClassService {
 	private final ClassRepository classRepository;
 	private final ClassMapper classMapper;
-	private final EntityManager entityManager;
+	private final StudentRepository studentRepository;
 
 	@Override
 	public ClassResponse create(ClassRequest request) {
@@ -63,12 +64,14 @@ public class ClassServiceImpl implements ClassService {
 	}
 
 	@Override
+	@Transactional
 	public ClassResponse update(UUID id, ClassRequest request) {
 
 		Class clazz = findByOrThrow(id);
 		clazz.setName(request.getName());
 		clazz.setStatus(Optional.of(request.isStatus()).orElse(true));
 
+		Class saved = classRepository.save(clazz);
 		List<Student> list = new ArrayList<>();
 
 		if(clazz.getStudents() != null) {
@@ -102,9 +105,7 @@ public class ClassServiceImpl implements ClassService {
 			});
 		}
 
-		clazz.setStudents(list);
-
-		Class saved = classRepository.save(clazz);
+		studentRepository.saveAll(list);
 		log.info("Class with id {} updated successfully", saved.getId());
 		return classMapper.toResponse(saved);
 	}

@@ -6,14 +6,17 @@ import java.util.UUID;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentStatisticsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
 public interface StudentService {
 
+	@Deprecated
 	StudentResponse create(StudentRequest request);
 
+	@Deprecated
 	StudentResponse getById(UUID uuid);
 
 	Page<StudentResponse> getAll(Pageable pageable);
@@ -23,4 +26,7 @@ public interface StudentService {
 	void delete(UUID uuid);
 
 	List<StudentResponse> importStudents(ImportStudentRequest request);
+
+	StudentStatisticsResponse statistics();
+
 }

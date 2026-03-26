@@ -5,6 +5,7 @@ import java.util.*;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentStatisticsResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
@@ -146,10 +147,27 @@ public class StudentServiceImpl implements StudentService {
 				.toList();
 	}
 
+	@Override
+	public StudentStatisticsResponse statistics() {
+		int female = studentRepository.countByGender("F");
+		int male = studentRepository.countByGender("M");
+		int total = male + female;
+		return toStatistics(total, male, female);
+	}
+
 	private Student findByOrThrow(UUID uuid) {
 		return studentRepository
 				.findById(uuid)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found with id : " + uuid));
+	}
+
+	private StudentStatisticsResponse toStatistics(int student ,int male ,int female) {
+		return StudentStatisticsResponse
+				.builder()
+				.totalStudent(student)
+				.totalFemale(female)
+				.totalMale(male)
+				.build();
 	}
 
 
