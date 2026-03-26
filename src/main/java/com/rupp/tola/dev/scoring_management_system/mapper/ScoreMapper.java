@@ -10,12 +10,12 @@ import org.mapstruct.Mapping;
 public interface ScoreMapper {
 
     @Mapping(source = "studentId", target = "student.id")
-    @Mapping(source = "subjectId", target = "subject.id")
+//    @Mapping(source = "subjectId", target = "subject.id")
     @Mapping(source = "semesterId", target = "semester.id")
     Score toEntity(ScoreRequest request);
 
     @Mapping(source = "student.id", target = "studentId")
-    @Mapping(source = "subject.id", target = "subjectId")
+//    @Mapping(source = "subject.id", target = "subjectId")
     @Mapping(source = "semester.id", target = "semesterId")
     ScoreResponse toDetailResponse(Score score);
 

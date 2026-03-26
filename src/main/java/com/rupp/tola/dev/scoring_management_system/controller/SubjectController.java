@@ -6,11 +6,8 @@ import com.rupp.tola.dev.scoring_management_system.dto.response.SubjectResponse;
 import com.rupp.tola.dev.scoring_management_system.service.SubjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.apache.poi.ss.formula.functions.Single;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 import java.util.UUID;

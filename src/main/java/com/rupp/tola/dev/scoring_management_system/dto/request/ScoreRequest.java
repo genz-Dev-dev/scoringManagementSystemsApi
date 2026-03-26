@@ -16,16 +16,14 @@ import java.util.UUID;
 @Builder
 public class ScoreRequest {
 
-    @NotNull(message = "Score is required for student.")
-    private BigDecimal score;
 
     @NotNull(message = "Student is required.")
     private UUID studentId;
 
-    @NotNull(message = "Subject is required.")
-    private UUID subjectId;
-
     @NotNull(message = "Semester is required.")
     private UUID semesterId;
+
+    @NotNull(message = "Score is required for student.")
+    private BigDecimal score;
 
 }

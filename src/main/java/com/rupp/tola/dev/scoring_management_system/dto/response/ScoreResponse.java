@@ -15,7 +15,9 @@ import java.util.UUID;
 public class ScoreResponse {
 
     private UUID id;
-    private BigDecimal score;
     private UUID studentId;
+    private UUID semesterId;
+    private BigDecimal score;
+
 
 }

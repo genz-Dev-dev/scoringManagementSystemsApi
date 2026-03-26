@@ -4,7 +4,6 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.ScoreRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ScoreResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Score;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
-import com.rupp.tola.dev.scoring_management_system.entity.Subject;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.ScoreMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ScoreRepository;
@@ -12,7 +11,6 @@ import com.rupp.tola.dev.scoring_management_system.repository.StudentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.xmlbeans.impl.tool.SchemaImportResolver;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

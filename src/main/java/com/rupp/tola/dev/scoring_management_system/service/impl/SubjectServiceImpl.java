@@ -2,8 +2,6 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.SubjectRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SubjectResponse;
-import com.rupp.tola.dev.scoring_management_system.entity.Score;
-import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.entity.Subject;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.SubjectMapper;
@@ -13,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.SchemaOutputResolver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
