@@ -32,4 +32,5 @@ public class Department {
 
     @Column(name = "description", nullable = false)
     private String description;
+
 }

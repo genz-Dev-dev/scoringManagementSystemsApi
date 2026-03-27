@@ -20,8 +20,8 @@ public class ScoreRequest {
     @NotNull(message = "Student is required.")
     private UUID studentId;
 
-//    @NotNull(message = "Semester is required.")
-//    private UUID semesterId;
+    @NotNull(message = "Semester is required.")
+    private UUID semesterId;
 
     @NotNull(message = "Score is required for student.")
     private BigDecimal score;
