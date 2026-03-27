@@ -1,5 +1,7 @@
 package com.rupp.tola.dev.scoring_management_system.dto.response;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class StudentResponse {
 
     private UUID id;
@@ -29,6 +32,8 @@ public class StudentResponse {
     private String gender;
 
     private LocalDate dateOfBirth;
+
+    private LocalDate enrollmentDate;
 
     private String email;
 

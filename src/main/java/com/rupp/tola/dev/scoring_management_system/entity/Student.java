@@ -11,8 +11,7 @@ import lombok.*;
 @Table(name = "tbl_student")
 @Getter
 @Setter
-@NoArgsConstructor
-public class Student extends BaseEntity{
+public class Student extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -44,6 +43,9 @@ public class Student extends BaseEntity{
 	@Column(name = "std_dob")
 	private LocalDate dateOfBirth;
 
+	@Column(name = "enrollment_date")
+	private LocalDate enrollmentDate;
+
 	@Column(name = "std_email")
 	private String email;
 
@@ -52,10 +54,14 @@ public class Student extends BaseEntity{
 
 	private Boolean status;
 
-	@OneToOne(mappedBy = "student",cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
 	private StudentAddress address;
 
-	@OneToMany(mappedBy = "student" , cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
 	private List<Score> scores;
+
+	public Student() {
+		this.status = true;
+	}
 
 }

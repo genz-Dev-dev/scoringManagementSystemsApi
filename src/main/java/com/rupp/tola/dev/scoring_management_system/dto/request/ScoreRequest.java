@@ -26,4 +26,6 @@ public class ScoreRequest {
     @NotNull(message = "Score is required for student.")
     private BigDecimal score;
 
+    //TODO: do it by your Bunchean
+
 }

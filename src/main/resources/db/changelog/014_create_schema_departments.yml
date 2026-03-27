@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 014_create_departments_table
+      author: tola.dev001@gmail.com
+      changes:
+        - createTable:
+            tableName: tbl_department
+            columns:
+              - column:
+                  name: department_id
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: department_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: department_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

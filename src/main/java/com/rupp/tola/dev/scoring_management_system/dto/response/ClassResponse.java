@@ -1,32 +1,33 @@
 package com.rupp.tola.dev.scoring_management_system.dto.response;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ClassResponse {
-    
+
     private UUID id;
-    
+
     private String name;
-    
-    private Boolean status;
-    
-    @JsonProperty("students")
-    private List<StudentResponse> students;
-    
-    private LocalDateTime creationAt;
-    
-    private LocalDateTime updatedAt;
+
+    private String departmentId;
+
+    private String academicYear;
+
+    private Integer generation;
+
+    private LocalDate creationAt;
+
+    private LocalDate updatedAt;
 }
