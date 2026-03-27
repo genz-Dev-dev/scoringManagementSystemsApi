@@ -9,17 +9,17 @@ import org.mapstruct.*;
 public interface SemesterMapper {
 
     @Mapping(target = "id" , ignore = true)
-    @Mapping(target = "startAt" , ignore = true)
-    @Mapping(target = "endAt" , ignore = true)
+    @Mapping(target = "startDate" , ignore = true)
+    @Mapping(target = "endDate" , ignore = true)
+    @Mapping(target = "scores" , ignore = true)
     Semester toEntity(SemesterRequest request);
 
     SemesterResponse toResponse(Semester semester);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id" , ignore = true)
-    @Mapping(target = "startAt" , ignore = true)
-    @Mapping(target = "endAt" , ignore = true)
+    @Mapping(target = "startDate" , ignore = true)
+    @Mapping(target = "endDate" , ignore = true)
+    @Mapping(target = "scores" , ignore = true)
     void updateFromRequest(SemesterRequest request, @MappingTarget Semester semester);
-
-
 }

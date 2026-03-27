@@ -60,6 +60,9 @@ public class User implements UserDetails {
 	@JoinColumn(name = "role_id" , referencedColumnName = "role_id")
 	private Role role;
 
+	@OneToMany(mappedBy = "instructor" ,  cascade = CascadeType.ALL)
+	private List<Course> courses;
+
 	@Override
 	@NullMarked
 	public Collection<? extends GrantedAuthority> getAuthorities() {

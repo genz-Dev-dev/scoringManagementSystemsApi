@@ -14,6 +14,13 @@ import java.util.UUID;
 public class SubjectResponse {
 
     private UUID id;
+
+    private String departmentId;
+
     private String name;
+
+    private String description;
+
+    private String code;
 
 }

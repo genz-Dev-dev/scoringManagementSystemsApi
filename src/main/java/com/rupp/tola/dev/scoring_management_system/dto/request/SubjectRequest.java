@@ -12,7 +12,15 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SubjectRequest {
 
-    @NotBlank(message = "Name is required.")
+    @NotBlank(message = "Department id is required.")
+    private String departmentId;
+
+    @NotBlank(message = "Subject name is required.")
     private String name;
 
+    @NotBlank(message = "Subject description is required.")
+    private String description;
+
+    @NotBlank(message = "Subject code is required.")
+    private String code;
 }

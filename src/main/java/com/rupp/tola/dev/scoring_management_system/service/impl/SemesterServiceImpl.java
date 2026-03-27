@@ -12,13 +12,16 @@ import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class SemesterServiceImpl implements SemesterService {
 
     private final SemesterRepository semesterRepository;
@@ -26,15 +29,12 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public SemesterResponse create(SemesterRequest request) {
-
-        if(semesterRepository.existsBySemesterNo(request.getSemesterNo())) {
-            log.info("Semester with no {} already exists", request.getSemesterNo());
-            throw new DuplicateResourceException("Semester already exists");
-        }
+        validateDuplicate(request);
 
         Semester semester = semesterMapper.toEntity(request);
-        semester.setStartAt(Util.convertToLocalDate(request.getStartAt()));
-        semester.setEndAt(Util.convertToLocalDate(request.getEndAt()));
+        semester.setStartDate(Util.convertToLocalDate(request.getStartDate()));
+        semester.setEndDate(Util.convertToLocalDate(request.getEndDate()));
+        validateDateRange(semester.getStartDate(), semester.getEndDate());
         Semester saved = semesterRepository.save(semester);
         log.info("Created Semester with id {}", saved.getId());
         return semesterMapper.toResponse(saved);
@@ -43,9 +43,11 @@ public class SemesterServiceImpl implements SemesterService {
     @Override
     public SemesterResponse update(UUID id, SemesterRequest request) {
         Semester semester = this.findByOrThrow(id);
+        validateDuplicate(id, request);
         semesterMapper.updateFromRequest(request, semester);
-        semester.setStartAt(Util.convertToLocalDate(request.getStartAt()));
-        semester.setEndAt(Util.convertToLocalDate(request.getEndAt()));
+        semester.setStartDate(Util.convertToLocalDate(request.getStartDate()));
+        semester.setEndDate(Util.convertToLocalDate(request.getEndDate()));
+        validateDateRange(semester.getStartDate(), semester.getEndDate());
         Semester saved = semesterRepository.save(semester);
         log.info("Semester with id {} has been updated", id);
         return semesterMapper.toResponse(saved);
@@ -59,6 +61,7 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SemesterResponse> getAll() {
         List<Semester> semesters = semesterRepository.findAll();
         return semesters.stream()
@@ -67,10 +70,29 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SemesterResponse getById(UUID id) {
         Semester semester = this.findByOrThrow(id);
         log.info("Returning Semester with id {}", id);
         return semesterMapper.toResponse(semester);
+    }
+
+    private void validateDuplicate(SemesterRequest request) {
+        if (semesterRepository.existsByName(request.getName())) {
+            throw new DuplicateResourceException("Semester name already exists");
+        }
+    }
+
+    private void validateDuplicate(UUID id, SemesterRequest request) {
+        if (semesterRepository.existsByNameAndIdNot(request.getName(), id)) {
+            throw new DuplicateResourceException("Semester name already exists");
+        }
+    }
+
+    private void validateDateRange(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Semester start date must be before or equal to end date");
+        }
     }
 
     private Semester findByOrThrow(UUID id) {
