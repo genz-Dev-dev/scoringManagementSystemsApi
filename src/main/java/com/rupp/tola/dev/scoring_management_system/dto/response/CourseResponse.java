@@ -14,6 +14,7 @@ import java.util.UUID;
 public class CourseResponse {
 
     private UUID subjectId;
+
     private String subjectName;
 
     private UUID semesterId;

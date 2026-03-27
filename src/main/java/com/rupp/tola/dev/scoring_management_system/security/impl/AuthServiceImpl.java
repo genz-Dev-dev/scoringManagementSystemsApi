@@ -105,6 +105,7 @@ public class AuthServiceImpl implements AuthService {
 
 	private UserResponse createNewUser(UserRequest request) {
 		User user = userMapper.toEntity(request);
+		user.setStatus(true);
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 
 		RefreshToken refresh = refreshTokenService.create();
@@ -217,6 +218,13 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
+	public void updateStatus(UUID uuid, String status) {
+		User user = this.findByOrThrow(uuid);
+		user.setStatus(Boolean.parseBoolean(status));
+		userRepository.save(user);
+	}
+
+	@Override
 	public User getUserAuthenticated() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
@@ -229,6 +237,11 @@ public class AuthServiceImpl implements AuthService {
 		response.setRefreshToken(user.getRefreshToken().getToken());
 		response.setRole(user.getRole().getName());
 		return response;
+	}
+
+	private User findByOrThrow(UUID uuid) {
+		return userRepository.findById(uuid)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with UUID: " + uuid));
 	}
 
 }

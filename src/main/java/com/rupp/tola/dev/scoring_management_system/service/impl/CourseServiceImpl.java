@@ -3,6 +3,8 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 import com.rupp.tola.dev.scoring_management_system.dto.request.CourseRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.CourseResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Course;
+import com.rupp.tola.dev.scoring_management_system.entity.Semester;
+import com.rupp.tola.dev.scoring_management_system.entity.Subject;
 import com.rupp.tola.dev.scoring_management_system.entity.User;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.CourseMapper;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,8 +35,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponse create(CourseRequest request) {
-        checkIsSemesterAndSubjectExists(request.getSemesterId() , request.getSubjectId());
         Course course = courseMapper.toEntity(request);
+        CourseResponse response = courseMapper.toResponse(course);
+        checkIsSemesterAndSubjectExists(request.getSemesterId() , request.getSubjectId() , response);
         User instructor = userRepository.findById(request.getInstructorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Instructor not found with ID: " + request.getInstructorId()));
         course.setInstructor(instructor);
@@ -42,7 +46,7 @@ public class CourseServiceImpl implements CourseService {
         course.setEndAt(Util.convertToLocalDate(request.getEndAt()));
         Course saved = courseRepository.save(course);
         log.info("Create course with request {}" , request);
-        return courseMapper.toResponse(saved);
+        return response;
     }
 
     @Override
@@ -77,9 +81,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
 
-    private void checkIsSemesterAndSubjectExists(UUID semesterId, UUID subjectId) {
-        if(!semesterRepository.existsById(semesterId) || !subjectRepository.existsById(subjectId)) {
-            throw new ResourceNotFoundException("Semester or subject not found");
+    private void checkIsSemesterAndSubjectExists(UUID semesterId, UUID subjectId , CourseResponse response) {
+        Optional<Semester> semester = semesterRepository.findById(semesterId);
+        Optional<Subject> subject = subjectRepository.findById(subjectId);
+        if(semester.isEmpty() || subject.isEmpty()) {
+            throw new  ResourceNotFoundException("Semester or Subject not found");
         }
+        response.setSemesterName(semester.get().getName());
+        response.setSubjectName(subject.get().getName());
     }
+
 }

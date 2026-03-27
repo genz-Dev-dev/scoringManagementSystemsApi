@@ -12,11 +12,20 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class UserResponse {
+
     private UUID id;
+
     private String fullName;
+
     private String email;
+
     private boolean verified;
+
     private String verificationToken;
+
     private String refreshToken;
+
+    private boolean status;
+
     private String role;
 }
