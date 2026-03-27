@@ -9,7 +9,7 @@ databaseChangeLog:
                         - column:
                               name: class_id
                               type: uuid
-                              defaultValueComputed: gen_random_uuid() # 🔥 auto-generate UUID
+                              defaultValueComputed: gen_random_uuid()
                               constraints:
                                   primaryKey: true
                                   nullable: false
@@ -18,3 +18,32 @@ databaseChangeLog:
                               type: varchar(100)
                               constraints:
                                   nullable: false
+                        - column:
+                              name: department_id
+                              type: uuid
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: academic_year
+                              type: varchar(50)
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: generation
+                              type: int
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: creation_at
+                              type: date
+                              constraints:
+                                  nullable: false
+                        - column:
+                              name: update_at
+                              type: date
+              - addForeignKeyConstraint:
+                    baseTableName: tbl_class
+                    baseColumnNames: department_id
+                    referencedTableName: tbl_department
+                    referencedColumnNames: department_id
+                    constraintName: fk_class_department

@@ -1,5 +1,8 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -10,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class StudentRequest {
 
     private UUID id;
@@ -29,17 +33,22 @@ public class StudentRequest {
     private String enFirstName;
 
     @NotBlank(message = "English name is required.")
-    @Size(min = 2, max = 30, message = "Last name must be between 10 - 30 characters.")
+    @Size(min = 2, max = 30, message = "Last name must be between 2 - 30 characters.")
     private String enLastName;
 
-    @Size(max = 1)
+    @NotBlank(message = "Gender is required.")
     private String gender;
 
+    @NotBlank(message = "Date of birth is required.")
     private String dateOfBirth;
 
     private String email;
 
+    @JsonAlias("phone")
     private String phoneNumber;
+
+    @NotBlank(message = "Enrollment date is required.")
+    private String enrollmentDate;
 
     private StudentAddressRequest address;
 

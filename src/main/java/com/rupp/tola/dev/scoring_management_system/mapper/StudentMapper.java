@@ -17,6 +17,8 @@ public interface StudentMapper {
 	@Mapping(target = "id" , ignore = true)
 	@Mapping(target = "clazz", ignore = true)
 	@Mapping(target = "studentCode", ignore = true)
+	@Mapping(target = "dateOfBirth", ignore = true)
+	@Mapping(target = "enrollmentDate", ignore = true)
 	Student toEntity(StudentRequest request);
 
 	@Mapping(target = "address", source = "address")
@@ -27,6 +29,9 @@ public interface StudentMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "clazz", ignore = true)
 	@Mapping(target = "scores", ignore = true)
+	@Mapping(target = "studentCode", ignore = true)
+	@Mapping(target = "dateOfBirth", ignore = true)
+	@Mapping(target = "enrollmentDate", ignore = true)
 	@Mapping(target = "address", source = "address")
 	void updateFromRequest(StudentRequest request, @MappingTarget Student student);
 
@@ -34,4 +39,5 @@ public interface StudentMapper {
 	default void toStudentCode(@MappingTarget Student student) {
 		student.setStudentCode(StudentCodeGenerateUtils.generator());
 	}
+	
 }

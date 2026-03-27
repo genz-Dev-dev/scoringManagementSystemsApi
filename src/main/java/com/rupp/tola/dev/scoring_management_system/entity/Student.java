@@ -43,6 +43,9 @@ public class Student extends BaseEntity {
 	@Column(name = "std_dob")
 	private LocalDate dateOfBirth;
 
+	@Column(name = "enrollment_date")
+	private LocalDate enrollmentDate;
+
 	@Column(name = "std_email")
 	private String email;
 

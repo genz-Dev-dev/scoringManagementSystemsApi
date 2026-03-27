@@ -1,26 +1,30 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ClassRequest {
 
     @NotBlank(message = "Class name is required.")
     private String name;
 
-    private boolean status;
+    @NotBlank(message = "Department id is required.")
+    private String departmentId;
 
-    @JsonProperty("students")
-    private List<StudentRequest> students;
+    @NotBlank(message = "Academic year is required.")
+    private String academicYear;
+
+    @NotNull(message = "Generation is required.")
+    private Integer generation;
 }
