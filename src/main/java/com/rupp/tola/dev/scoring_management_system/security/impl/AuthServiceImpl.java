@@ -10,6 +10,7 @@ import com.rupp.tola.dev.scoring_management_system.entity.Role;
 import com.rupp.tola.dev.scoring_management_system.entity.User;
 import com.rupp.tola.dev.scoring_management_system.enums.RoleName;
 import com.rupp.tola.dev.scoring_management_system.enums.Status;
+import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.jwt.JwtService;
 import com.rupp.tola.dev.scoring_management_system.repository.RoleRepository;
 import com.rupp.tola.dev.scoring_management_system.service.RefreshTokenService;
@@ -116,16 +117,9 @@ public class AuthServiceImpl implements AuthService {
 		user.setVerificationToken(token);
 		user.setVerified(false);
 
-		Role role = roleRepository.findByNameAndStatus(RoleName.ROLE_STAFF.name(), Status.ACTIVE.name())
-				.orElseGet(() -> {
-					Role  newRole = new Role();
-					newRole.setName(RoleName.ROLE_STAFF.name());
-					newRole.setStatus(Status.ACTIVE.name());
-					newRole.setDescription("Default role using for new user registration.");
-					return roleRepository.save(newRole);
-				});
+		Role role = roleRepository.findByNameAndStatus(request.getRole(), Status.ACTIVE.name())
+						.orElseThrow(()-> new ResourceNotFoundException("Role not found with name: " + RoleName.ROLE_STAFF.name()));
 
-		role.setUsers(Set.of(user));
 		user.setRole(role);
 		log.info("New user created: {}", user);
 		User saved = userRepository.save(user);

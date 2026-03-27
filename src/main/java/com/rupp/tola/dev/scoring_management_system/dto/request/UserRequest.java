@@ -26,4 +26,8 @@ public class UserRequest {
     @NotBlank(message = "Password is required.")
     @Size(min = 5 , message = "Password at least must be 5 characters up.")
     private String password;
+
+    @NotBlank(message = "Role is required.")
+    @Size(min = 2 , max = 25 , message = "Role must be between 2 and 25 characters.")
+    private String role;
 }
