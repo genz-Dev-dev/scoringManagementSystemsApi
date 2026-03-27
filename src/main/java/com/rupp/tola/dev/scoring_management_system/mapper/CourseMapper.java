@@ -20,7 +20,6 @@ public interface CourseMapper {
             @Mapping(target = "schedule" , ignore = true),
             @Mapping(target = "startAt" , ignore = true),
             @Mapping(target = "endAt" , ignore = true),
-            @Mapping(target = "instructor" , ignore = true),
     })
     Course toEntity(CourseRequest request);
 
