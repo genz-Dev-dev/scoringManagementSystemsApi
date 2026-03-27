@@ -44,8 +44,12 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public StudentResponse create(StudentRequest request) {
 		Student student = studentMapper.toEntity(request);
-		applyRequest(student, request);
-
+		Class clazz = classRepository.findById(request.getClassId())
+						.orElseThrow(() -> new ResourceNotFoundException("Class not found"));
+		student.setClazz(clazz);
+		student.setDateOfBirth(Util.convertToLocalDate(request.getDateOfBirth()));
+		student.setEnrollmentDate(Util.convertToLocalDate(request.getEnrollmentDate()));
+		student.getAddress().setStudent(student);
 		Student saved = studentRepository.save(student);
 		return studentMapper.toResponse(saved);
 	}
@@ -116,6 +120,7 @@ public class StudentServiceImpl implements StudentService {
 			student.setStudentCode(StudentCodeGenerateUtils.generator());
 			student.setStatus(true);
 			student.setClazz(clazz);
+			student.getAddress().setStudent(student);
 		}
 		
 		List<Student> savedStudents = studentRepository.saveAll(studentList);
