@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_course")
@@ -39,5 +40,8 @@ public class Course {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id" , referencedColumnName = "user_id")
     private User instructor;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Score> scores;
 
 }

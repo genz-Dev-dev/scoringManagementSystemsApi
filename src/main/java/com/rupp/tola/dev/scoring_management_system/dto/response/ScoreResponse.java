@@ -15,9 +15,17 @@ import java.util.UUID;
 public class ScoreResponse {
 
     private UUID id;
+
     private UUID studentId;
+
     private UUID semesterId;
+
+    private UUID subjectId;
+
     private BigDecimal score;
 
+    private String grade;
+
+    private boolean status;
 
 }

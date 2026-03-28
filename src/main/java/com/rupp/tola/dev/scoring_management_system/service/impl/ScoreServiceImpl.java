@@ -9,10 +9,12 @@ import com.rupp.tola.dev.scoring_management_system.mapper.ScoreMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ScoreRepository;
 import com.rupp.tola.dev.scoring_management_system.repository.StudentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ScoreService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,33 +28,26 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public ScoreResponse create(ScoreRequest request) {
-
         Score score = scoreMapper.toEntity(request);
         score.setScore(request.getScore());
-
         Student student =  studentRepository.findById(request.getStudentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Student Not Found with id: " + request.getStudentId()));
-
         score.setStudent(student);
         Score saved = scoreRepository.save(score);
-
-        return scoreMapper.toDetailResponse(saved);
+        return scoreMapper.toResponse(saved);
     }
 
     @Override
     public ScoreResponse update(UUID id, ScoreRequest request) {
-
         Score score = scoreRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Subject Not Found: " + id));
 
         Student student =  studentRepository.findById(request.getStudentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Student Not Found with id: " + request.getStudentId()));
-
         score.setStudent(student);
         Score updated = scoreRepository.save(score);
         log.info("Updated score id: {}", id);
-
-        return scoreMapper.toDetailResponse(updated);
+        return scoreMapper.toResponse(updated);
     }
 
     @Override
@@ -60,7 +55,15 @@ public class ScoreServiceImpl implements ScoreService {
         Score score = scoreRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Subject Not Found: " + id));
         log.info("Getting score with id: {}", id);
-        return scoreMapper.toDetailResponse(score);
+        return scoreMapper.toResponse(score);
+    }
+
+    @Override
+    public List<ScoreResponse> getAll() {
+        List<Score> scores = scoreRepository.findAll();
+        return scores.stream()
+                .map(scoreMapper::toResponse)
+                .toList();
     }
 
     @Override

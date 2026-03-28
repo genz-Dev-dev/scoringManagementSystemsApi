@@ -17,7 +17,7 @@ public class ScoreController {
 
     private final ScoreService scoreService;
 
-    @PutMapping
+    @PostMapping
     public ResponseEntity<SingleResponse<ScoreResponse>> createNew(@RequestBody ScoreRequest request) {
         ScoreResponse response = scoreService.create(request);
         return ResponseEntity.ok(SingleResponse.success("A new score has been successfully created.", response));

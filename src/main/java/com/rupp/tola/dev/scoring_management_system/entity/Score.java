@@ -7,10 +7,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 @Entity
 @Table(name = "tbl_score", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { "student_id", "subject_id", "semester_id" })
+		@UniqueConstraint(columnNames = { "student_id", "semester_id", "subject_id"})
 })
 @Getter
 @Setter
@@ -22,22 +23,23 @@ public class Score extends BaseEntity {
 	@Column(name = "score_id")
 	private UUID id;
 
-	@Column(name = "score" , nullable = false)
-	private BigDecimal score;
-
-	@Column(name = "version", nullable = false)
-	private Integer version = 1;
-
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "student_id" , referencedColumnName = "student_id")
+	@JoinColumn(name = "student_id")
 	private Student student;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "subject_id" , referencedColumnName = "subject_id")
-	private Subject subject;
+	@JoinColumns({
+			@JoinColumn(name = "semester_id", referencedColumnName = "semester_id"),
+			@JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
+	})
+	private Course course;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "semester_id" , referencedColumnName = "semester_id")
-	private Semester semester;
+	@Column(name = "score")
+	private BigDecimal score;
+
+	@Column(name = "score_grade")
+	private String grade;
+
+	private boolean status;
 
 }

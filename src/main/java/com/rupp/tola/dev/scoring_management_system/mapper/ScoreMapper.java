@@ -5,18 +5,24 @@ import com.rupp.tola.dev.scoring_management_system.dto.response.ScoreResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Score;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface ScoreMapper {
 
-    @Mapping(source = "studentId", target = "student.id")
-//    @Mapping(source = "subjectId", target = "subject.id")
-//    @Mapping(source = "semesterId", target = "semester.id")
+    @Mappings({
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "student.id", source = "studentId"),
+            @Mapping(target = "course.courseId.semesterId", source = "semesterId"),
+            @Mapping(target = "course.courseId.subjectId", source = "subjectId")
+    })
     Score toEntity(ScoreRequest request);
 
-    @Mapping(source = "student.id", target = "studentId")
-//    @Mapping(source = "subject.id", target = "subjectId")
-//    @Mapping(source = "semester.id", target = "semesterId")
-    ScoreResponse toDetailResponse(Score score);
+    @Mappings({
+            @Mapping(target = "studentId", source = "student.id"),
+            @Mapping(target = "semesterId", source = "course.courseId.semesterId"),
+            @Mapping(target = "subjectId", source = "course.courseId.subjectId")
+    })
+    ScoreResponse toResponse(Score score);
 
 }
