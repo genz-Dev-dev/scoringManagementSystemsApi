@@ -1,0 +1,111 @@
+databaseChangeLog:
+  - changeSet:
+      id: 017_create_courses_table
+      author: chamreunvira (generated)
+      changes:
+        - createTable:
+            tableName: tbl_course
+            columns:
+              - column:
+                  name: semester_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subject_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: instructor_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_description
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_at
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_at
+                  type: date
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: tbl_course
+            columnNames: semester_id, subject_id
+            constraintName: pk_course
+        - addForeignKeyConstraint:
+            baseTableName: tbl_course
+            baseColumnNames: semester_id
+            referencedTableName: tbl_semester
+            referencedColumnNames: semester_id
+            constraintName: fk_course_semester
+        - addForeignKeyConstraint:
+            baseTableName: tbl_course
+            baseColumnNames: subject_id
+            referencedTableName: tbl_subject
+            referencedColumnNames: subject_id
+            constraintName: fk_course_subject
+        - addForeignKeyConstraint:
+            baseTableName: tbl_course
+            baseColumnNames: instructor_id
+            referencedTableName: tbl_user
+            referencedColumnNames: user_id
+            constraintName: fk_course_instructor
+        - createTable:
+            tableName: tbl_course_schedule
+            columns:
+              - column:
+                  name: course_schedule_id
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: semester_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subject_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day_of_week
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: room
+                  type: int
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: tbl_course_schedule
+            baseColumnNames: semester_id, subject_id
+            referencedTableName: tbl_course
+            referencedColumnNames: semester_id, subject_id
+            constraintName: fk_course_schedule_course

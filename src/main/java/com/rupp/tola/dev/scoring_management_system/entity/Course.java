@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,12 +26,6 @@ public class Course {
     @Column(name = "course_description" , nullable = false , length = 100)
     private String description;
 
-    @Column(name = "course_schedule" , nullable = false)
-    private LocalDate schedule;
-
-    @Column(name = "course_room" , nullable = false)
-    private int room;
-
     @Column(name = "start_at" , nullable = false)
     private LocalDate startAt;
 
@@ -41,7 +36,7 @@ public class Course {
     @JoinColumn(name = "instructor_id" , referencedColumnName = "user_id")
     private User instructor;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Score> scores;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseSchedule> schedules = new ArrayList<>();
 
 }

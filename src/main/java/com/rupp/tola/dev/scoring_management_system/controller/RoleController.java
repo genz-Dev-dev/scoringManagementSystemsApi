@@ -60,7 +60,7 @@ public class RoleController {
 
     @Operation(summary = "Update status role with UUID pathVariable.")
     @PutMapping("/status/{uuid}")
-    public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID uuid , Map<String , String> request) {
+    public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID uuid , @RequestBody Map<String , String> request) {
         roleService.updateStatus(uuid , request.get("status"));
         return ResponseEntity.ok().body(SingleResponse.success("Successfully deleted role." , null));
     }

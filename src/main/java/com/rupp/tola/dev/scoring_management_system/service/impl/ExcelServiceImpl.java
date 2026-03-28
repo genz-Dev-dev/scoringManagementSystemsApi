@@ -1,8 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
+import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.entity.StudentAddress;
 import com.rupp.tola.dev.scoring_management_system.exception.ExcelException;
+import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
+import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.repository.StudentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
 import com.rupp.tola.dev.scoring_management_system.utils.Util;
@@ -17,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ import java.util.List;
 public class ExcelServiceImpl implements ExcelService {
 
     private final StudentRepository studentRepository;
+    private final ClassRepository classRepository;
 
     @Override
     public List<Student> importStudents(MultipartFile file) {
@@ -62,12 +67,14 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public ByteArrayInputStream exportStudent() {
+    public ByteArrayInputStream exportStudent(UUID classId) {
         try {
-            List<Student> students = studentRepository.findAll();
+            Class clazz = classRepository.findById(classId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Class not found with ID: " + classId));
+            List<Student> students = studentRepository.findAllByClazzId(classId);
 
             XSSFWorkbook workbook = new XSSFWorkbook();
-            Sheet sheet = headerStudentExcel(workbook);
+            Sheet sheet = headerStudentExcel(workbook, clazz.getName());
 
             int rowIndex = 1;
             for (Student student : students) {
@@ -123,8 +130,8 @@ public class ExcelServiceImpl implements ExcelService {
         }
     }
 
-    private Sheet headerStudentExcel(Workbook workbook) {
-        Sheet sheet = workbook.createSheet("students");
+    private Sheet headerStudentExcel(Workbook workbook, String className) {
+        Sheet sheet = workbook.createSheet("students-" + className);
 
         Row header = sheet.createRow(0);
 

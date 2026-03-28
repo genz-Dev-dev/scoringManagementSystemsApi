@@ -62,15 +62,21 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public UserResponse login(AuthRequest request) {
+		User user = userRepository.findByEmail(request.getEmail())
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
+		if(!user.isStatus()) {
+			log.info("User has been freeze with status: {}" , user.isStatus());
+			throw new RuntimeException("User has been freeze with status: " + user.isStatus());
+		}
 		Authentication authToken = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 						request.getEmail(),
 						request.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authToken);
-		User user = userRepository.findByEmail(request.getEmail())
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
 		User saved = userRepository.save(user);
-		return toResponse(saved);
+		UserResponse response = toResponse(saved);
+		response.setVerificationToken(jwtService.generateToken(user.getEmail()));
+		return response;
 	}
 
 	@Override

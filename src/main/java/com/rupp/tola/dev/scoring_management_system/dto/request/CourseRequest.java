@@ -1,6 +1,8 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -33,11 +36,11 @@ public class CourseRequest {
     @Size(min = 5 , max = 100 , message = "Description must be between 5 and 100 characters.")
     private String description;
 
-    @NotBlank(message = "Schedule is required.")
     private String schedule;
 
-    @NotNull(message = "Room is required.")
-    private int room;
+    @Valid
+    @NotEmpty(message = "At least one course schedule is required.")
+    private List<CourseScheduleRequest> schedules;
 
     @NotBlank(message = "Start at is required.")
     private String startAt;

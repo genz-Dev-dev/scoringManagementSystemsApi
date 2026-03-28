@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 016_alter_semesters_table_match_entity_set
-      author: codex
+      author: chamreunvira (generated)
       changes:
         - addColumn:
             tableName: tbl_semester
