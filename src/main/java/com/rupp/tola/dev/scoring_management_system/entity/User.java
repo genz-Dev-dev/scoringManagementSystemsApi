@@ -49,6 +49,9 @@ public class User implements UserDetails {
 	@Column(name = "expiry_opt")
 	private Instant expiryOtp;
 
+	@Column(name = "user_status" , nullable = false)
+	private boolean status;
+
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreationTimestamp
 	private LocalDateTime createdAt;
@@ -59,6 +62,9 @@ public class User implements UserDetails {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id" , referencedColumnName = "role_id")
 	private Role role;
+
+	@OneToMany(mappedBy = "instructor" ,  cascade = CascadeType.ALL)
+	private List<Course> courses;
 
 	@Override
 	@NullMarked

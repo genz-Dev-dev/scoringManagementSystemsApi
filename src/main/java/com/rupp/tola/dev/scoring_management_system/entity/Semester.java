@@ -1,11 +1,20 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-
-import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Table(name = "tbl_semester")
@@ -14,21 +23,23 @@ import lombok.*;
 @NoArgsConstructor
 public class Semester {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "semester_id")
-	private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "semester_id")
+    private UUID id;
 
-	@Column(name = "semester_no", updatable = false, nullable = false)
-	private int semesterNo;
+    @Column(name = "semester_name", nullable = false, unique = true)
+    private String name;
 
-	@Column(name = "semester_start_at", nullable = false)
-	private LocalDate startAt;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
-	@Column(name = "semester_end_at" , nullable = false)
-	private LocalDate endAt;
+    @Column(name = "end_date", nullable = false)
+    private LocalDate endDate;
 
-	@OneToMany(mappedBy = "score" , cascade = CascadeType.ALL)
-	private List<Score> scores;
+    @Column(name = "description", nullable = false)
+    private String description;
 
+    @OneToMany(mappedBy = "semester", cascade = CascadeType.ALL)
+    private List<Score> scores;
 }

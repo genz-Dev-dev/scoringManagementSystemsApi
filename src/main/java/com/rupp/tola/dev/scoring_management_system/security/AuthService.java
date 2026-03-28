@@ -73,6 +73,7 @@ public interface AuthService {
 	 */
 	User getUser(UUID uuid);
 
+	void updateStatus(UUID uuid , String status);
 
 	/**
 	 * This method use to find user has been authentication. For retrieve foreign key

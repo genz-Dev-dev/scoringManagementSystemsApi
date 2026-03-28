@@ -9,5 +9,8 @@ import com.rupp.tola.dev.scoring_management_system.entity.Semester;
 
 @Repository
 public interface SemesterRepository extends JpaRepository<Semester, UUID> {
-    boolean existsBySemesterNo(int no);
+
+    boolean existsByName(String name);
+
+    boolean existsByNameAndIdNot(String name, UUID id);
 }

@@ -26,4 +26,8 @@ databaseChangeLog:
   - include:
       file: db/changelog/014_create_schema_departments.yml
   - include:
+      file: db/changelog/015_alter_schema_subjects.yml
+  - include:
+      file: db/changelog/016_alter_schema_semesters.yml
+  - include:
       file: com/rupp/tola/dev/scoring_management_system/entity/23-01-changelog.xml

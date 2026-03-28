@@ -13,9 +13,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class PermissionResponse {
+
     private UUID id;
+
     private String name;
+
     private String description;
+
     private String module;
+
     private List<UUID> roleIds;
+
 }

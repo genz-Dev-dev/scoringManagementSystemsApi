@@ -1,7 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,13 +12,16 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SemesterRequest {
 
-    @NotNull(message = "Semester No is required.")
-    private int semesterNo;
+    @NotBlank(message = "Semester name is required.")
+    private String name;
 
-    @NotBlank(message = "Semester start at is required.")
-    private String startAt;
+    @NotBlank(message = "Semester start date is required.")
+    private String startDate;
 
-    @NotBlank(message = "Semester end at is required.")
-    private String endAt;
+    @NotBlank(message = "Semester end date is required.")
+    private String endDate;
+
+    @NotBlank(message = "Semester description is required.")
+    private String description;
 
 }

@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.codec.StringEncoder;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,8 +14,13 @@ import java.util.UUID;
 public class SubjectResponse {
 
     private UUID id;
-    private String subjectCode;
-    private String subjectName;
-    private List<ScoreResponse> scores;
+
+    private String departmentId;
+
+    private String name;
+
+    private String description;
+
+    private String code;
 
 }

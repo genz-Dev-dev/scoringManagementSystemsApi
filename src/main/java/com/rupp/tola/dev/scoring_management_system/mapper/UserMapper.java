@@ -13,6 +13,7 @@ public interface UserMapper {
 	@Mapping(target = "verificationToken" , ignore = true)
 	@Mapping(target = "verified" , ignore = true)
 	@Mapping(target = "role" , ignore = true)
+	@Mapping(target = "status" , ignore = true)
 	User toEntity(UserRequest request);
 
 	@Mapping(target = "role", ignore = true)

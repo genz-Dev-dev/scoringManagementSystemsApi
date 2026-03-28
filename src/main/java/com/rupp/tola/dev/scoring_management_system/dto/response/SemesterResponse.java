@@ -16,10 +16,12 @@ public class SemesterResponse {
 
     private UUID id;
 
-    private int semesterNo;
+    private String name;
 
-    private LocalDate startAt;
+    private LocalDate startDate;
 
-    private LocalDate endAt;
+    private LocalDate endDate;
+
+    private String description;
 
 }

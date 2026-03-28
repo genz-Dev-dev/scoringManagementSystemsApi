@@ -10,6 +10,7 @@ import com.rupp.tola.dev.scoring_management_system.security.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +71,12 @@ public class UserController {
     @GetMapping("/is-authenticated")
     public boolean isAuthenticated(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
         return authentication.isAuthenticated();
+    }
+
+    @PutMapping("/update-status/{id}")
+    public ResponseEntity<SingleResponse<Void>> updateStatus(@PathVariable UUID id, @RequestParam String status) {
+        authService.updateStatus(id, status);
+        return ResponseEntity.ok(SingleResponse.success("Update status successfully.", null));
     }
 
 }
