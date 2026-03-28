@@ -2,19 +2,20 @@ package com.rupp.tola.dev.scoring_management_system.service;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.CourseRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.CourseResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface CourseService {
 
     CourseResponse create(CourseRequest request);
 
-    CourseResponse update(UUID uuid, CourseRequest request);
+    CourseResponse update(UUID semesterId, UUID subjectId, CourseRequest request);
 
-    void delete(UUID uuid);
+    void delete(UUID semesterId, UUID subjectId);
 
-    List<CourseResponse> getAll();
+    Page<CourseResponse> getAll(Pageable pageable);
 
-    CourseResponse getById(UUID uuid);
+    CourseResponse getById(UUID semesterId, UUID subjectId);
 }

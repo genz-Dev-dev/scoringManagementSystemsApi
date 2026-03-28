@@ -30,4 +30,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/016_alter_schema_semesters.yml
   - include:
+      file: db/changelog/017_create_schema_courses.yml
+  - include:
       file: com/rupp/tola/dev/scoring_management_system/entity/23-01-changelog.xml

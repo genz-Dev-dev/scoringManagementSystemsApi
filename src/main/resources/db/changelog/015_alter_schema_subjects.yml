@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 015_alter_subjects_table_add_department_and_description
-      author: codex
+      author: chamreunvira (generated)
       changes:
         - addColumn:
             tableName: tbl_subject

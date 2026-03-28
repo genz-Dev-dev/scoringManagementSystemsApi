@@ -80,12 +80,12 @@ public class StudentsController {
 	}
 
 	@GetMapping(path = "/export-student")
-	public ResponseEntity<Resource> exportStudent() {
-		ByteArrayInputStream stream = excelService.exportStudent();
+	public ResponseEntity<Resource> exportStudent(@RequestParam UUID classId) {
+		ByteArrayInputStream stream = excelService.exportStudent(classId);
 		ByteArrayResource recourse = new ByteArrayResource(stream.readAllBytes());
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=students.xlsx")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=students-" + classId + ".xlsx")
 				.contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(recourse);
 	}
