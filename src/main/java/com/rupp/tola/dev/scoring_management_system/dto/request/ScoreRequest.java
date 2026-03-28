@@ -18,19 +18,18 @@ import java.util.UUID;
 @Builder
 public class ScoreRequest {
 
-    @NotNull(message = "Student ID is required!")
-    private UUID studentId;
-
-    @NotNull(message = "Semester ID is required!")
+    @NotNull(message = "Semester ID is required")
     private UUID semesterId;
 
-    @NotNull(message = "Subject ID is required!")
+    @NotNull(message = "Subject ID is required")
     private UUID subjectId;
 
-    @NotNull(message = "Score is required for student.")
-    @Min(0)
-    @Max(100)
-    private BigDecimal score;
+    @NotNull(message = "Student ID is required")
+    private UUID studentId;
+
+    @Min(value = 0, message = "Score must be at least 0")
+    @Max(value = 100, message = "Score must not exceed 100")
+    private double score;
 
     private String grade;
 

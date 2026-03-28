@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Course {
+public class Course{
 
     @EmbeddedId
     private CourseId courseId;

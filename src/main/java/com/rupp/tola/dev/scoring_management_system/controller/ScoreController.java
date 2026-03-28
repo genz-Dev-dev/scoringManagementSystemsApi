@@ -4,6 +4,7 @@ import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ScoreRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ScoreResponse;
 import com.rupp.tola.dev.scoring_management_system.service.ScoreService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class ScoreController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<SingleResponse<ScoreResponse>> update(
             @PathVariable UUID id,
-            @RequestBody ScoreRequest request
+            @RequestBody @Valid ScoreRequest request
     ) {
         ScoreResponse response = scoreService.update(id, request);
       return ResponseEntity.ok(SingleResponse.success("The score has been successfully updated.", response));

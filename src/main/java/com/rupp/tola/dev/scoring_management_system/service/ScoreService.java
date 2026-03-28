@@ -18,6 +18,10 @@ public interface ScoreService {
 
     List<ScoreResponse> getAll();
 
+    List<ScoreResponse> findByStudentId(UUID studentId);
+
+    List<ScoreResponse> findByCourse(UUID semesterId, UUID subjectId);
+
     void delete(UUID id);
 
 }

@@ -1,13 +1,14 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 @Entity
 @Table(name = "tbl_score", uniqueConstraints = {
@@ -16,7 +17,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @Getter
 @Setter
 @NoArgsConstructor
-public class Score extends BaseEntity {
+@AllArgsConstructor
+public class Score extends BaseEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
