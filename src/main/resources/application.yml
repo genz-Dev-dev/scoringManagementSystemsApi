@@ -9,9 +9,9 @@ app:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:4321/SM
-    username: SMUSER
-    password: SMPW
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:

@@ -24,5 +24,17 @@ services:
     depends_on:
       - postgres
 
+  backend:
+    image: boukry:latest
+    container_name: boukrySystem
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/SM
+      DB_USERNAME: SMUSER
+      DB_PASSWORD: SMPW
+    depends_on:
+      - postgres
+
 volumes:
   pg_data:
