@@ -9,9 +9,9 @@ app:
 
 spring:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:4321/SM
+    username: ${DB_USERNAME:SMUSER}
+    password: ${DB_PASSWORD:SMPW}
     driver-class-name: org.postgresql.Driver
 
   jpa:
