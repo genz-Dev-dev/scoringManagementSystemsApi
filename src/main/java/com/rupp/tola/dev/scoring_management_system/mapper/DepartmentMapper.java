@@ -13,11 +13,15 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface DepartmentMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "code" , ignore = true)
+    @Mapping(target = "thumbnail" , ignore = true)
     Department toEntity(DepartmentRequest request);
 
+    @Mapping(target = "thumbnail" , source = "thumbnail")
     DepartmentResponse toResponse(Department department);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "code" , ignore = true)
     void updateFromRequest(DepartmentRequest request, @MappingTarget Department department);
 }

@@ -2,6 +2,7 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Department;
 import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;

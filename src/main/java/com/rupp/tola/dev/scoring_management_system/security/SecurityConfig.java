@@ -40,7 +40,7 @@ public class SecurityConfig {
 	private final CustomeAuthenticationEntryPoint authenticationEntryPoint;
 
 	private static final String[] PUBLIC_URLS = { "/auth/**", "/oauth2/**" , "/css/**", "/js/**", "/images/**", "/swagger-ui.html",
-			"/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**" };
+			"/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**" , "/uploads/**" };
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

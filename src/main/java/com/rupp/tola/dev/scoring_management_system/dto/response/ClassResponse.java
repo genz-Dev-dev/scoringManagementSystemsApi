@@ -23,6 +23,8 @@ public class ClassResponse {
 
     private String departmentId;
 
+    private String departmentName;
+
     private String academicYear;
 
     private Integer generation;

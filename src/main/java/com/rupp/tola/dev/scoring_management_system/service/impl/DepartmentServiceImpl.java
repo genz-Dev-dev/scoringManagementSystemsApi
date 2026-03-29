@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
+import com.rupp.tola.dev.scoring_management_system.constant.CodePrefix;
 import com.rupp.tola.dev.scoring_management_system.dto.request.DepartmentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.DepartmentResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Department;
@@ -8,8 +9,10 @@ import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundExc
 import com.rupp.tola.dev.scoring_management_system.mapper.DepartmentMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.DepartmentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.DepartmentService;
+import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
+    @Value("${uploads.department}")
+    private String UPLOAD_DIRECTORY ;
     private final DepartmentRepository departmentRepository;
     private final DepartmentMapper departmentMapper;
 
@@ -30,6 +35,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         validateDuplicate(request);
 
         Department department = departmentMapper.toEntity(request);
+        if(request.getImage() != null && !request.getImage().isEmpty()) {
+            String imageName = Util.uploadImage(request.getImage() , UPLOAD_DIRECTORY);
+            department.setThumbnail(imageName);
+        }
+        Long departmentCode = departmentRepository.getNextDepartmentSequence();
+        String code = CodePrefix.DEPARTMENT_CODE_PREFIX +  String.format("%04d", departmentCode);
+        department.setCode(code);
         Department saved = departmentRepository.save(department);
         log.info("Department created with id {}", saved.getId());
         return departmentMapper.toResponse(saved);
@@ -74,19 +86,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentRepository.existsByName(request.getName())) {
             throw new DuplicateResourceException("Department name already exists");
         }
-
-        if (departmentRepository.existsByCode(request.getCode())) {
-            throw new DuplicateResourceException("Department code already exists");
-        }
     }
 
     private void validateDuplicate(UUID id, DepartmentRequest request) {
         if (departmentRepository.existsByNameAndIdNot(request.getName(), id)) {
             throw new DuplicateResourceException("Department name already exists");
-        }
-
-        if (departmentRepository.existsByCodeAndIdNot(request.getCode(), id)) {
-            throw new DuplicateResourceException("Department code already exists");
         }
     }
 

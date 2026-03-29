@@ -19,6 +19,7 @@ public interface ClassMapper {
 	void updateFromRequest(ClassRequest classRequest, @MappingTarget Class clazz);
 
 	@Mapping(target = "departmentId", source = "department.id")
+	@Mapping(target = "departmentName" , source = "department.name")
 	ClassResponse toResponse(Class clazz);
 
 }

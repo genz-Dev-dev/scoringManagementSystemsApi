@@ -34,10 +34,5 @@ public interface StudentMapper {
 	@Mapping(target = "enrollmentDate", ignore = true)
 	@Mapping(target = "address", source = "address")
 	void updateFromRequest(StudentRequest request, @MappingTarget Student student);
-
-	@AfterMapping
-	default void toStudentCode(@MappingTarget Student student) {
-		student.setStudentCode(StudentCodeGenerateUtils.generator());
-	}
 	
 }

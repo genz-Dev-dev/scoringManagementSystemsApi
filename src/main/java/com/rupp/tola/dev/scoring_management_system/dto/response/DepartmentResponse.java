@@ -17,6 +17,8 @@ public class DepartmentResponse {
 
     private String name;
 
+    private String thumbnail;
+
     private String code;
 
     private String description;

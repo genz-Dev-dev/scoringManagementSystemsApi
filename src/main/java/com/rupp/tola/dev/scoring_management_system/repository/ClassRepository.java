@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClassRepository extends JpaRepository<Class, UUID> {
+
 	boolean existsByNameAndAcademicYearAndGeneration(String name, String academicYear, Integer generation);
 
 	boolean existsByNameAndAcademicYearAndGenerationAndIdNot(String name, String academicYear, Integer generation, UUID id);
+
 }

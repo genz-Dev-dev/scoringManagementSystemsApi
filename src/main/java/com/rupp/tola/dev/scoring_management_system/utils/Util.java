@@ -2,12 +2,57 @@ package com.rupp.tola.dev.scoring_management_system.utils;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Util {
+
+    private static final List<String> IMAGE_EXTENSIONS = List.of("jpg", "jpeg", "png");
+
+    /**
+     * update image from multipart file request
+     * @param file
+     * @param dir
+     * @return
+     */
+    public static String uploadImage(MultipartFile file , String dir) {
+        try {
+            if (Objects.isNull(file)) {
+                throw new IllegalArgumentException("File is null");
+            }
+
+            String extension = Objects.requireNonNull(file.getOriginalFilename())
+                    .substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+
+            if(!IMAGE_EXTENSIONS.contains(extension)) {
+                throw new IllegalArgumentException("File is not a valid file name");
+            }
+            Path uploadPath = Paths.get(dir);
+
+            if(!Files.exists(uploadPath)) {
+                Files.createDirectory(uploadPath);
+            }
+
+            String fileName = file.getOriginalFilename();
+            String uniqueName = System.currentTimeMillis() + "_" + fileName;
+            Path filePath = uploadPath.resolve(uniqueName)
+                    .toAbsolutePath();
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            return uniqueName;
+        }catch (IOException e){
+            throw new IllegalArgumentException("File is not a valid file name");
+        }
+    }
 
     /**
      * generate 6 digit string One Time Password (OTP)

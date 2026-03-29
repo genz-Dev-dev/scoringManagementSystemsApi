@@ -34,6 +34,9 @@ public class Subject {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
+    @Column(name = "subject_thumbnail" , nullable = false)
+    private String thumbnail;
+
     @Column(name = "subject_name", nullable = false)
     private String name;
 

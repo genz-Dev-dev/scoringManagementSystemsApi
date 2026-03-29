@@ -2,6 +2,7 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 
 import java.util.*;
 
+import com.rupp.tola.dev.scoring_management_system.constant.CodePrefix;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
@@ -50,6 +51,9 @@ public class StudentServiceImpl implements StudentService {
 		student.setDateOfBirth(Util.convertToLocalDate(request.getDateOfBirth()));
 		student.setEnrollmentDate(Util.convertToLocalDate(request.getEnrollmentDate()));
 		student.getAddress().setStudent(student);
+		Long codeNumber = studentRepository.getNextSequence();
+		String code = CodePrefix.STUDENT_CODE_PREFIX + String.format("%04d", codeNumber);
+		student.setStudentCode(code);
 		Student saved = studentRepository.save(student);
 		return studentMapper.toResponse(saved);
 	}

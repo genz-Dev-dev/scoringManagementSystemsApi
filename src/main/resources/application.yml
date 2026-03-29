@@ -66,5 +66,7 @@ springdoc:
     enabled: true
   packages-to-scan: com.rupp.tola.dev.scoring_management_system
 
-# 0Auth02 config with google
+uploads:
+  department: /home/chamreunvira/Desktop/BouKryUniversitySystem/uploads/department
+  subject: /home/chamreunvira/Desktop/BouKryUniversitySystem/uploads/subject
 

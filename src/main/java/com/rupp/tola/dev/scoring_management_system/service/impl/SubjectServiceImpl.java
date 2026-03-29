@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
+import com.rupp.tola.dev.scoring_management_system.constant.CodePrefix;
 import com.rupp.tola.dev.scoring_management_system.dto.request.SubjectRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SubjectResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Department;
@@ -30,11 +31,12 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public SubjectResponse create(SubjectRequest request) {
-        validateDuplicate(request);
 
         Subject subject = subjectMapper.toEntity(request);
         subject.setDepartment(findDepartmentById(request.getDepartmentId()));
-
+        Long subjectNumber = subjectRepository.getNextSequenceSubject();
+        String code = CodePrefix.SUBJECT_CODE_PREFIX + String.format("%04d" , subjectNumber);
+        subject.setCode(code);
         Subject saved = subjectRepository.save(subject);
         log.info("Subject created with id {}", saved.getId());
         return subjectMapper.toResponse(saved);
@@ -59,7 +61,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public SubjectResponse update(UUID id, SubjectRequest request) {
         Subject subject = findByOrThrow(id);
-        validateDuplicate(id, request);
 
         subjectMapper.updateFromRequest(request, subject);
         subject.setDepartment(findDepartmentById(request.getDepartmentId()));
@@ -74,18 +75,6 @@ public class SubjectServiceImpl implements SubjectService {
         Subject subject = findByOrThrow(id);
         subjectRepository.delete(subject);
         log.info("Subject deleted with id {}", id);
-    }
-
-    private void validateDuplicate(SubjectRequest request) {
-        if (subjectRepository.existsByCode(request.getCode())) {
-            throw new DuplicateResourceException("Subject code already exists");
-        }
-    }
-
-    private void validateDuplicate(UUID id, SubjectRequest request) {
-        if (subjectRepository.existsByCodeAndIdNot(request.getCode(), id)) {
-            throw new DuplicateResourceException("Subject code already exists");
-        }
     }
 
     private Subject findByOrThrow(UUID id) {

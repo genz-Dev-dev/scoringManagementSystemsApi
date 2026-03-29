@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.rupp.tola.dev.scoring_management_system.enums.UploadBatchesStatus;
+import com.rupp.tola.dev.scoring_management_system.constant.UploadBatchesStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

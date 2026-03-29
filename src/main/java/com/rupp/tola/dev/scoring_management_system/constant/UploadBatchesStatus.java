@@ -1,4 +1,4 @@
-package com.rupp.tola.dev.scoring_management_system.enums;
+package com.rupp.tola.dev.scoring_management_system.constant;
 
 public enum UploadBatchesStatus {
     PENDING, APPROVED, REJECTED
