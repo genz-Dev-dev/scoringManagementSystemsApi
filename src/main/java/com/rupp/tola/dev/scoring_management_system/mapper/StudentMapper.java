@@ -5,8 +5,6 @@ import java.util.List;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
-import com.rupp.tola.dev.scoring_management_system.utils.StudentCodeGenerateUtils;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

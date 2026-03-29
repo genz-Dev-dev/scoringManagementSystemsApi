@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,13 +69,24 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentResponse update(UUID id, DepartmentRequest request) {
-        Department department = findByOrThrow(id);
-        validateDuplicate(id, request);
-
-        departmentMapper.updateFromRequest(request, department);
-        Department saved = departmentRepository.save(department);
-        log.info("Department updated with id {}", saved.getId());
-        return departmentMapper.toResponse(saved);
+        try {
+            Department department = findByOrThrow(id);
+            validateDuplicate(id, request);
+            if(department.getThumbnail() != null) {
+                Path thumbnailPath = Path.of(UPLOAD_DIRECTORY + department.getThumbnail());
+                Files.deleteIfExists(thumbnailPath);
+            }
+            departmentMapper.updateFromRequest(request, department);
+            if(request.getImage() != null && !request.getImage().isEmpty()) {
+                String imageName = Util.uploadImage(request.getImage() , UPLOAD_DIRECTORY);
+                department.setThumbnail(imageName);
+            }
+            Department saved = departmentRepository.save(department);
+            log.info("Department updated with id {}", saved.getId());
+            return departmentMapper.toResponse(saved);
+        }catch (IOException e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        }
     }
 
     @Override

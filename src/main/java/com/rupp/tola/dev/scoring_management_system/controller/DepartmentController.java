@@ -40,7 +40,7 @@ public class DepartmentController {
         return ResponseEntity.ok(SingleResponse.success("Successfully retrieved department.", response));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SingleResponse<DepartmentResponse>> update(@PathVariable UUID id,
                                                                      @Valid @RequestBody DepartmentRequest request) {
         DepartmentResponse response = departmentService.update(id, request);

@@ -16,7 +16,6 @@ import com.rupp.tola.dev.scoring_management_system.mapper.StudentAddressMapper;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
-import com.rupp.tola.dev.scoring_management_system.utils.StudentCodeGenerateUtils;
 import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -51,9 +50,7 @@ public class StudentServiceImpl implements StudentService {
 		student.setDateOfBirth(Util.convertToLocalDate(request.getDateOfBirth()));
 		student.setEnrollmentDate(Util.convertToLocalDate(request.getEnrollmentDate()));
 		student.getAddress().setStudent(student);
-		Long codeNumber = studentRepository.getNextSequence();
-		String code = CodePrefix.STUDENT_CODE_PREFIX + String.format("%04d", codeNumber);
-		student.setStudentCode(code);
+		student.setStudentCode(getStudentCode());
 		Student saved = studentRepository.save(student);
 		return studentMapper.toResponse(saved);
 	}
@@ -121,7 +118,7 @@ public class StudentServiceImpl implements StudentService {
 		}
 
 		for (Student student : studentList) {
-			student.setStudentCode(StudentCodeGenerateUtils.generator());
+			student.setStudentCode(getStudentCode());
 			student.setStatus(true);
 			student.setClazz(clazz);
 			student.getAddress().setStudent(student);
@@ -151,7 +148,7 @@ public class StudentServiceImpl implements StudentService {
 
 	private void applyRequest(Student student, StudentRequest request) {
 		if (student.getStudentCode() == null || student.getStudentCode().isBlank()) {
-			student.setStudentCode(StudentCodeGenerateUtils.generator());
+			student.setStudentCode(getStudentCode());
 		}
 
 		if (student.getStatus() == null) {
@@ -205,6 +202,11 @@ public class StudentServiceImpl implements StudentService {
 				.totalFemale(female)
 				.totalMale(male)
 				.build();
+	}
+
+	private String getStudentCode() {
+		Long codeNumber = studentRepository.getNextSequence();
+		return CodePrefix.STUDENT_CODE_PREFIX + String.format("%04d", codeNumber);
 	}
 
 

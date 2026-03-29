@@ -41,7 +41,7 @@ public class SubjectController {
         return ResponseEntity.ok(SingleResponse.success("Successfully retrieved subject.", response));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}" , consumes =  MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SingleResponse<SubjectResponse>> update(@PathVariable UUID id,
                                                                   @Valid @RequestBody SubjectRequest request) {
         SubjectResponse response = subjectService.update(id, request);

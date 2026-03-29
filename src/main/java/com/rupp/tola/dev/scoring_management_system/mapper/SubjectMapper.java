@@ -16,6 +16,7 @@ public interface SubjectMapper {
     @Mapping(target = "department", ignore = true)
     @Mapping(target = "scores", ignore = true)
     @Mapping(target = "code" , ignore = true)
+    @Mapping(target = "thumbnail" , ignore = true)
     Subject toEntity(SubjectRequest request);
 
     @Mapping(target = "departmentId", source = "department.id")

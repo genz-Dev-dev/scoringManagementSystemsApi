@@ -11,11 +11,17 @@ import com.rupp.tola.dev.scoring_management_system.mapper.SubjectMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.DepartmentRepository;
 import com.rupp.tola.dev.scoring_management_system.repository.SubjectRepository;
 import com.rupp.tola.dev.scoring_management_system.service.SubjectService;
+import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +31,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
 
+    @Value("${uploads.subject}")
+    private String UPLOAD_DIRECTORY;
     private final SubjectRepository subjectRepository;
     private final DepartmentRepository departmentRepository;
     private final SubjectMapper subjectMapper;
@@ -33,6 +41,10 @@ public class SubjectServiceImpl implements SubjectService {
     public SubjectResponse create(SubjectRequest request) {
 
         Subject subject = subjectMapper.toEntity(request);
+        if(request.getImage() != null && !request.getImage().isEmpty()){
+            String imageName = Util.uploadImage(request.getImage() , UPLOAD_DIRECTORY);
+            subject.setThumbnail(imageName);
+        }
         subject.setDepartment(findDepartmentById(request.getDepartmentId()));
         Long subjectNumber = subjectRepository.getNextSequenceSubject();
         String code = CodePrefix.SUBJECT_CODE_PREFIX + String.format("%04d" , subjectNumber);
@@ -60,14 +72,25 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public SubjectResponse update(UUID id, SubjectRequest request) {
-        Subject subject = findByOrThrow(id);
+        try {
+            Subject subject = findByOrThrow(id);
+            if (subject.getThumbnail() != null) {
+                Path thumbnailPath = Path.of(UPLOAD_DIRECTORY, subject.getThumbnail());
+                Files.deleteIfExists(thumbnailPath);
+            }
+            subjectMapper.updateFromRequest(request, subject);
+            if(request.getImage() != null && !request.getImage().isEmpty()){
+                String imageName = Util.uploadImage(request.getImage() , UPLOAD_DIRECTORY);
+                subject.setThumbnail(imageName);
+            }
+            subject.setDepartment(findDepartmentById(request.getDepartmentId()));
 
-        subjectMapper.updateFromRequest(request, subject);
-        subject.setDepartment(findDepartmentById(request.getDepartmentId()));
-
-        Subject saved = subjectRepository.save(subject);
-        log.info("Subject updated with id {}", saved.getId());
-        return subjectMapper.toResponse(saved);
+            Subject saved = subjectRepository.save(subject);
+            log.info("Subject updated with id {}", saved.getId());
+            return subjectMapper.toResponse(saved);
+        }catch (IOException e){
+            throw new ResourceNotFoundException(e.getMessage());
+        }
     }
 
     @Override

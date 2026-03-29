@@ -19,6 +19,8 @@ public class SubjectResponse {
 
     private String departmentName;
 
+    private String thumbnail;
+
     private String name;
 
     private String description;
