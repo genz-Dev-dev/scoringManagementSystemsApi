@@ -1,10 +1,15 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -13,8 +18,21 @@ import java.util.UUID;
 @Builder
 public class ScoreRequest {
 
-    private UUID id;
+    @NotNull(message = "Semester ID is required")
+    private UUID semesterId;
 
-    //TODO: do it by your Bunchean
+    @NotNull(message = "Subject ID is required")
+    private UUID subjectId;
+
+    @NotNull(message = "Student ID is required")
+    private UUID studentId;
+
+    @Min(value = 0, message = "Score must be at least 0")
+    @Max(value = 100, message = "Score must not exceed 100")
+    private double score;
+
+    private String grade;
+
+    private boolean status;
 
 }

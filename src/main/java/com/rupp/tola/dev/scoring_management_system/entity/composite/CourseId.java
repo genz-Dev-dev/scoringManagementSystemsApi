@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CourseId implements Serializable {
 
+
     @Column(name = "semester_id")
     private UUID semesterId;
 

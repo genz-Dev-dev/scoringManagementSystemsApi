@@ -42,4 +42,5 @@ public class Semester {
 
     @OneToMany(mappedBy = "semester", cascade = CascadeType.ALL)
     private List<Score> scores;
+
 }
