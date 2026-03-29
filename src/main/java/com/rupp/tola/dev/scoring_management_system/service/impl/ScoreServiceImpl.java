@@ -75,19 +75,21 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public List<ScoreResponse> findByStudentId(UUID studentId) {
-        log.info("Student was found with id {}", studentId);
-        return scoreMapper.toResponseList(
-                scoreRepository.findByStudentId(studentId)
-        );
+//        log.info("Student was found with id {}", studentId);
+//        return scoreMapper.toResponseList(
+//                scoreRepository.findByStudentId(studentId)
+//        );
+        return null;
     }
 
     @Override
     public List<ScoreResponse> findByCourse(UUID semesterId, UUID subjectId) {
-        CourseId courseId = new CourseId(semesterId, subjectId);
-        log.info("Course was found with id {} from semester {}", courseId, semesterId );
-        return scoreMapper.toResponseList(
-                scoreRepository.findByCourseId(courseId)
-        );
+//        CourseId courseId = new CourseId(semesterId, subjectId);
+//        log.info("Course was found with id {} from semester {}", courseId, semesterId );
+//        return scoreMapper.toResponseList(
+//                scoreRepository.findByCourseId(courseId)
+//        );
+        return null;
     }
 
     @Override

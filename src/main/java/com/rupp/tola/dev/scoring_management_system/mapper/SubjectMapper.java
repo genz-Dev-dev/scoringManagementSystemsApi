@@ -14,7 +14,6 @@ public interface SubjectMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "department", ignore = true)
-    @Mapping(target = "scores", ignore = true)
     @Mapping(target = "code" , ignore = true)
     @Mapping(target = "thumbnail" , ignore = true)
     Subject toEntity(SubjectRequest request);
@@ -26,7 +25,6 @@ public interface SubjectMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "department", ignore = true)
-    @Mapping(target = "scores", ignore = true)
     @Mapping(target = "code" , ignore = true)
     void updateFromRequest(SubjectRequest request, @MappingTarget Subject subject);
 }

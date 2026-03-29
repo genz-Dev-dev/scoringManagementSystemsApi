@@ -11,6 +11,6 @@ import com.rupp.tola.dev.scoring_management_system.entity.Score;
 
 @Repository
 public interface ScoreRepository extends JpaRepository<Score, UUID> {
-    List<Score> findByStudentId(UUID studentId);
-    List<Score> findByCourseId(CourseId courseId);
+    List<Score> findByStudent_Id(UUID studentId);
+    List<Score> findByCourse_CourseId(CourseId courseId);
 }
