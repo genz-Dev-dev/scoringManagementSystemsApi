@@ -75,7 +75,7 @@ public class SubjectServiceImpl implements SubjectService {
         try {
             Subject subject = findByOrThrow(id);
             if (subject.getThumbnail() != null) {
-                Path thumbnailPath = Path.of(UPLOAD_DIRECTORY, subject.getThumbnail());
+                Path thumbnailPath = Path.of(UPLOAD_DIRECTORY).resolve(subject.getThumbnail());
                 Files.deleteIfExists(thumbnailPath);
             }
             subjectMapper.updateFromRequest(request, subject);

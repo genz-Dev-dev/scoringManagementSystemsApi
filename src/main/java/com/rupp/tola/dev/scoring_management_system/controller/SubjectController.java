@@ -2,7 +2,6 @@ package com.rupp.tola.dev.scoring_management_system.controller;
 
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.SubjectRequest;
-import com.rupp.tola.dev.scoring_management_system.dto.response.CourseResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SubjectResponse;
 import com.rupp.tola.dev.scoring_management_system.service.SubjectService;
 import jakarta.validation.Valid;
@@ -42,8 +41,7 @@ public class SubjectController {
     }
 
     @PutMapping(value = "/{id}" , consumes =  MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SingleResponse<SubjectResponse>> update(@PathVariable UUID id,
-                                                                  @Valid @RequestBody SubjectRequest request) {
+    public ResponseEntity<SingleResponse<SubjectResponse>> update(@Valid @ModelAttribute SubjectRequest request, @PathVariable UUID id){
         SubjectResponse response = subjectService.update(id, request);
         return ResponseEntity.ok(SingleResponse.success("Successfully updated subject.", response));
     }

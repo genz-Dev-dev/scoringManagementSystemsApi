@@ -73,7 +73,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             Department department = findByOrThrow(id);
             validateDuplicate(id, request);
             if(department.getThumbnail() != null) {
-                Path thumbnailPath = Path.of(UPLOAD_DIRECTORY + department.getThumbnail());
+                Path thumbnailPath = Path.of(UPLOAD_DIRECTORY).resolve(department.getThumbnail());
                 Files.deleteIfExists(thumbnailPath);
             }
             departmentMapper.updateFromRequest(request, department);
