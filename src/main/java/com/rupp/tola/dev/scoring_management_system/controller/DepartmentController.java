@@ -19,37 +19,37 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DepartmentController {
 
-    private final DepartmentService departmentService;
+	private final DepartmentService departmentService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SingleResponse<DepartmentResponse>> create(@Valid @ModelAttribute DepartmentRequest request) {
-        DepartmentResponse response = departmentService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(SingleResponse.success("Successfully created department.", response));
-    }
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SingleResponse<DepartmentResponse>> create(@Valid @ModelAttribute DepartmentRequest request) {
+		DepartmentResponse response = departmentService.create(request);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(SingleResponse.success("Successfully created department.", response));
+	}
 
-    @GetMapping
-    public ResponseEntity<SingleResponse<List<DepartmentResponse>>> getAll() {
-        List<DepartmentResponse> response = departmentService.getAll();
-        return ResponseEntity.ok(SingleResponse.success("Successfully retrieved all departments.", response));
-    }
+	@GetMapping
+	public ResponseEntity<SingleResponse<List<DepartmentResponse>>> getAll() {
+		List<DepartmentResponse> response = departmentService.getAll();
+		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved all departments.", response));
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SingleResponse<DepartmentResponse>> getById(@PathVariable UUID id) {
-        DepartmentResponse response = departmentService.getById(id);
-        return ResponseEntity.ok(SingleResponse.success("Successfully retrieved department.", response));
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<SingleResponse<DepartmentResponse>> getById(@PathVariable UUID id) {
+		DepartmentResponse response = departmentService.getById(id);
+		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved department.", response));
+	}
 
-    @PutMapping(value = "/{id}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SingleResponse<DepartmentResponse>> update(@PathVariable UUID id,
-                                                                     @Valid @ModelAttribute DepartmentRequest request) {
-        DepartmentResponse response = departmentService.update(id, request);
-        return ResponseEntity.ok(SingleResponse.success("Successfully updated department.", response));
-    }
+	@PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SingleResponse<DepartmentResponse>> update(@PathVariable UUID id,
+			@Valid @ModelAttribute DepartmentRequest request) {
+		DepartmentResponse response = departmentService.update(id, request);
+		return ResponseEntity.ok(SingleResponse.success("Successfully updated department.", response));
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID id) {
-        departmentService.delete(id);
-        return ResponseEntity.ok(SingleResponse.success("Successfully deleted department.", null));
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID id) {
+		departmentService.delete(id);
+		return ResponseEntity.ok(SingleResponse.success("Successfully deleted department.", null));
+	}
 }

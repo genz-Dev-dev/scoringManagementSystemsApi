@@ -19,46 +19,43 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CourseController {
 
-    private final CourseService courseService;
+	private final CourseService courseService;
 
-    @GetMapping
-    public ResponseEntity<MultipleResponse<CourseResponse>> getAll(PaginationRequest request) {
-        if ("id".equals(request.getSortBy())) {
-            request.setSortBy("name");
-        }
+	@GetMapping
+	public ResponseEntity<MultipleResponse<CourseResponse>> getAll(PaginationRequest request) {
+		if ("id".equals(request.getSortBy())) {
+			request.setSortBy("name");
+		}
 
-        Page<CourseResponse> response = courseService.getAll(request.toPageable());
-        return ResponseEntity.ok(MultipleResponse.success("Successfully retrieved all courses with pagination.", response));
-    }
+		Page<CourseResponse> response = courseService.getAll(request.toPageable());
+		return ResponseEntity
+				.ok(MultipleResponse.success("Successfully retrieved all courses with pagination.", response));
+	}
 
-    @GetMapping("/{semesterId}/{subjectId}")
-    public ResponseEntity<SingleResponse<CourseResponse>> getById(@PathVariable UUID semesterId,
-                                                                  @PathVariable UUID subjectId) {
-        CourseResponse courseResponse = courseService.getById(semesterId, subjectId);
-        return ResponseEntity.ok(SingleResponse.success("Successfully to retrieve course data." , courseResponse));
-    }
+	@GetMapping("/{semesterId}/{subjectId}")
+	public ResponseEntity<SingleResponse<CourseResponse>> getById(@PathVariable UUID semesterId,
+			@PathVariable UUID subjectId) {
+		CourseResponse courseResponse = courseService.getById(semesterId, subjectId);
+		return ResponseEntity.ok(SingleResponse.success("Successfully to retrieve course data.", courseResponse));
+	}
 
-    @PostMapping
-    public ResponseEntity<SingleResponse<CourseResponse>> create(@Valid @RequestBody CourseRequest courseRequest) {
-        CourseResponse response = courseService.create(courseRequest);
-        return ResponseEntity.ok(SingleResponse.success("Successfully to create course data." , response));
-    }
+	@PostMapping
+	public ResponseEntity<SingleResponse<CourseResponse>> create(@Valid @RequestBody CourseRequest courseRequest) {
+		CourseResponse response = courseService.create(courseRequest);
+		return ResponseEntity.ok(SingleResponse.success("Successfully to create course data.", response));
+	}
 
-    @PutMapping("/{semesterId}/{subjectId}")
-    public ResponseEntity<SingleResponse<CourseResponse>> update(@PathVariable UUID semesterId,
-                                                                 @PathVariable UUID subjectId,
-                                                                 @RequestBody @Valid CourseRequest courseRequest) {
-        return ResponseEntity.ok(SingleResponse.success(
-                "Successfully to update course data.",
-                courseService.update(semesterId, subjectId, courseRequest)
-        ));
-    }
+	@PutMapping("/{semesterId}/{subjectId}")
+	public ResponseEntity<SingleResponse<CourseResponse>> update(@PathVariable UUID semesterId,
+			@PathVariable UUID subjectId, @RequestBody @Valid CourseRequest courseRequest) {
+		return ResponseEntity.ok(SingleResponse.success("Successfully to update course data.",
+				courseService.update(semesterId, subjectId, courseRequest)));
+	}
 
-    @DeleteMapping("/{semesterId}/{subjectId}")
-    public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID semesterId,
-                                                       @PathVariable UUID subjectId) {
-        courseService.delete(semesterId, subjectId);
-        return ResponseEntity.ok(SingleResponse.success("Successfully to delete course data." , null));
-    }
+	@DeleteMapping("/{semesterId}/{subjectId}")
+	public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID semesterId, @PathVariable UUID subjectId) {
+		courseService.delete(semesterId, subjectId);
+		return ResponseEntity.ok(SingleResponse.success("Successfully to delete course data.", null));
+	}
 
 }

@@ -24,7 +24,6 @@ import com.rupp.tola.dev.scoring_management_system.service.StudentService;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +36,8 @@ public class StudentsController {
 	@GetMapping
 	public ResponseEntity<MultipleResponse<StudentResponse>> findAll(PaginationRequest request) {
 		Page<StudentResponse> responses = studentService.getAll(request.toPageable());
-		return ResponseEntity.ok().body(MultipleResponse.success("Successfully retrieved all students with pagination.", responses));
+		return ResponseEntity.ok()
+				.body(MultipleResponse.success("Successfully retrieved all students with pagination.", responses));
 	}
 
 	@GetMapping(path = "/{uuid}")
@@ -56,7 +56,7 @@ public class StudentsController {
 
 	@PutMapping(path = "/{uuid}")
 	public ResponseEntity<SingleResponse<StudentResponse>> update(@PathVariable UUID uuid,
-																  @Valid @RequestBody StudentRequest request) {
+			@Valid @RequestBody StudentRequest request) {
 		StudentResponse response = studentService.update(uuid, request);
 		return ResponseEntity.ok(SingleResponse.success("Successfully updated student.", response));
 	}
@@ -73,9 +73,10 @@ public class StudentsController {
 		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved student class.", response));
 	}
 
-	@PostMapping(path = "/import-student", consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/import-student", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SingleResponse<?>> importStudent(@ModelAttribute ImportStudentRequest request) {
-		return ResponseEntity.ok(SingleResponse.success("Import student successfully.", studentService.importStudents(request)));
+		return ResponseEntity
+				.ok(SingleResponse.success("Import student successfully.", studentService.importStudents(request)));
 
 	}
 
@@ -83,17 +84,16 @@ public class StudentsController {
 	public ResponseEntity<Resource> exportStudent(@RequestParam UUID classId) {
 		ByteArrayInputStream stream = excelService.exportStudent(classId);
 		ByteArrayResource recourse = new ByteArrayResource(stream.readAllBytes());
-		return ResponseEntity
-				.status(HttpStatus.OK)
+		return ResponseEntity.status(HttpStatus.OK)
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=students-" + classId + ".xlsx")
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.body(recourse);
+				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(recourse);
 	}
 
 	@GetMapping("/statistics")
 	public ResponseEntity<SingleResponse<StudentStatisticsResponse>> getStatistics() {
 		StudentStatisticsResponse response = studentService.statistics();
-		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved student statistics response.", response));
+		return ResponseEntity
+				.ok(SingleResponse.success("Successfully retrieved student statistics response.", response));
 	}
 
 }

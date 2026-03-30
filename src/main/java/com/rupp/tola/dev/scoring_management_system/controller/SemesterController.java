@@ -18,37 +18,37 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SemesterController {
 
-    private final SemesterService semesterService;
+	private final SemesterService semesterService;
 
-    @GetMapping
-    public ResponseEntity<SingleResponse<List<SemesterResponse>>> getAll() {
-        List<SemesterResponse> response = semesterService.getAll();
-        return ResponseEntity.ok(SingleResponse.success("Successfully retrieved all semesters.", response));
-    }
+	@GetMapping
+	public ResponseEntity<SingleResponse<List<SemesterResponse>>> getAll() {
+		List<SemesterResponse> response = semesterService.getAll();
+		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved all semesters.", response));
+	}
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<SingleResponse<SemesterResponse>> getById(@PathVariable UUID id) {
-        SemesterResponse response = semesterService.getById(id);
-        return ResponseEntity.ok(SingleResponse.success("Successfully retrieved semester.", response));
-    }
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<SingleResponse<SemesterResponse>> getById(@PathVariable UUID id) {
+		SemesterResponse response = semesterService.getById(id);
+		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved semester.", response));
+	}
 
-    @PostMapping
-    public ResponseEntity<SingleResponse<SemesterResponse>> create(@Valid @RequestBody SemesterRequest request){
-        SemesterResponse response = semesterService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(SingleResponse.success("Successfully created semester.", response));
-    }
+	@PostMapping
+	public ResponseEntity<SingleResponse<SemesterResponse>> create(@Valid @RequestBody SemesterRequest request) {
+		SemesterResponse response = semesterService.create(request);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(SingleResponse.success("Successfully created semester.", response));
+	}
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<SingleResponse<SemesterResponse>> update(@PathVariable UUID id,
-                                                                   @Valid @RequestBody SemesterRequest request){
-        SemesterResponse response = semesterService.update(id, request);
-        return ResponseEntity.ok(SingleResponse.success("Successfully updated semester.", response));
-    }
+	@PutMapping(path = "/{id}")
+	public ResponseEntity<SingleResponse<SemesterResponse>> update(@PathVariable UUID id,
+			@Valid @RequestBody SemesterRequest request) {
+		SemesterResponse response = semesterService.update(id, request);
+		return ResponseEntity.ok(SingleResponse.success("Successfully updated semester.", response));
+	}
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID id){
-        semesterService.delete(id);
-        return ResponseEntity.ok(SingleResponse.success("Successfully deleted semester.", null));
-    }
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID id) {
+		semesterService.delete(id);
+		return ResponseEntity.ok(SingleResponse.success("Successfully deleted semester.", null));
+	}
 }
