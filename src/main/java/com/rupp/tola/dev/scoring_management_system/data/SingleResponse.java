@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.data;
 
+import com.rupp.tola.dev.scoring_management_system.dto.response.ScoreResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,12 +8,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SingleResponse<T> {
+public class SingleResponse<T> extends MultipleResponse<List<ScoreResponse>> {
 
     private boolean success;
     private int status;

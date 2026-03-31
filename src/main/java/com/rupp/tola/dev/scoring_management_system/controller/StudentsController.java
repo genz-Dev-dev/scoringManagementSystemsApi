@@ -62,8 +62,8 @@ public class StudentsController {
 	}
 
 	@DeleteMapping(path = "/{uuid}")
-	public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID uuid) {
-		studentService.delete(uuid);
+	public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID id) {
+		studentService.delete(id);
 		return ResponseEntity.ok(SingleResponse.success("Successfully deleted student.", null));
 	}
 
@@ -95,5 +95,5 @@ public class StudentsController {
 		StudentStatisticsResponse response = studentService.statistics();
 		return ResponseEntity.ok(SingleResponse.success("Successfully retrieved student statistics response.", response));
 	}
-
+	
 }
