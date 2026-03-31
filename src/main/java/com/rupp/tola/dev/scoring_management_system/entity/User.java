@@ -1,6 +1,7 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -48,6 +49,12 @@ public class User implements UserDetails {
 
 	@Column(name = "expiry_opt")
 	private Instant expiryOtp;
+
+	@Column(name = "user_login_attempt")
+	private int attempt;
+
+	@Column(name = "user_account_lock_time")
+	private LocalDate lockTime;
 
 	@Column(name = "user_status" , nullable = false)
 	private boolean status;

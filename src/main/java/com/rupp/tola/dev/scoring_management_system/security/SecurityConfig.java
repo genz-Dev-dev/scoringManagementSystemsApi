@@ -1,12 +1,15 @@
 package com.rupp.tola.dev.scoring_management_system.security;
 
 import com.rupp.tola.dev.scoring_management_system.filter.JwtAuthenticationFilter;
+import com.rupp.tola.dev.scoring_management_system.security.handler.CustomLoginSuccessHandler;
+import com.rupp.tola.dev.scoring_management_system.security.handler.CustomLoginFailureHandler;
 import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAccessDeniedHandler;
 import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAuthenticationEntryPoint;
 
 import java.util.List;
 
 import com.rupp.tola.dev.scoring_management_system.service.AppUserDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +31,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -38,6 +42,8 @@ public class SecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final CustomeAccessDeniedHandler accessDeniedHandler;
 	private final CustomeAuthenticationEntryPoint authenticationEntryPoint;
+	private final CustomLoginFailureHandler loginFailureHandler;
+	private final CustomLoginSuccessHandler loginSuccessHandler;
 
 	private static final String[] PUBLIC_URLS = { "/auth/**", "/oauth2/**" , "/css/**", "/js/**", "/images/**", "/swagger-ui.html",
 			"/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**" , "/uploads/**" };
@@ -52,7 +58,11 @@ public class SecurityConfig {
 		return http
 				.csrf(AbstractHttpConfigurer::disable)
 				.httpBasic(AbstractHttpConfigurer::disable)
-				.formLogin(AbstractHttpConfigurer::disable)
+				.formLogin(login -> {
+					login.failureHandler(loginFailureHandler);
+					login.successHandler(loginSuccessHandler);
+//					login.disable();
+				})
 				.cors(cors -> cors.configurationSource(configurationSource()))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -28,4 +29,8 @@ public class UserResponse {
     private boolean status;
 
     private String role;
+
+    private int attempt;
+
+    private LocalDate lockTime;
 }
