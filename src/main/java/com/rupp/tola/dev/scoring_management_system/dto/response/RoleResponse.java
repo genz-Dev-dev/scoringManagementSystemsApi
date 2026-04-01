@@ -13,9 +13,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class RoleResponse {
+
     private UUID id;
     private String name;
     private String description;
     private String status;
     private List<UUID> userIds;
+
 }

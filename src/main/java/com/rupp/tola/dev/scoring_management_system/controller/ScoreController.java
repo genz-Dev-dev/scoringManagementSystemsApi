@@ -51,7 +51,7 @@ public class ScoreController {
         log.info("REST request to get all scores, page : {}, size : {}", pageable.getPageNumber(), pageable.getPageSize());
         Page<ScoreResponse> page = scoreService.getAll(pageable);
         log.info("Fetched {} scores on page {}", page.getNumberOfElements(), page.getNumber());
-        return ResponseEntity.ok(SingleResponse.success("Scores retrieved successfully.", page));
+        return ResponseEntity.ok(SingleResponse.success("Scores retrieved successfully.", page)) ;
     }
 
     @GetMapping("/course")
