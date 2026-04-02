@@ -44,9 +44,6 @@ public class StudentRequest {
     @JsonAlias("phone")
     private String phoneNumber;
 
-    @NotBlank(message = "Enrollment date is required.")
-    private String enrollmentDate;
-
     private StudentAddressRequest address;
 
 }

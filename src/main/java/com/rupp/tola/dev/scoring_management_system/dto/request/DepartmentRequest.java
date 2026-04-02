@@ -17,7 +17,6 @@ public class DepartmentRequest {
     @NotBlank(message = "Department name is required.")
     private String name;
 
-    @NotNull(message = "Image thumbnail is required.")
     private MultipartFile image;
 
     @NotBlank(message = "Department description is required.")

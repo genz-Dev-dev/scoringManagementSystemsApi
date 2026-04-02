@@ -5,7 +5,6 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.SubjectRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SubjectResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Department;
 import com.rupp.tola.dev.scoring_management_system.entity.Subject;
-import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.SubjectMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.DepartmentRepository;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 

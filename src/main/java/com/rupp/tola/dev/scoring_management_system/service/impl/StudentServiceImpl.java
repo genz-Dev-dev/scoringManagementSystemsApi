@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import com.rupp.tola.dev.scoring_management_system.constant.CodePrefix;
@@ -48,7 +49,7 @@ public class StudentServiceImpl implements StudentService {
 						.orElseThrow(() -> new ResourceNotFoundException("Class not found"));
 		student.setClazz(clazz);
 		student.setDateOfBirth(Util.convertToLocalDate(request.getDateOfBirth()));
-		student.setEnrollmentDate(Util.convertToLocalDate(request.getEnrollmentDate()));
+		student.setEnrollmentDate(LocalDate.now());
 		student.getAddress().setStudent(student);
 		student.setStudentCode(getStudentCode());
 		Student saved = studentRepository.save(student);
@@ -157,7 +158,6 @@ public class StudentServiceImpl implements StudentService {
 
 		student.setGender(normalizeGender(request.getGender()));
 		student.setDateOfBirth(Util.convertToLocalDate(request.getDateOfBirth()));
-		student.setEnrollmentDate(Util.convertToLocalDate(request.getEnrollmentDate()));
 		student.setEmail(request.getEmail());
 		student.setPhoneNumber(request.getPhoneNumber());
 

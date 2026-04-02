@@ -92,7 +92,7 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource configurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowedOrigins(List.of("http://localhost:4200" , "http://localhost:5173"));
+		config.setAllowedOrigins(List.of("http://localhost:4200" , "http://localhost:5173" , "http://localhost:3000"));
 		config.setAllowedHeaders(List.of("*"));
 		config.setAllowedMethods(List.of("*"));
 		config.setAllowCredentials(true);

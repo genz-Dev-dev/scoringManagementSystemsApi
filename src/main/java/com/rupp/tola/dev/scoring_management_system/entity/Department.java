@@ -29,7 +29,7 @@ public class Department {
     @Column(name = "department_name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "department_thumbnail" , nullable = false)
+    @Column(name = "department_thumbnail")
     private String thumbnail;
 
     @Column(name = "department_code", nullable = false, unique = true)
