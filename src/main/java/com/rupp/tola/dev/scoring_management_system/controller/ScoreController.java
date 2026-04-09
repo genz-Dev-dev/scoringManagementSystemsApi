@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
+import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ScoreRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ScoreResponse;
@@ -47,11 +48,11 @@ public class ScoreController {
     }
 
     @GetMapping
-    public ResponseEntity<SingleResponse<Page<ScoreResponse>>> getAll(Pageable pageable) {
+    public ResponseEntity<Page<ScoreResponse>> getAll(Pageable pageable) {
         log.info("REST request to get all scores, page : {}, size : {}", pageable.getPageNumber(), pageable.getPageSize());
         Page<ScoreResponse> page = scoreService.getAll(pageable);
         log.info("Fetched {} scores on page {}", page.getNumberOfElements(), page.getNumber());
-        return ResponseEntity.ok(SingleResponse.success("Scores retrieved successfully.", page)) ;
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/course")
@@ -101,6 +102,6 @@ public class ScoreController {
         log.info("REST request to delete score, id : {}", id);
         scoreService.delete(id);
         log.info("Score deleted successfully for id : {}", id);
-        return ResponseEntity.ok(SingleResponse.success("Score deleted successfully.", null));
+        return ResponseEntity.noContent().build();
     }
 }
