@@ -1,7 +1,9 @@
 package com.rupp.tola.dev.scoring_management_system.service;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.DepartmentRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.DepartmentResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.SubjectResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,4 +19,6 @@ public interface DepartmentService {
     DepartmentResponse update(UUID id, DepartmentRequest request);
 
     void delete(UUID id);
+
 }
+

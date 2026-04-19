@@ -2,11 +2,13 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 
 import com.rupp.tola.dev.scoring_management_system.constant.CodePrefix;
 import com.rupp.tola.dev.scoring_management_system.dto.request.DepartmentRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.DepartmentResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Department;
 import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.DepartmentMapper;
+import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.repository.DepartmentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.DepartmentService;
 import com.rupp.tola.dev.scoring_management_system.utils.Util;

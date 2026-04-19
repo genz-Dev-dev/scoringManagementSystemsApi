@@ -2,12 +2,14 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.DepartmentResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Department;
 import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.ClassMapper;
+import com.rupp.tola.dev.scoring_management_system.mapper.DepartmentMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.repository.DepartmentRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ClassService;
@@ -27,6 +29,7 @@ public class ClassServiceImpl implements ClassService {
 	private final ClassRepository classRepository;
 	private final DepartmentRepository departmentRepository;
 	private final ClassMapper classMapper;
+	private final DepartmentMapper departmentMapper;
 
 	@Override
 	public ClassResponse create(ClassRequest request) {
@@ -63,6 +66,14 @@ public class ClassServiceImpl implements ClassService {
 		Class clazz = findByOrThrow(id);
 		log.info("Delete class successfully with ID: " + id);
 		classRepository.delete(clazz);
+	}
+
+	@Override
+	public DepartmentResponse findByDepartmentId(UUID departmentId, UUID classId) {
+		Class clazz = findByOrThrow(classId);
+		Department department = classRepository.findByDepartment(clazz.getDepartment())
+				.orElseThrow(() -> new ResourceNotFoundException("Department ot found with ID: " + clazz.getDepartment().getId()));
+		return departmentMapper.toResponse(department);
 	}
 
 	@Override
@@ -103,5 +114,6 @@ public class ClassServiceImpl implements ClassService {
 			throw new DuplicateResourceException("Class already exists");
 		}
 	}
+
 
 }
