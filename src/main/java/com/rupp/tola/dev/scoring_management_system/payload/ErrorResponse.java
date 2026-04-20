@@ -1,4 +1,4 @@
-package com.rupp.tola.dev.scoring_management_system.data;
+package com.rupp.tola.dev.scoring_management_system.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,28 +20,18 @@ public class ErrorResponse<T> {
     private LocalDate localDate;
 
     public static <T> ErrorResponse<T> error(HttpStatus status , String message , T error) {
-        return ErrorResponse
-                .<T>builder()
-                .success(false)
-                .status(status.value())
-                .message(message)
-                .error(error)
-                .localDate(LocalDate.now())
-                .build();
+        return builderErrorResponse(status, message, error);
     }
 
     public static <T> ErrorResponse<T> error(HttpStatus status , String message) {
-        return ErrorResponse
-                .<T>builder()
-                .success(false)
-                .status(status.value())
-                .message(message)
-                .error(null)
-                .localDate(LocalDate.now())
-                .build();
+        return builderErrorResponse(status, message, null);
     }
 
     public static <T> ErrorResponse<T> error(String message) {
+        return builderErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, message, null);
+    }
+
+    private static <T> ErrorResponse<T> builderErrorResponse(HttpStatus status, String message , T error) {
         return ErrorResponse
                 .<T>builder()
                 .success(false)

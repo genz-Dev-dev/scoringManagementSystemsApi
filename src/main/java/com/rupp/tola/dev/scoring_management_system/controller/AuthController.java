@@ -1,8 +1,8 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.RefreshTokenRequest;
-import com.rupp.tola.dev.scoring_management_system.data.ErrorResponse;
-import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.payload.ErrorResponse;
+import com.rupp.tola.dev.scoring_management_system.payload.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.AuthRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.UserRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;

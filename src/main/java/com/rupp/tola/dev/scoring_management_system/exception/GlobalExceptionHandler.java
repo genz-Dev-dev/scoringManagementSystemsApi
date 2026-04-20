@@ -1,6 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.exception;
 
-import com.rupp.tola.dev.scoring_management_system.data.ErrorResponse;
+import com.rupp.tola.dev.scoring_management_system.payload.ErrorResponse;
 import io.jsonwebtoken.JwtException;
 import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpHeaders;

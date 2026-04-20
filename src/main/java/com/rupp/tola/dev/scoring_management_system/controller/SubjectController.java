@@ -1,6 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
-import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.payload.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.SubjectRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.SubjectResponse;
 import com.rupp.tola.dev.scoring_management_system.service.SubjectService;

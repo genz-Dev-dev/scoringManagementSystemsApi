@@ -1,4 +1,4 @@
-package com.rupp.tola.dev.scoring_management_system.data;
+package com.rupp.tola.dev.scoring_management_system.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,25 +28,17 @@ public class MultipleResponse<T> {
     private LocalDate timestamp;
 
     public static <T> MultipleResponse<T> success(HttpStatus status, String message , Page<T> data) {
-        return MultipleResponse.<T>builder()
-                .success(true)
-                .status(status.value())
-                .message(message)
-                .content(data.getContent())
-                .number(data.getNumber() + 1)
-                .size(data.getSize())
-                .totalPage(data.getTotalPages())
-                .totalElement(data.getTotalElements())
-                .hastPrevious(data.hasPrevious())
-                .hastNext(data.hasNext())
-                .timestamp(LocalDate.now())
-                .build();
+        return builderMultipleResponse(status, message, data);
     }
 
     public static <T> MultipleResponse<T> success(String message , Page<T> data) {
+        return builderMultipleResponse(HttpStatus.OK, message, data);
+    }
+
+    private static <T> MultipleResponse<T> builderMultipleResponse(HttpStatus status, String message , Page<T> data) {
         return MultipleResponse.<T>builder()
                 .success(true)
-                .status(HttpStatus.OK.value())
+                .status(status.value())
                 .message(message)
                 .content(data.getContent())
                 .number(data.getNumber() + 1)

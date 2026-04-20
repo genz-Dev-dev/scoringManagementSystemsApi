@@ -2,8 +2,8 @@ package com.rupp.tola.dev.scoring_management_system.controller;
 
 import java.util.UUID;
 
-import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
-import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.payload.MultipleResponse;
+import com.rupp.tola.dev.scoring_management_system.payload.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.PaginationRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
