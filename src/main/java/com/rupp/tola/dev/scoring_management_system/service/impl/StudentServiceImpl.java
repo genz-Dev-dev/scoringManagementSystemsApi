@@ -3,19 +3,23 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 import java.util.*;
 
 import com.rupp.tola.dev.scoring_management_system.constant.CodePrefix;
+import com.rupp.tola.dev.scoring_management_system.dto.request.StudentsFilterRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentStatisticsResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentsFilterResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
 import com.rupp.tola.dev.scoring_management_system.mapper.ClassMapper;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentAddressMapper;
+import com.rupp.tola.dev.scoring_management_system.mapper.StudentFilterMapper;
 import com.rupp.tola.dev.scoring_management_system.mapper.StudentMapper;
 import com.rupp.tola.dev.scoring_management_system.repository.ClassRepository;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
+import com.rupp.tola.dev.scoring_management_system.specification.StudentSpecification;
 import com.rupp.tola.dev.scoring_management_system.utils.Util;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -138,6 +142,16 @@ public class StudentServiceImpl implements StudentService {
 		int male = studentRepository.countByGender("M");
 		int total = male + female;
 		return toStatistics(total, male, female);
+	}
+
+	@Override
+	public List<StudentsFilterResponse> studentsFilterResponse(StudentsFilterRequest request) {
+
+		return studentRepository
+				.findAll(StudentSpecification.filter(request))
+				.stream()
+				.map(StudentFilterMapper::RESPONSE)
+				.toList();
 	}
 
 	private Student findByOrThrow(UUID uuid) {

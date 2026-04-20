@@ -9,14 +9,16 @@ app:
 
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/SM
+#    url: jdbc:postgresql://postgres:5432/SM
+    url: jdbc:postgresql://localhost:4321/SM
     username: ${DB_USERNAME:SMUSER}
     password: ${DB_PASSWORD:SMPW}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+    #      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
@@ -47,7 +49,7 @@ spring:
             enable: true
             required: true
         debug: false
-  
+
   h2:
     console:
       enabled: true
@@ -67,6 +69,5 @@ springdoc:
   packages-to-scan: com.rupp.tola.dev.scoring_management_system
 
 uploads:
-  department: /home/chamreunvira/Desktop/BouKryUniversitySystem/uploads/department
-  subject: /home/chamreunvira/Desktop/BouKryUniversitySystem/uploads/subject
-
+  department: tola@tola-dev:~/Documents/springProjects/scoring_management_system/BoukryUniversity
+  subject: /Documents/springProjects/scoring_management_system/BouKryUniversitySystem/uploads/subject

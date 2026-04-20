@@ -8,9 +8,11 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.PaginationRequest
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.request.StudentsFilterRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.response.StudentStatisticsResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentsFilterResponse;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -94,6 +96,11 @@ public class StudentsController {
 		StudentStatisticsResponse response = studentService.statistics();
 		return ResponseEntity
 				.ok(SingleResponse.success("Successfully retrieved student statistics response.", response));
+	}
+
+	@PostMapping("/filter")
+	public ResponseEntity<SingleResponse<StudentsFilterResponse>> filterStudents(@RequestBody StudentsFilterRequest request){
+		return ResponseEntity.ok((SingleResponse<StudentsFilterResponse>) studentService.studentsFilterResponse(request));
 	}
 
 }
