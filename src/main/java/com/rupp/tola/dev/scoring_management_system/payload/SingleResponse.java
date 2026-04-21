@@ -20,22 +20,23 @@ public class SingleResponse<T> {
     private T data;
     private LocalDate timestamp;
 
-    public static <T> SingleResponse<T> success(boolean success , String message , HttpStatus status , T data) {
-        return SingleResponse
-                .<T>builder()
-                .success(success)
-                .status(status.value())
-                .message(message)
-                .data(data)
-                .timestamp(LocalDate.now())
-                .build();
+    public static <T> SingleResponse<T> success(String message) {
+        return builderSingleResponse(HttpStatus.OK, message , null);
     }
 
     public static <T> SingleResponse<T> success(String message , T data) {
-        return SingleResponse.
-                <T>builder()
+        return builderSingleResponse(HttpStatus.OK, message, data);
+    }
+
+    public static <T> SingleResponse<T> success(String message , HttpStatus status , T data) {
+        return builderSingleResponse(status , message , data);
+    }
+
+    public static <T> SingleResponse<T> builderSingleResponse(HttpStatus status, String message , T data) {
+        return SingleResponse
+                .<T>builder()
                 .success(true)
-                .status(HttpStatus.OK.value())
+                .status(status.value())
                 .message(message)
                 .data(data)
                 .timestamp(LocalDate.now())
