@@ -9,33 +9,41 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "tbl_audit_log")
+@Getter
+@Setter
 public class AuditLog {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "audit_id", columnDefinition = "uuid", updatable = false, nullable = false)
 	private UUID id;
 
-	@Column(name = "table_name", updatable = false, nullable = false)
-	private String tableName;
+	@Column(name = "username" , nullable = false)
+	private String username;
 
-	@Column(name = "record_id")
-	private UUID recordId;
-
-	@Column(name = "action")
+	@Column(name = "action" , nullable = false)
 	private String action;
 
-	@Column(name = "old_data", columnDefinition = "jsonb")
-	private String oldData;
+	@Column(name = "entity_name")
+	private String entityName;
 
-	@Column(name = "new_data", columnDefinition = "jsonb")
-	private String newData;
+	@Column(name = "entity_id")
+	private String entityId;
 
-	@Column(name = "change_at")
-	private LocalDateTime changeAt;
+	@Column(name = "old_value")
+	private String oldValue;
+
+	@Column(name = "new_value")
+	private String newValue;
+
+	@CreationTimestamp
+	@Column(name = "timestamp")
+	private LocalDateTime timestamp;
+
 }
