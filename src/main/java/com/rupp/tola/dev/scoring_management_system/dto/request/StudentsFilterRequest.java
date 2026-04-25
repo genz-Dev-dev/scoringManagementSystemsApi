@@ -11,8 +11,5 @@ import java.util.UUID;
 @NoArgsConstructor
 public class StudentsFilterRequest {
     private UUID classId;
-    private UUID courseId;
-    private UUID departmentId;
-    private UUID subjectId;
-    private UUID semsterId;
+//    private UUID departmentId;
 }

@@ -4,25 +4,20 @@ import com.rupp.tola.dev.scoring_management_system.dto.response.StudentsFilterRe
 import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-
-import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface StudentFilterMapper {
 
     @Mapping(target = "studentId", source = "id")
     @Mapping(target = "studentCode", source = "studentCode")
-    @Mapping(target = "fullName",
-            expression = "java(student.getEnFirstName() + \" \" + student.getEnLastName())")
-
+    @Mapping(target = "gender", source = "gender")
+    @Mapping(target = "className", source = "clazz.name")
     @Mapping(target = "classId", source = "clazz.id")
     @Mapping(target = "departmentId", source = "clazz.department.id")
+    @Mapping(target = "khLastName",source = "khLastName")
+    @Mapping(target = "khFirstName",source = "khFirstName")
+    @Mapping(target = "enFirstName",source = "enFirstName")
+    @Mapping(target = "enLastName",source = "enLastName")
 
-    @Mapping(target = "courseId", expression = "java(null)")
-    @Mapping(target = "subjectId", expression = "java(null)")
-    @Mapping(target = "semesterId", expression = "java(null)")
-    static StudentsFilterResponse RESPONSE(Student student) {
-        return null;
-    }
+    StudentsFilterResponse toResponse(Student student);
 }

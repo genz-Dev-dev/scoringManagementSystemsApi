@@ -44,6 +44,7 @@ public class StudentServiceImpl implements StudentService {
 	private final StudentMapper studentMapper;
 	private final StudentAddressMapper studentAddressMapper;
 	private final ExcelService excelService;
+	private final StudentFilterMapper mapper;
 
 	@Override
 	public StudentResponse create(StudentRequest request) {
@@ -150,7 +151,7 @@ public class StudentServiceImpl implements StudentService {
 		return studentRepository
 				.findAll(StudentSpecification.filter(request))
 				.stream()
-				.map(StudentFilterMapper::RESPONSE)
+				.map(mapper::toResponse)
 				.toList();
 	}
 

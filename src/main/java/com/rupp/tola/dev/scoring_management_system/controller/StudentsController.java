@@ -1,6 +1,7 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
@@ -99,8 +100,17 @@ public class StudentsController {
 	}
 
 	@PostMapping("/filter")
-	public ResponseEntity<SingleResponse<StudentsFilterResponse>> filterStudents(@RequestBody StudentsFilterRequest request){
-		return ResponseEntity.ok((SingleResponse<StudentsFilterResponse>) studentService.studentsFilterResponse(request));
-	}
+	public ResponseEntity<SingleResponse<List<StudentsFilterResponse>>> filterStudents(
+			@RequestBody StudentsFilterRequest request) {
 
+		List<StudentsFilterResponse> response =
+				studentService.studentsFilterResponse(request);
+
+		return ResponseEntity.ok(
+				SingleResponse.success(
+						"Successfully retrieved student statistics response.",
+						response
+				)
+		);
+	}
 }
