@@ -1,12 +1,18 @@
 package com.kh.rupp_dev.boukryuniversity.service.impl;
 
+import com.kh.rupp_dev.boukryuniversity.constant.UploadBatchesStatus;
+import com.kh.rupp_dev.boukryuniversity.dto.response.StudentResponse;
+import com.kh.rupp_dev.boukryuniversity.dto.response.UploadBatchesResponse;
 import com.kh.rupp_dev.boukryuniversity.entity.Class;
 import com.kh.rupp_dev.boukryuniversity.entity.Student;
 import com.kh.rupp_dev.boukryuniversity.entity.StudentAddress;
+import com.kh.rupp_dev.boukryuniversity.entity.UploadBatches;
 import com.kh.rupp_dev.boukryuniversity.exception.ExcelException;
 import com.kh.rupp_dev.boukryuniversity.exception.ResourceNotFoundException;
+import com.kh.rupp_dev.boukryuniversity.mapper.UploadBatchesMapper;
 import com.kh.rupp_dev.boukryuniversity.repository.ClassRepository;
 import com.kh.rupp_dev.boukryuniversity.repository.StudentRepository;
+import com.kh.rupp_dev.boukryuniversity.repository.UploadBatchesRepository;
 import com.kh.rupp_dev.boukryuniversity.service.ExcelService;
 import com.kh.rupp_dev.boukryuniversity.utils.Util;
 import lombok.RequiredArgsConstructor;
@@ -29,41 +35,49 @@ public class ExcelServiceImpl implements ExcelService {
 
     private final StudentRepository studentRepository;
     private final ClassRepository classRepository;
+    private final UploadBatchesRepository uploadBatchesRepository;
+    private final UploadBatchesMapper uploadBatchesMapper;
 
     @Override
-    public List<Student> importStudents(MultipartFile file) {
-        List<Student> students = new ArrayList<>();
-        try {
-            Workbook workbook = new XSSFWorkbook(file.getInputStream());
-            Sheet sheet = workbook.getSheetAt(0);
-            for(Row row : sheet) {
-                if(row.getRowNum() == 0) {
-                    continue;
-                }
-                Student student = new Student();
-                StudentAddress address = new StudentAddress();
+    public List<StudentResponse> importStudents(MultipartFile file) {
 
-                for (int i = 1; i <= 14; i++) {
-                    Cell cell = row.getCell(i);
-                    String cellValue = Util.getCellValueAsString(cell);
-                    if(cellValue.isBlank()) continue;
-                    excelStudentMapping(i , student , address , cellValue);
+        int failRow = 0;
+        int successRow = 0;
+
+        List<Student> students = new ArrayList<>();
+            try {
+                Workbook workbook = new XSSFWorkbook(file.getInputStream());
+                Sheet sheet = workbook.getSheetAt(0);
+                for(Row row : sheet) {
+                    if(row.getRowNum() == 0) {
+                        continue;
+                    }
+                    Student student = new Student();
+                    StudentAddress address = new StudentAddress();
+
+                    for (int i = 1; i <= 14; i++) {
+                        Cell cell = row.getCell(i);
+                        String cellValue = Util.getCellValueAsString(cell);
+                        if(cellValue.isBlank()) continue;
+                        excelStudentMapping(i , student , address , cellValue);
+                    }
+
+                    student.setAddress(address);
+                    students.add(student);
+                    successRow++;
                 }
-                
-                student.setAddress(address);
-                students.add(student);
+                log.info("Export students successfully: {}" , students.size());
+                workbook.close();
+            }catch (IOException ex) {
+                failRow++;
             }
-            log.info("Export students successfully: {}" , students.size());
-            workbook.close();
-            return students;
-        }catch (IOException ex) {
-            log.error("Could not open Excel file.", ex);
-            throw new ExcelException("Could not open Excel file.");
-        }
-        catch (ExcelException ex) {
-            log.error("Error while reading Excel file.", ex);
-            throw new ExcelException("Error while reading Excel file.");
-        }
+        UploadBatches uploadBatches = new UploadBatches();
+        uploadBatches.setFileName(file.getOriginalFilename());
+        uploadBatches.setStatus(UploadBatchesStatus.PENDING);
+        uploadBatches.setFailRow(failRow);
+        uploadBatches.setSuccessRow(successRow);
+        uploadBatchesRepository.save(uploadBatches);
+        return uploadBatchesMapper.toResponse(uploadBatches);
     }
 
     @Override

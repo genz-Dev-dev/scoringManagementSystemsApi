@@ -9,6 +9,7 @@ import com.kh.rupp_dev.boukryuniversity.dto.request.ImportStudentRequest;
 import com.kh.rupp_dev.boukryuniversity.dto.request.StudentRequest;
 import com.kh.rupp_dev.boukryuniversity.dto.response.StudentResponse;
 import com.kh.rupp_dev.boukryuniversity.dto.response.StudentStatisticsResponse;
+import com.kh.rupp_dev.boukryuniversity.dto.response.UploadBatchesResponse;
 import com.kh.rupp_dev.boukryuniversity.entity.Class;
 import com.kh.rupp_dev.boukryuniversity.entity.Student;
 import com.kh.rupp_dev.boukryuniversity.exception.ResourceNotFoundException;
@@ -98,11 +99,11 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public List<StudentResponse> importStudents(ImportStudentRequest request) {
+	public UploadBatchesResponse importStudents(ImportStudentRequest request) {
 		if(request.getFile() != null && request.getFile().isEmpty()) {
 			throw new ResourceNotFoundException("Student file not found");
 		}
-		
+
 		List<Student> studentList = excelService.importStudents(request.getFile());
 		if (studentList.isEmpty()) {
 			log.warn("No students found in the imported file");
@@ -124,7 +125,7 @@ public class StudentServiceImpl implements StudentService {
 			student.setClazz(clazz);
 			student.getAddress().setStudent(student);
 		}
-		
+
 		List<Student> savedStudents = studentRepository.saveAll(studentList);
 		log.info("Imported {} students successfully", savedStudents.size());
 

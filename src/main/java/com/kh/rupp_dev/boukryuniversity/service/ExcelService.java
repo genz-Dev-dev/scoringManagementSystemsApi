@@ -1,6 +1,8 @@
 package com.kh.rupp_dev.boukryuniversity.service;
 
+import com.kh.rupp_dev.boukryuniversity.dto.response.UploadBatchesResponse;
 import com.kh.rupp_dev.boukryuniversity.entity.Student;
+import com.kh.rupp_dev.boukryuniversity.entity.UploadBatches;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -9,7 +11,7 @@ import java.util.UUID;
 
 public interface ExcelService {
 
-    List<Student> importStudents(MultipartFile file);
+    UploadBatchesResponse importStudents(MultipartFile file);
 
     ByteArrayInputStream exportStudent(UUID classId);
 
