@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

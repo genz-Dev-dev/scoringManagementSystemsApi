@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditListener.class)
 public class Score extends BaseEntity implements Serializable {
 
 	@Id

@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditListener.class)
 public class StudentAddress {
 
     @Id

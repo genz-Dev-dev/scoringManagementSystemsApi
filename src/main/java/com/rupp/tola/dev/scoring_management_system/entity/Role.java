@@ -2,6 +2,7 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 
 import java.util.*;
 
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditListener.class)
 public class Role {
 
 	@Id

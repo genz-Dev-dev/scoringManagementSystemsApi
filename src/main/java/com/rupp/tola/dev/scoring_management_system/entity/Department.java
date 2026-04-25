@@ -1,15 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditListener.class)
 public class Department {
 
     @Id

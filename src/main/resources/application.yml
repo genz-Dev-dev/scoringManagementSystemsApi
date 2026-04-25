@@ -69,5 +69,5 @@ springdoc:
   packages-to-scan: com.rupp.tola.dev.scoring_management_system
 
 uploads:
-  department: tola@tola-dev:~/Documents/springProjects/scoring_management_system/BoukryUniversity
-  subject: /Documents/springProjects/scoring_management_system/BouKryUniversitySystem/uploads/subject
+  department: /home/tola/Documents/springProjects/scoring_management_system/BoukryUniversity
+  subject: /home/tola/Documents/springProjects/scoring_management_system/BoukryUniversity

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import lombok.*;
 @Table(name = "tbl_student")
 @Getter
 @Setter
+@EntityListeners(AuditListener.class)
 public class Student extends BaseEntity {
 
 	@Id

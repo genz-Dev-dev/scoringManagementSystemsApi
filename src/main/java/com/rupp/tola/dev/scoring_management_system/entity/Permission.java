@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditListener.class)
 public class Permission {
 
 	@Id

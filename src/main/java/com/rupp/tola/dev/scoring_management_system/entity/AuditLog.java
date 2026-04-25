@@ -1,15 +1,10 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
 
 @Data
 @Entity
@@ -18,10 +13,10 @@ public class AuditLog {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "audit_id", columnDefinition = "uuid", updatable = false, nullable = false)
+	@Column(name = "audit_id", updatable = false, nullable = false)
 	private UUID id;
 
-	@Column(name = "table_name", updatable = false, nullable = false)
+	@Column(name = "table_name", nullable = false)
 	private String tableName;
 
 	@Column(name = "record_id")
@@ -30,11 +25,11 @@ public class AuditLog {
 	@Column(name = "action")
 	private String action;
 
-	@Column(name = "old_data", columnDefinition = "jsonb")
-	private String oldData;
-
 	@Column(name = "new_data", columnDefinition = "jsonb")
 	private String newData;
+
+	@Column(name = "old_data", columnDefinition = "jsonb")
+	private String oldData;
 
 	@Column(name = "change_at")
 	private LocalDateTime changeAt;

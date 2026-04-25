@@ -127,6 +127,11 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-envers</artifactId>
+		</dependency>
+
 		<!-- ===== Testing ===== -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

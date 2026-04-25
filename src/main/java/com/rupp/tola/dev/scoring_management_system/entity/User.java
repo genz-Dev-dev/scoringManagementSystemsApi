@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditListener.class)
 public class User implements UserDetails {
 
 	@Id

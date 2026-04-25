@@ -1,5 +1,6 @@
 package com.rupp.tola.dev.scoring_management_system.entity;
 
+import com.rupp.tola.dev.scoring_management_system.audit.AuditListener;
 import com.rupp.tola.dev.scoring_management_system.entity.composite.CourseId;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditListener.class)
 public class Course{
 
     @EmbeddedId
