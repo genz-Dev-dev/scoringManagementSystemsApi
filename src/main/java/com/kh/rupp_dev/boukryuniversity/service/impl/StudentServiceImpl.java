@@ -1,9 +1,11 @@
 package com.kh.rupp_dev.boukryuniversity.service.impl;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
 import com.kh.rupp_dev.boukryuniversity.constant.CodePrefix;
+import com.kh.rupp_dev.boukryuniversity.dto.request.UploadBatchesRequest;
 import com.kh.rupp_dev.boukryuniversity.dto.response.ClassResponse;
 import com.kh.rupp_dev.boukryuniversity.dto.request.ImportStudentRequest;
 import com.kh.rupp_dev.boukryuniversity.dto.request.StudentRequest;
@@ -12,11 +14,16 @@ import com.kh.rupp_dev.boukryuniversity.dto.response.StudentStatisticsResponse;
 import com.kh.rupp_dev.boukryuniversity.dto.response.UploadBatchesResponse;
 import com.kh.rupp_dev.boukryuniversity.entity.Class;
 import com.kh.rupp_dev.boukryuniversity.entity.Student;
+import com.kh.rupp_dev.boukryuniversity.entity.UploadBatches;
+import com.kh.rupp_dev.boukryuniversity.entity.User;
 import com.kh.rupp_dev.boukryuniversity.exception.ResourceNotFoundException;
 import com.kh.rupp_dev.boukryuniversity.mapper.ClassMapper;
 import com.kh.rupp_dev.boukryuniversity.mapper.StudentAddressMapper;
 import com.kh.rupp_dev.boukryuniversity.mapper.StudentMapper;
+import com.kh.rupp_dev.boukryuniversity.mapper.UploadBatchesMapper;
 import com.kh.rupp_dev.boukryuniversity.repository.ClassRepository;
+import com.kh.rupp_dev.boukryuniversity.repository.UploadBatchesRepository;
+import com.kh.rupp_dev.boukryuniversity.security.AuthService;
 import com.kh.rupp_dev.boukryuniversity.service.ExcelService;
 import com.kh.rupp_dev.boukryuniversity.utils.Util;
 import jakarta.transaction.Transactional;
@@ -42,6 +49,8 @@ public class StudentServiceImpl implements StudentService {
 	private final StudentMapper studentMapper;
 	private final StudentAddressMapper studentAddressMapper;
 	private final ExcelService excelService;
+	private final AuthService authService;
+	private final UploadBatchesRepository uploadBatchesRepository;
 
 	@Override
 	public StudentResponse create(StudentRequest request) {
@@ -99,12 +108,15 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public UploadBatchesResponse importStudents(ImportStudentRequest request) {
-		if(request.getFile() != null && request.getFile().isEmpty()) {
+	public UploadBatchesResponse importStudents(ImportStudentRequest request) throws IOException {
+		if (request.getFile() != null && request.getFile().isEmpty()) {
 			throw new ResourceNotFoundException("Student file not found");
 		}
 
-		List<Student> studentList = excelService.importStudents(request.getFile());
+		UploadBatches uploadBatches = new UploadBatches();
+
+		List<Student> studentList = excelService.importStudents(request.getFile(), uploadBatches);
+
 		if (studentList.isEmpty()) {
 			log.warn("No students found in the imported file");
 			throw new RuntimeException("No students found in the imported file");
@@ -127,11 +139,15 @@ public class StudentServiceImpl implements StudentService {
 		}
 
 		List<Student> savedStudents = studentRepository.saveAll(studentList);
+
+		User user = authService.getUserAuthenticated();
+		uploadBatches.setUser(user);
+		UploadBatches saved = uploadBatchesRepository.save(uploadBatches);
+
+
 		log.info("Imported {} students successfully", savedStudents.size());
 
-		return studentList.stream()
-				.map(studentMapper::toResponse)
-				.toList();
+		return toUploadBatchesResponse(saved);
 	}
 
 	@Override
@@ -208,6 +224,22 @@ public class StudentServiceImpl implements StudentService {
 	private String getStudentCode() {
 		Long codeNumber = studentRepository.getNextSequence();
 		return CodePrefix.STUDENT_CODE_PREFIX + String.format("%04d", codeNumber);
+	}
+
+
+	private UploadBatchesResponse toUploadBatchesResponse(UploadBatches uploadBatches) {
+		return UploadBatchesResponse
+				.builder()
+				.id(uploadBatches.getId())
+				.userId(uploadBatches.getUser().getId())
+				.username(uploadBatches.getUser().getUsername())
+				.fileName(uploadBatches.getFileName())
+				.successRow(uploadBatches.getSuccessRow())
+				.failRow(Objects.requireNonNullElse(uploadBatches.getFailRow() , 0))
+				.status(uploadBatches.getStatus())
+				.createAt(uploadBatches.getCreatedAt())
+				.completedAt(uploadBatches.getCompletedAt())
+				.build();
 	}
 
 

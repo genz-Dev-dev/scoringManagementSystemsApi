@@ -1,11 +1,13 @@
 package com.kh.rupp_dev.boukryuniversity.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 import com.kh.rupp_dev.boukryuniversity.dto.request.ImportStudentRequest;
 import com.kh.rupp_dev.boukryuniversity.dto.request.PaginationRequest;
 import com.kh.rupp_dev.boukryuniversity.dto.request.StudentRequest;
+import com.kh.rupp_dev.boukryuniversity.dto.response.UploadBatchesResponse;
 import com.kh.rupp_dev.boukryuniversity.payload.MultipleResponse;
 import com.kh.rupp_dev.boukryuniversity.payload.SingleResponse;
 import com.kh.rupp_dev.boukryuniversity.dto.response.ClassResponse;
@@ -74,7 +76,7 @@ public class StudentsController {
 	}
 
 	@PostMapping(path = "/import-student", consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SingleResponse<?>> importStudent(@ModelAttribute ImportStudentRequest request) {
+	public ResponseEntity<SingleResponse<UploadBatchesResponse>> importStudent(@ModelAttribute ImportStudentRequest request) throws IOException {
 		return ResponseEntity.ok(SingleResponse.success("Import student successfully.", studentService.importStudents(request)));
 
 	}

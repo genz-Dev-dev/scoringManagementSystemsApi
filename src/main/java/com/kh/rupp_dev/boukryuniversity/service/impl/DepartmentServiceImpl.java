@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             department.setThumbnail(imageName);
         }
         Long departmentCode = departmentRepository.getNextDepartmentSequence();
-        String code = String.format("%s%.4s" , CodePrefix.DEPARTMENT_CODE_PREFIX , departmentCode);
+        String code = String.format("%s%04d" , CodePrefix.DEPARTMENT_CODE_PREFIX , departmentCode);
         department.setCode(code);
         Department saved = departmentRepository.save(department);
         log.info("Department created with id {}", saved.getId());

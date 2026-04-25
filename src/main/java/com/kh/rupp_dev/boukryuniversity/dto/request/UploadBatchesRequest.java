@@ -1,4 +1,4 @@
-package com.kh.rupp_dev.boukryuniversity.dto.response;
+package com.kh.rupp_dev.boukryuniversity.dto.request;
 
 import com.kh.rupp_dev.boukryuniversity.constant.UploadBatchesStatus;
 import lombok.AllArgsConstructor;
@@ -13,13 +13,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UploadBatchesResponse {
-
-    private UUID id;
+public class UploadBatchesRequest {
 
     private UUID userId;
-
-    private String username;
 
     private String fileName;
 
@@ -31,7 +27,4 @@ public class UploadBatchesResponse {
 
     private Integer failRow;
 
-    private LocalDateTime createAt;
-
-    private LocalDateTime completedAt;
 }

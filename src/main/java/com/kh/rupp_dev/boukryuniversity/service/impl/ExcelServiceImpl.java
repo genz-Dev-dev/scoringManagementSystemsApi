@@ -1,18 +1,14 @@
 package com.kh.rupp_dev.boukryuniversity.service.impl;
 
 import com.kh.rupp_dev.boukryuniversity.constant.UploadBatchesStatus;
-import com.kh.rupp_dev.boukryuniversity.dto.response.StudentResponse;
-import com.kh.rupp_dev.boukryuniversity.dto.response.UploadBatchesResponse;
 import com.kh.rupp_dev.boukryuniversity.entity.Class;
 import com.kh.rupp_dev.boukryuniversity.entity.Student;
 import com.kh.rupp_dev.boukryuniversity.entity.StudentAddress;
 import com.kh.rupp_dev.boukryuniversity.entity.UploadBatches;
 import com.kh.rupp_dev.boukryuniversity.exception.ExcelException;
 import com.kh.rupp_dev.boukryuniversity.exception.ResourceNotFoundException;
-import com.kh.rupp_dev.boukryuniversity.mapper.UploadBatchesMapper;
 import com.kh.rupp_dev.boukryuniversity.repository.ClassRepository;
 import com.kh.rupp_dev.boukryuniversity.repository.StudentRepository;
-import com.kh.rupp_dev.boukryuniversity.repository.UploadBatchesRepository;
 import com.kh.rupp_dev.boukryuniversity.service.ExcelService;
 import com.kh.rupp_dev.boukryuniversity.utils.Util;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,23 +32,21 @@ public class ExcelServiceImpl implements ExcelService {
 
     private final StudentRepository studentRepository;
     private final ClassRepository classRepository;
-    private final UploadBatchesRepository uploadBatchesRepository;
-    private final UploadBatchesMapper uploadBatchesMapper;
+
+
 
     @Override
-    public List<StudentResponse> importStudents(MultipartFile file) {
-
-        int failRow = 0;
-        int successRow = 0;
-
+    public List<Student> importStudents(MultipartFile file , UploadBatches uploadBatch) throws IOException {
         List<Student> students = new ArrayList<>();
+            Workbook workbook = new XSSFWorkbook(file.getInputStream());
+            Sheet sheet = workbook.getSheetAt(0);
+            int failRow = 0;
             try {
-                Workbook workbook = new XSSFWorkbook(file.getInputStream());
-                Sheet sheet = workbook.getSheetAt(0);
                 for(Row row : sheet) {
                     if(row.getRowNum() == 0) {
                         continue;
                     }
+                    uploadBatch.setSuccessRow(row.getRowNum());
                     Student student = new Student();
                     StudentAddress address = new StudentAddress();
 
@@ -64,21 +59,24 @@ public class ExcelServiceImpl implements ExcelService {
 
                     student.setAddress(address);
                     students.add(student);
-                    successRow++;
                 }
-                log.info("Export students successfully: {}" , students.size());
-                workbook.close();
-            }catch (IOException ex) {
+
+                uploadBatch.setFileName(file.getOriginalFilename());
+                uploadBatch.setTotalRow(sheet.getLastRowNum());
+                uploadBatch.setStatus(UploadBatchesStatus.APPROVED);
+                uploadBatch.setCompletedAt(LocalDateTime.now());
+            } catch (ExcelException ex) {
                 failRow++;
+                uploadBatch.setFailRow(failRow);
+                uploadBatch.setStatus(UploadBatchesStatus.REJECTED);
+                log.error("Error while reading Excel file.", ex);
+                throw new ExcelException("Error while reading Excel file.");
             }
-        UploadBatches uploadBatches = new UploadBatches();
-        uploadBatches.setFileName(file.getOriginalFilename());
-        uploadBatches.setStatus(UploadBatchesStatus.PENDING);
-        uploadBatches.setFailRow(failRow);
-        uploadBatches.setSuccessRow(successRow);
-        uploadBatchesRepository.save(uploadBatches);
-        return uploadBatchesMapper.toResponse(uploadBatches);
+            log.info("Export students successfully: {}" , students.size());
+            workbook.close();
+            return students;
     }
+
 
     @Override
     public ByteArrayInputStream exportStudent(UUID classId) {
@@ -233,4 +231,5 @@ public class ExcelServiceImpl implements ExcelService {
                 break;
         }
     }
+
 }

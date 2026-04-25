@@ -1,5 +1,6 @@
 package com.kh.rupp_dev.boukryuniversity.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public interface StudentService {
 
 	ClassResponse getClassByStudentId(UUID uuid);
 
-	UploadBatchesResponse importStudents(ImportStudentRequest request);
+	UploadBatchesResponse importStudents(ImportStudentRequest request) throws IOException;
 
 	StudentStatisticsResponse statistics();
 
