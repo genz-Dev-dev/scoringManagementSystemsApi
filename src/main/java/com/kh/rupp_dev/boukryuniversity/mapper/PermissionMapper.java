@@ -12,6 +12,7 @@ public interface PermissionMapper {
     @Mapping(target = "id" , ignore = true)
     @Mapping(target = "createdAt" , ignore = true)
     @Mapping(target = "roles" , ignore = true)
+    @Mapping(target = "status" , ignore = true)
     Permission toEntity(PermissionRequest request);
 
     @Mapping(target = "roleIds" , ignore = true)
@@ -21,5 +22,6 @@ public interface PermissionMapper {
     @Mapping(target = "id" , ignore = true)
     @Mapping(target = "createdAt" , ignore = true)
     @Mapping(target = "roles" , ignore = true)
+    @Mapping(target = "status" , ignore = true)
     void updateFromRequest(@MappingTarget Permission permission, PermissionRequest request);
 }

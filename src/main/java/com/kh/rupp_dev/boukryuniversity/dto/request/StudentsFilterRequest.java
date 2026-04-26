@@ -1,4 +1,4 @@
-package com.rupp.tola.dev.scoring_management_system.dto.request;
+package com.kh.rupp_dev.boukryuniversity.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

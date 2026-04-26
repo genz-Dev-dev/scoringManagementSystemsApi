@@ -20,14 +20,6 @@ public class AuditorAwareImpl implements AuditorAware<String> {
             return Optional.of("SYSTEM");
         }
     }
+
+    
 }
-//@Component
-//public class AuditorAwareImpl implements AuditorAware<String> {
-//
-//    @Override
-//    public Optional<String> getCurrentAuditor() {
-//        String userName = SecurityContextHolder.getContext().getAuthentication()
-//                .getName();
-//        return Optional.ofNullable(userName);
-//    }
-//}

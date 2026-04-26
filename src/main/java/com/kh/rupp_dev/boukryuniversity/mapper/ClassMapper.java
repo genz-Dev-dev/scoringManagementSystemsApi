@@ -12,10 +12,14 @@ public interface ClassMapper {
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "department", ignore = true)
+	@Mapping(target = "creationAt" , ignore = true)
+	@Mapping(target = "updatedAt" , ignore = true)
 	Class toEntity(ClassRequest request);
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "department", ignore = true)
+	@Mapping(target = "creationAt" , ignore = true)
+	@Mapping(target = "updatedAt" , ignore = true)
 	void updateFromRequest(ClassRequest classRequest, @MappingTarget Class clazz);
 
 	@Mapping(target = "departmentId", source = "department.id")

@@ -20,7 +20,10 @@ public interface AuditLogMapper {
     default Map<String, Object> jsonToMap(String json) {
         try {
             if (json == null) return null;
-            return new ObjectMapper().readValue(json, Map.class);
+            return 
+                new ObjectMapper()
+                    .readValue(json, Map.class);
+                    
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse JSON", e);
         }

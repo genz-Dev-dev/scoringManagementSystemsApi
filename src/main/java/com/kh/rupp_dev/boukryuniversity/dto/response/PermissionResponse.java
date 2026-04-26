@@ -22,6 +22,8 @@ public class PermissionResponse {
 
     private String module;
 
+    private boolean status;
+
     private List<UUID> roleIds;
 
 }

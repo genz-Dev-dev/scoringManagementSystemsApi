@@ -11,6 +11,7 @@ public interface RoleMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", ignore = true)
     @Mapping(target = "users" , ignore = true)
+    @Mapping(target = "permissions" , ignore = true)
     Role toEntity(RoleRequest request);
 
     @Mapping(target = "userIds" , ignore = true)
@@ -19,5 +20,6 @@ public interface RoleMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "users", ignore = true)
+    @Mapping(target = "permissions" , ignore = true)
     void updateFromRequest(@MappingTarget Role role, RoleRequest request);
 }

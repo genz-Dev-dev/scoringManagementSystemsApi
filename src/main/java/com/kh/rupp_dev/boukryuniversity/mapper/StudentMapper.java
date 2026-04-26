@@ -17,6 +17,10 @@ public interface StudentMapper {
 	@Mapping(target = "studentCode", ignore = true)
 	@Mapping(target = "dateOfBirth", ignore = true)
 	@Mapping(target = "enrollmentDate", ignore = true)
+	@Mapping(target = "creationAt" , ignore = true)
+	@Mapping(target = "updatedAt" , ignore = true)
+	@Mapping(target = "status" , ignore = true)
+	@Mapping(target = "scores" , ignore = true)
 	Student toEntity(StudentRequest request);
 
 	@Mapping(target = "address", source = "address")
@@ -31,6 +35,9 @@ public interface StudentMapper {
 	@Mapping(target = "dateOfBirth", ignore = true)
 	@Mapping(target = "enrollmentDate", ignore = true)
 	@Mapping(target = "address", source = "address")
+	@Mapping(target = "creationAt" , ignore = true)
+	@Mapping(target = "updatedAt" , ignore = true)
+	@Mapping(target = "status" , ignore = true)
 	void updateFromRequest(StudentRequest request, @MappingTarget Student student);
 	
 }

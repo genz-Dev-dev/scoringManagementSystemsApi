@@ -34,26 +34,27 @@ public class DataSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         logger.info("Seeding data...");
 
-        Permission adminRead = perm("admin:read" , "Can access GET method." , "ADMIN_MANAGEMENT");
-        Permission adminWrite = perm("admin:write" , "Can access POST and PUT method." , "ADMIN_MANAGEMENT");
-        Permission adminDelete = perm("admin:delete" , "Can access DELETE method." , "ADMIN");
+        Permission adminRead = perm("admin:read", "Can access GET method.", "ADMIN_MANAGEMENT");
+        Permission adminWrite = perm("admin:write", "Can access POST and PUT method.", "ADMIN_MANAGEMENT");
+        Permission adminDelete = perm("admin:delete", "Can access DELETE method.", "ADMIN");
 
-        Role roleAdmin = createRole("ROLE_ADMIN" , "Only admin can use this role." ,
-                "ACTIVE" , Set.of(adminRead, adminWrite, adminDelete));
+        Role roleAdmin = createRole("ROLE_ADMIN", "Only admin can use this role.",
+                "ACTIVE", Set.of(adminRead, adminWrite, adminDelete));
 
-        createRole("ROLE_STAFF" , "Only staff can use this role." , "ACTIVE" , Set.of(adminRead, adminWrite, adminDelete));
+        createRole("ROLE_STAFF", "Only staff can use this role.", "ACTIVE", Set.of(adminRead, adminWrite, adminDelete));
 
-        if(!userRepository.existsByEmail("admin@gmail.com")) {
+        if (!userRepository.existsByEmail("admin@gmail.com")) {
             User admin = new User();
-            admin.setFullName("admin");
-            admin.setEmail("admin@gmail.com");
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setFullName("Chamreun Vira");
+            admin.setEmail("virachamreun@gmail.com");
+            admin.setPassword(passwordEncoder.encode("Vira168"));
             admin.setVerified(true);
             admin.setRole(roleAdmin);
-            admin.setVerificationToken(jwtService.generateToken("admin"));
+            admin.setVerificationToken(jwtService.generateToken("virachamreun@gmail.com"));
             RefreshToken refreshToken = refreshTokenService.create();
             refreshToken.setUser(admin);
             admin.setRefreshToken(refreshToken);
+            admin.setStatus(true);
             userRepository.save(admin);
         }
 
@@ -70,7 +71,7 @@ public class DataSeeder implements CommandLineRunner {
                 });
     }
 
-    public Role createRole(String name , String description , String status , Set<Permission> permissions) {
+    public Role createRole(String name, String description, String status, Set<Permission> permissions) {
         return roleRepository.findByName(name)
                 .orElseGet(() -> {
                     Role role = new Role();

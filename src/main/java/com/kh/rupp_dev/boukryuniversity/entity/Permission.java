@@ -31,6 +31,9 @@ public class Permission {
 	@Column(name = "permission_module" , nullable = false , length = 50)
 	private String module;
 
+	@Column(name = "status")
+	private boolean status = true;
+
 	@CreationTimestamp
 	@Column(name = "created_at" , nullable = false , updatable = false)
 	private LocalDate createdAt;

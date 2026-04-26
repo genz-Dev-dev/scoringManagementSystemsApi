@@ -15,6 +15,7 @@ public interface DepartmentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "code", ignore = true)
     @Mapping(target = "thumbnail", ignore = true)
+    @Mapping(target = "subjects" , ignore = true)
     Department toEntity(DepartmentRequest request);
 
     @Mapping(target = "thumbnail", source = "thumbnail")
@@ -24,5 +25,6 @@ public interface DepartmentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "code", ignore = true)
     @Mapping(target = "thumbnail", ignore = true)
+    @Mapping(target = "subjects" , ignore = true)
     void updateFromRequest(DepartmentRequest request, @MappingTarget Department department);
 }

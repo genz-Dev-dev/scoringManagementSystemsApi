@@ -26,6 +26,7 @@ public interface ScoreMapper {
 
     List<ScoreResponse> toResponseList(List<Score> scores);
 
+    @Mapping(target = "id" , ignore = true)
     @Mapping(target = "student", ignore = true)
     @Mapping(target = "course", ignore = true)
     @Mapping(target = "creationAt", ignore = true)

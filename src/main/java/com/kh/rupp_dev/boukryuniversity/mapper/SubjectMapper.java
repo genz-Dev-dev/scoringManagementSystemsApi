@@ -26,5 +26,6 @@ public interface SubjectMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "department", ignore = true)
     @Mapping(target = "code" , ignore = true)
+    @Mapping(target = "thumbnail" , ignore = true)
     void updateFromRequest(SubjectRequest request, @MappingTarget Subject subject);
 }

@@ -1,6 +1,5 @@
 package com.kh.rupp_dev.boukryuniversity.dto.request;
 
-import jakarta.mail.Multipart;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
