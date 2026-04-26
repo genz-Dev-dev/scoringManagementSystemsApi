@@ -22,28 +22,25 @@ public class AuditLog {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "audit_id", updatable = false, nullable = false)
 	private UUID id;
 
-	@Column(name = "username" , nullable = false)
-	private String username;
+	@Column(name = "table_name", nullable = false)
+	private String tableName;
 
-	@Column(name = "action" , nullable = false)
+	@Column(name = "record_id")
+	private UUID recordId;
+
+	@Column(name = "action")
 	private String action;
 
-	@Column(name = "entity_name")
-	private String entityName;
+	@Column(name = "new_data", columnDefinition = "jsonb")
+	private String newData;
 
-	@Column(name = "entity_id")
-	private String entityId;
+	@Column(name = "old_data", columnDefinition = "jsonb")
+	private String oldData;
 
-	@Column(name = "old_value")
-	private String oldValue;
-
-	@Column(name = "new_value")
-	private String newValue;
-
-	@CreationTimestamp
-	@Column(name = "timestamp")
-	private LocalDateTime timestamp;
+	@Column(name = "change_at")
+	private LocalDateTime changeAt;
 
 }
