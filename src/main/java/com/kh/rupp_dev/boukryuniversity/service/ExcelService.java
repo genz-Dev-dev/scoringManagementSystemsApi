@@ -1,6 +1,5 @@
 package com.kh.rupp_dev.boukryuniversity.service;
 
-import com.kh.rupp_dev.boukryuniversity.dto.request.UploadBatchesRequest;
 import com.kh.rupp_dev.boukryuniversity.entity.Student;
 import com.kh.rupp_dev.boukryuniversity.entity.UploadBatches;
 import org.springframework.web.multipart.MultipartFile;

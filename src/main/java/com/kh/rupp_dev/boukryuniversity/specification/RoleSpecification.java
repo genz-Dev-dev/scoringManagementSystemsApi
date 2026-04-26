@@ -1,6 +1,8 @@
 package com.kh.rupp_dev.boukryuniversity.specification;
 
 import com.kh.rupp_dev.boukryuniversity.entity.Role;
+
+import org.jspecify.annotations.NullMarked;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 
@@ -19,6 +21,7 @@ public class RoleSpecification implements Specification<Role> {
 	private RoleFiltter filtter;
 
 	@Override
+	@NullMarked
 	public Predicate toPredicate(@NonNull Root<Role> root, @NonNull CriteriaQuery<?> query,
                                  @NonNull CriteriaBuilder criteriaBuilder) {
 		return null;
