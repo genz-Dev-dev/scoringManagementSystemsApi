@@ -61,15 +61,6 @@ springdoc:
         path: /v3/api-docs
         enabled: true
     packages-to-scan: com.rupp.tola.dev.scoring_management_system
-
-<<<<<<< HEAD
-
-
-
-
-
-=======
->>>>>>> 9bfc6a03c9e812cece43d5ebac6224b74be05e57
 #server:
 #    port: 8080
 #    servlet:

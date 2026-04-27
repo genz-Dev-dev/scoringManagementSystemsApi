@@ -2,8 +2,9 @@ package com.rupp.tola.dev.scoring_management_system.dto;
 
 import java.util.UUID;
 
-import com.rupp.tola.dev.scoring_management_system.enums.RoleStatus;
 import lombok.Data;
+
+import javax.management.relation.RoleStatus;
 
 @Data
 public class RolesDTO {
