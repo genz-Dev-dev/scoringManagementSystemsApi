@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: audit_logs
+                    tableName: tbl_audit_log
                     columns:
                         - column:
                               name: audit_id

@@ -5,13 +5,10 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.ResetPasswordRequ
 import com.rupp.tola.dev.scoring_management_system.dto.request.UserRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.request.VerifyOtpRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.UserResponse;
-import com.rupp.tola.dev.scoring_management_system.entity.Users;
-import jakarta.mail.MessagingException;
+import com.rupp.tola.dev.scoring_management_system.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.User;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -60,7 +57,7 @@ public interface AuthService {
 	UserResponse resetPassword(String token, ResetPasswordRequest request);
 
 	/**
-	 * Delete user account
+	 * Delete user account with UUID
 	 * @param uuid
 	 */
 	void delete(UUID uuid);
@@ -74,5 +71,13 @@ public interface AuthService {
 	 * This method use for set foreign into weak entity set
 	 * return Users Object but be care full make sure user is verfied
 	 */
-	Users getUser(UUID uuid);
+	User getUser(UUID uuid);
+
+	void updateStatus(UUID uuid , String status);
+
+	/**
+	 * This method use to find user has been authentication. For retrieve foreign key
+	 * @return User object
+	 */
+	User getUserAuthenticated();
 }

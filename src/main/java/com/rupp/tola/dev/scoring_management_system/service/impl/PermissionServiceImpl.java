@@ -1,67 +1,105 @@
 package com.rupp.tola.dev.scoring_management_system.service.impl;
 
-import java.util.Optional;
+import com.rupp.tola.dev.scoring_management_system.dto.request.PermissionRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.PermissionResponse;
+import com.rupp.tola.dev.scoring_management_system.entity.Permission;
+import com.rupp.tola.dev.scoring_management_system.entity.Role;
+import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
+import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
+import com.rupp.tola.dev.scoring_management_system.mapper.PermissionMapper;
+import com.rupp.tola.dev.scoring_management_system.repository.PermissionRepository;
+import com.rupp.tola.dev.scoring_management_system.repository.RoleRepository;
+import com.rupp.tola.dev.scoring_management_system.service.PermissionService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-import com.rupp.tola.dev.scoring_management_system.service.PermissionService;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.rupp.tola.dev.scoring_management_system.entity.Permissions;
-import com.rupp.tola.dev.scoring_management_system.exception.ResourceNotFoundException;
-import com.rupp.tola.dev.scoring_management_system.repository.PermissionRepository;
-
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
-@Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
 
-	private final PermissionRepository permissionRepository;
+    private final PermissionRepository permissionRepository;
+    private final PermissionMapper permissionMapper;
+    private final RoleRepository roleRepository;
 
-	@Override
-	public Permissions createPermissions(Permissions permissions) {
-		return permissionRepository.save(permissions);
-	}
+    @Override
+    public PermissionResponse create(PermissionRequest request) {
+        if (permissionRepository.existsByNameAndModule(request.getName(), request.getModule())) {
+            throw new DuplicateResourceException("Permission already exists");
+        }
+        Permission permission = permissionMapper.toEntity(request);
+        if (request.getRoleIds() != null && !request.getRoleIds().isEmpty()) {
+            Set<Role> roles = roleRepository.findByIdIn(request.getRoleIds());
+            permission.setRoles(roles);
+        }
+        Permission saved = permissionRepository.save(permission);
+        log.info("Permission created: {}", saved);
+        return toResponse(saved);
+    }
 
-	@Override
-	public Permissions getById(UUID id) {
-		return permissionRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("permmsionId id required: " + id));
-	}
+    @Override
+    public PermissionResponse update(UUID id, PermissionRequest request) {
+        if (permissionRepository.existsByNameAndModule(request.getName(), request.getModule())) {
+            throw new DuplicateResourceException("Permission already exists");
+        }
+        Permission permission = findByOrThrow(id);
+        permissionMapper.updateFromRequest(permission, request);
+        if (request.getRoleIds() != null && !request.getRoleIds().isEmpty()) {
+            Set<Role> roles = roleRepository.findByIdIn(request.getRoleIds());
+            permission.setRoles(roles);
+        }
+        Permission updated = permissionRepository.save(permission);
+        return toResponse(updated);
+    }
 
-	@Override
-	public Permissions updatePermissionById(UUID id, Permissions permissionsUpdate) {
-		Permissions permissions = getById(id);
-		permissions.setName(permissionsUpdate.getName());
-		return permissionRepository.save(permissions);
-	}
+    @Override
+    public void delete(UUID id) {
+        Permission permission = findByOrThrow(id);
+        permission.getRoles().removeIf(role -> role.getPermissions().remove(permission));
+        permissionRepository.delete(permission);
+    }
 
-	@Override
-	public Permissions updatePermissionsByStatus(UUID id, Boolean status) {
+    @Override
+    public List<PermissionResponse> getAll() {
+        List<Permission> permissions = permissionRepository.findAll();
+        return permissions.stream()
+                .map(this::toResponse)
+                .toList();
+    }
 
-		String message = "status update not found";
-		Permissions permissions = permissionRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(message));
-		permissions.setStatus(status);
-		return permissionRepository.save(permissions);
-	}
+    @Override
+    public PermissionResponse getById(UUID id) {
+        Permission permission = findByOrThrow(id);
+        return toResponse(permission);
+    }
 
-	@Override
-	public Optional<Permissions> getByStatus(Boolean status) {
-<<<<<<< HEAD:src/main/java/com/rupp/tola/dev/scoring_management_system/security/impl/PermissionServiceImpl.java
+    @Override
+    public List<PermissionResponse> findByModule(String module) {
+        List<Permission> permissions = permissionRepository.findByModule(module);
+        return permissions.stream()
+                .map(this::toResponse)
+                .toList();
+    }
 
-		return permissionRepository.findByStatus(status).map(Optional::of).orElseGet(() -> {
-			return Optional.empty();
-		});
-=======
-		String message = "status not found";
-		Permissions permissions = permissionRepository.findByStatus(status)
-				.orElseThrow(() -> new ResourceNotFoundException(message));
-		return Optional.ofNullable(permissions);
->>>>>>> 7fe9c6b319874c8fd8ea935a4508e16203c493e1:src/main/java/com/rupp/tola/dev/scoring_management_system/service/impl/PermissionServiceImpl.java
-	}
+    private Permission findByOrThrow(UUID id) {
+        return permissionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Permission not found with ID: " + id));
+    }
 
+    private PermissionResponse toResponse(Permission permission) {
+        var response = permissionMapper.toResponse(permission);
+        if (permission.getRoles() != null && !permission.getRoles().isEmpty()) {
+            List<UUID> roleIds = permission.getRoles()
+                    .stream()
+                    .map(Role::getId)
+                    .toList();
+            response.setRoleIds(roleIds);
+        }
+        return response;
+    }
 }

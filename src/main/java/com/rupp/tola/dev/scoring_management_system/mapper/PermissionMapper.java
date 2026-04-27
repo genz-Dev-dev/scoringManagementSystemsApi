@@ -1,16 +1,25 @@
 package com.rupp.tola.dev.scoring_management_system.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import com.rupp.tola.dev.scoring_management_system.dto.request.PermissionRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.PermissionResponse;
+import com.rupp.tola.dev.scoring_management_system.entity.Permission;
+import org.mapstruct.*;
 
-import com.rupp.tola.dev.scoring_management_system.dto.PermissionDTO;
-import com.rupp.tola.dev.scoring_management_system.entity.Permissions;
 
 @Mapper(componentModel = "spring")
 public interface PermissionMapper {
-	PermissionMapper INSTANCE = Mappers.getMapper(PermissionMapper.class);
 
-	Permissions toPermissions(PermissionDTO permissionDTO);
+    @Mapping(target = "id" , ignore = true)
+    @Mapping(target = "createdAt" , ignore = true)
+    @Mapping(target = "roles" , ignore = true)
+    Permission toEntity(PermissionRequest request);
 
-	PermissionDTO tPermissionDTO(Permissions permissions);
+    @Mapping(target = "roleIds" , ignore = true)
+    PermissionResponse toResponse(Permission permission);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id" , ignore = true)
+    @Mapping(target = "createdAt" , ignore = true)
+    @Mapping(target = "roles" , ignore = true)
+    void updateFromRequest(@MappingTarget Permission permission, PermissionRequest request);
 }

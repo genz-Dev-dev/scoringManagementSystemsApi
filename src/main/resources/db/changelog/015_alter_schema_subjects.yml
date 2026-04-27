@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 015_alter_subjects_table_add_department_and_description
+      author: chamreunvira (generated)
+      changes:
+        - addColumn:
+            tableName: tbl_subject
+            columns:
+              - column:
+                  name: department_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: tbl_subject
+            columnNames: subject_code
+            constraintName: uk_subject_code
+        - addForeignKeyConstraint:
+            baseTableName: tbl_subject
+            baseColumnNames: department_id
+            referencedTableName: tbl_department
+            referencedColumnNames: department_id
+            constraintName: fk_subject_department

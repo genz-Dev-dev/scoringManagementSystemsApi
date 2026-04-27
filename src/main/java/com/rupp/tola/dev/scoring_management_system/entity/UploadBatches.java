@@ -3,17 +3,30 @@ package com.rupp.tola.dev.scoring_management_system.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.rupp.tola.dev.scoring_management_system.enums.UploadBatchesStatus;
-import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.rupp.tola.dev.scoring_management_system.constant.UploadBatchesStatus;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
-@Table(name = "upload_batches")
+@Table(name = "tbl_uplaod_batches")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class UploadBatches {
 
 	@Id
@@ -46,5 +59,5 @@ public class UploadBatches {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id" , referencedColumnName = "user_id")
-	private Users users;
+	private User user;
 }

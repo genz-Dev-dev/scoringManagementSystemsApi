@@ -1,7 +1,5 @@
 package com.rupp.tola.dev.scoring_management_system.dto.response;
 
-import com.rupp.tola.dev.scoring_management_system.enums.RoleName;
-import com.rupp.tola.dev.scoring_management_system.enums.RoleStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +14,8 @@ import java.util.UUID;
 @Builder
 public class RoleResponse {
     private UUID id;
-    private RoleName name;
-    private RoleStatus status;
-    private List<UUID> userId;
+    private String name;
+    private String description;
+    private String status;
+    private List<UUID> userIds;
 }

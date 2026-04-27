@@ -3,38 +3,100 @@ databaseChangeLog:
           id: 005_create_students_table
           author: tola.dev001@gmail.com
           changes:
-              - createTable:
-                    tableName: students
-                    columns:
-                        - column:
-                              name: student_id
-                              type: uuid
-                              defaultValueComputed: gen_random_uuid() # 🔥 auto-generate UUID
-                              constraints:
-                                  primaryKey: true
-                                  nullable: false
-                        - column:
-                              name: student_code
-                              type: varchar(50)
-                              constraints:
-                                  nullable: false
-                        - column:
-                              name: name
-                              type: varchar(150)
-                              constraints:
-                                  nullable: false
-                        - column:
-                              name: class_id
-                              type: uuid
-                              constraints:
-                                  nullable: false
-                        - column:
-                              name: status
-                              type: boolean
-                              defaultValueBoolean: true # optional, default active
-              - addForeignKeyConstraint:
-                    baseTableName: students
-                    baseColumnNames: class_id
-                    referencedTableName: classes
-                    referencedColumnNames: class_id
-                    constraintName: fk_students_classes
+               - createTable:
+                     tableName: tbl_student
+                     columns:
+                         - column:
+                               name: student_id
+                               type: uuid
+                               defaultValueComputed: gen_random_uuid()
+                               constraints:
+                                   primaryKey: true
+                                   nullable: false
+                         - column:
+                               name: student_code
+                               type: varchar(50)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: kh_first_name
+                               type: varchar(100)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: kh_lastname
+                               type: varchar(100)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: en_first_name
+                               type: varchar(100)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: en_last_name
+                               type: varchar(100)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: gender
+                               type: varchar(1)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: class_id
+                               type: uuid
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: status
+                               type: boolean
+                               defaultValueBoolean: true
+                         - column:
+                               name: std_dob
+                               type: date
+                         - column:
+                               name: std_email
+                               type: varchar(100)
+                         - column:
+                               name: std_phone_number
+                               type: varchar(20)
+                         - column:
+                               name: no
+                               type: varchar(50)
+                         - column:
+                               name: address_street
+                               type: varchar(100)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: address_sangkat
+                               type: varchar(100)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: address_khan
+                               type: varchar(100)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: address_province
+                               type: varchar(100)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: country
+                               type: varchar(50)
+                               constraints:
+                                   nullable: false
+                         - column:
+                               name: created_at
+                               type: timestamp
+                               constraints:
+                                   nullable: false
+               - addForeignKeyConstraint:
+                     baseTableName: tbl_student
+                     baseColumnNames: class_id
+                     referencedTableName: tbl_class
+                     referencedColumnNames: class_id
+                     constraintName: fk_students_classes

@@ -1,9 +1,8 @@
 package com.rupp.tola.dev.scoring_management_system.specification;
 
+import com.rupp.tola.dev.scoring_management_system.entity.Role;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
-
-import com.rupp.tola.dev.scoring_management_system.entity.Roles;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -14,15 +13,14 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class RoleSpecification implements Specification<Roles> {
+public class RoleSpecification implements Specification<Role> {
 
 	private static final long serialVersionUID = 1L;
 	private RoleFiltter filtter;
 
 	@Override
-	public Predicate toPredicate(@NonNull Root<Roles> root, @NonNull CriteriaQuery<?> query,
-			@NonNull CriteriaBuilder criteriaBuilder) {
-		// TODO Auto-generated method stub
+	public Predicate toPredicate(@NonNull Root<Role> root, @NonNull CriteriaQuery<?> query,
+                                 @NonNull CriteriaBuilder criteriaBuilder) {
 		return null;
 	}
 

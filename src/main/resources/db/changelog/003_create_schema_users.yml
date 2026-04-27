@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: users
+                    tableName: tbl_user
                     columns:
                         - column:
                               name: user_id
@@ -34,8 +34,8 @@ databaseChangeLog:
                               constraints:
                                   nullable: false
               - addForeignKeyConstraint:
-                    baseTableName: users
+                    baseTableName: tbl_user
                     baseColumnNames: role_id
-                    referencedTableName: roles
+                    referencedTableName: tbl_role
                     referencedColumnNames: role_id
                     constraintName: fk_users_roles

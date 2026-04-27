@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 016_alter_semesters_table_match_entity_set
+      author: chamreunvira (generated)
+      changes:
+        - addColumn:
+            tableName: tbl_semester
+            columns:
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: tbl_semester
+            columnNames: semester_name
+            constraintName: uk_semester_name

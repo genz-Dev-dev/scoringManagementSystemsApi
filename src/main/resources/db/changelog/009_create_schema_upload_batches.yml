@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: upload_batches
+                    tableName: tbl_uplaod_batches
                     columns:
                         - column:
                               name: upload_batch_id
@@ -56,8 +56,8 @@ databaseChangeLog:
                               constraints:
                                   nullable: false
               - addForeignKeyConstraint:
-                    baseTableName: upload_batches
+                    baseTableName: tbl_uplaod_batches
                     baseColumnNames: user_id
-                    referencedTableName: users
+                    referencedTableName: tbl_user
                     referencedColumnNames: user_id
                     constraintName: fk_upload_batches_users

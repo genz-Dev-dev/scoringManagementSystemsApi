@@ -1,13 +1,19 @@
 package com.rupp.tola.dev.scoring_management_system.repository;
 
+import java.util.List;
 import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.dto.request.ScoreRequest;
+import com.rupp.tola.dev.scoring_management_system.entity.composite.CourseId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Scores;
+import com.rupp.tola.dev.scoring_management_system.entity.Score;
 
 @Repository
-public interface ScoreRepository extends JpaRepository<Scores, UUID> {
-
+public interface ScoreRepository extends JpaRepository<Score, UUID> , JpaSpecificationExecutor<Score> {
+//    List<Score> findByStudent_Id(UUID studentId);
+//    List<Score> findByCourse_CourseId(CourseId courseId);
+	Score save(ScoreRequest request);
 }

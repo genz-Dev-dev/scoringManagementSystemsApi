@@ -1,62 +1,66 @@
 package com.rupp.tola.dev.scoring_management_system.controller;
 
+import com.rupp.tola.dev.scoring_management_system.dto.request.PermissionRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.PermissionResponse;
+import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
+import com.rupp.tola.dev.scoring_management_system.service.PermissionService;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.rupp.tola.dev.scoring_management_system.dto.PermissionDTO;
-import com.rupp.tola.dev.scoring_management_system.entity.Permissions;
-import com.rupp.tola.dev.scoring_management_system.mapper.PermissionMapper;
-import com.rupp.tola.dev.scoring_management_system.service.PermissionService;
-
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
 @RestController
 @RequestMapping("/permissions")
+@RequiredArgsConstructor
 public class PermissionController {
-
 	private final PermissionService permissionService;
 
-	@PostMapping
-	public ResponseEntity<?> createPermissions(@RequestBody @Valid PermissionDTO permissionDTO) {
-		Permissions permissions = PermissionMapper.INSTANCE.toPermissions(permissionDTO);
-		permissions = permissionService.createPermissions(permissions);
-		return ResponseEntity.ok(PermissionMapper.INSTANCE.tPermissionDTO(permissions));
-	}
-
-	@GetMapping("{permissionId}")
-	public ResponseEntity<?> getPermissionById(@PathVariable("permissionId") UUID id) {
-		Permissions permissionId = permissionService.getById(id);
-		return ResponseEntity.ok(PermissionMapper.INSTANCE.tPermissionDTO(permissionId));
-	}
-
-	@PutMapping("{permissionId}")
-	public ResponseEntity<?> updatePermissionById(@PathVariable("permissionId") UUID id,
-			@RequestBody @Valid PermissionDTO permissionDTO) {
-		Permissions permissions = PermissionMapper.INSTANCE.toPermissions(permissionDTO);
-		permissions = permissionService.updatePermissionById(id, permissions);
-		return ResponseEntity.ok(PermissionMapper.INSTANCE.tPermissionDTO(permissions));
-	}
-
-	@PatchMapping("{permissionId}/status")
-	public ResponseEntity<?> updateStatus(@PathVariable("permissionId") UUID id, @RequestParam Boolean status) {
-		Permissions updated = permissionService.updatePermissionsByStatus(id, status);
-		return ResponseEntity.ok(updated);
+	@GetMapping("/{id}")
+	@Operation(summary = "Retrieve permission by id.")
+	public ResponseEntity<SingleResponse<PermissionResponse>> getById(@PathVariable UUID id) {
+		PermissionResponse response = permissionService.getById(id);
+		return ResponseEntity.ok().body(SingleResponse.success("Success to retrieve permission by id.", response));
 	}
 
 	@GetMapping
-	public ResponseEntity<?> getBystatus(@RequestParam(defaultValue = "false") Boolean status) {
-		return ResponseEntity.ok(permissionService.getByStatus(status));
+	@Operation(summary = "Retrieve all permissions.")
+	public ResponseEntity<SingleResponse<List<PermissionResponse>>> getAll() {
+		List<PermissionResponse> responses = permissionService.getAll();
+		return ResponseEntity.ok().body(SingleResponse.success("Success to retrieve all permissions.", responses));
 	}
+
+	@GetMapping("/module/{module}")
+	@Operation(summary = "Retrieve all module with module name.")
+	public ResponseEntity<SingleResponse<List<PermissionResponse>>> findByModule(@PathVariable String module) {
+		List<PermissionResponse> responses = permissionService.findByModule(module);
+		return ResponseEntity.ok().body(SingleResponse.success("Success to retrieve all permissions.", responses));
+	}
+
+	@PostMapping
+	@Operation(summary = "Create permission by request.")
+	public ResponseEntity<SingleResponse<PermissionResponse>> create(@Valid @RequestBody PermissionRequest request) {
+		PermissionResponse response = permissionService.create(request);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(SingleResponse.success("Success to create permission.", response));
+	}
+
+	@PutMapping("/{id}")
+	@Operation(summary = "Update permission with request.")
+	public ResponseEntity<SingleResponse<PermissionResponse>> update(@PathVariable UUID id,
+			@Valid @RequestBody PermissionRequest request) {
+		PermissionResponse response = permissionService.update(id, request);
+		return ResponseEntity.ok().body(SingleResponse.success("Success to update permission.", response));
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<SingleResponse<Void>> delete(@PathVariable UUID id) {
+		permissionService.delete(id);
+		return ResponseEntity.ok().body(SingleResponse.success("Success to delete permission.", null));
+	}
+
 }

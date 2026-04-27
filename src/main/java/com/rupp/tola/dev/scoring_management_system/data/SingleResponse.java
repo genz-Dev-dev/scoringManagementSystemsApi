@@ -18,7 +18,7 @@ public class SingleResponse<T> {
     private int status;
     private String message;
     private T data;
-    private LocalDate localDate;
+    private LocalDate timestamp;
 
     public static <T> SingleResponse<T> success(boolean success , String message , HttpStatus status , T data) {
         return SingleResponse
@@ -27,7 +27,7 @@ public class SingleResponse<T> {
                 .status(status.value())
                 .message(message)
                 .data(data)
-                .localDate(LocalDate.now())
+                .timestamp(LocalDate.now())
                 .build();
     }
 
@@ -38,7 +38,7 @@ public class SingleResponse<T> {
                 .status(HttpStatus.OK.value())
                 .message(message)
                 .data(data)
-                .localDate(LocalDate.now())
+                .timestamp(LocalDate.now())
                 .build();
     }
 

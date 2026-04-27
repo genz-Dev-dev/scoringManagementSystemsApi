@@ -4,7 +4,7 @@ databaseChangeLog:
           author: tola.dev001@gmail.com
           changes:
               - createTable:
-                    tableName: scores
+                    tableName: tbl_score
                     columns:
                         - column:
                               name: score_id
@@ -54,24 +54,24 @@ databaseChangeLog:
               - addForeignKeyConstraint:
                     baseTableName: scores
                     baseColumnNames: student_id
-                    referencedTableName: students
+                    referencedTableName: tbl_student
                     referencedColumnNames: student_id
                     constraintName: fk_scores_students
               - addForeignKeyConstraint:
                     baseTableName: scores
                     baseColumnNames: subject_id
-                    referencedTableName: subjects
+                    referencedTableName: tbl_subject
                     referencedColumnNames: subject_id
                     constraintName: fk_scores_subjects
               - addForeignKeyConstraint:
                     baseTableName: scores
                     baseColumnNames: semester_id
-                    referencedTableName: semesters
+                    referencedTableName: tbl_semester
                     referencedColumnNames: semester_id
                     constraintName: fk_scores_semesters
               - addForeignKeyConstraint:
                     baseTableName: scores
                     baseColumnNames: user_id
-                    referencedTableName: users
+                    referencedTableName: tbl_user
                     referencedColumnNames: user_id
                     constraintName: fk_scores_users

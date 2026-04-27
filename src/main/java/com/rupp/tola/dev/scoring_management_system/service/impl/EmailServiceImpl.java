@@ -22,23 +22,11 @@ public class EmailServiceImpl implements EmailService {
 	@Value("${spring.mail.username}")
 	private String from;
 
-    // @Override
-	// public void sendVerificationEmail(String email, String verificationToken) {
-	// sendEmail(email, verificationToken, "Email Verification",
-	// "/req/signup/verify",
-	// "Click the button below to verify your email address:");
-	// }
 	@Override
 	public void sendVerificationEmail(String email, String verificationToken) {
 		sendEmail(email, verificationToken, "Email Verification", "/auth/signup/verify", // ← must match your
 																								// controller exactly
 				"Click the button below to verify your email address:");
-	}
-
-	@Override
-	public void sendForgotPasswordEmail(String email, String resetToken) {
-		sendEmail(email, resetToken, "Password Reset Request", "/reset-password",
-				"Click the button below to reset your password:");
 	}
 
 	@Override
@@ -59,8 +47,6 @@ public class EmailServiceImpl implements EmailService {
 			throw new RuntimeException(ex.getLocalizedMessage());
 		}
 	}
-
-// ------------------------------------------------------------------ private
 
 	private void sendEmail(String to, String token, String subject, String path, String message) {
 		try {
@@ -86,16 +72,16 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 
-	private String buildEmailContent(String subject , String message , int otp) {
-		return """
-				<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;
-				    border-radius: 8px; background-color: #f9f9f9; text-align: center;">
-				    <h2 style="color: #333;">%s</h2>
-				    <p style="font-size: 16px; color: #555;">%s</p>
-				    <h1>%s</h1>
-				</div>
-				""".formatted(subject , message , otp);
-	}
+	// private String buildEmailContent(String subject , String message , int otp) {
+	// 	return """
+	// 			<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;
+	// 			    border-radius: 8px; background-color: #f9f9f9; text-align: center;">
+	// 			    <h2 style="color: #333;">%s</h2>
+	// 			    <p style="font-size: 16px; color: #555;">%s</p>
+	// 			    <h1>%s</h1>
+	// 			</div>
+	// 			""".formatted(subject , message , otp);
+	// }
 
 	private String buildEmailContent(String subject, String message, String actionUrl) {
 		return """

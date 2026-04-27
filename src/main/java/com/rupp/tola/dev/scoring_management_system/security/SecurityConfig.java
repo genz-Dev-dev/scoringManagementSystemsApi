@@ -6,12 +6,14 @@ import com.rupp.tola.dev.scoring_management_system.security.handler.CustomeAuthe
 
 import java.util.List;
 
+import com.rupp.tola.dev.scoring_management_system.service.AppUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -36,8 +39,8 @@ public class SecurityConfig {
 	private final CustomeAccessDeniedHandler accessDeniedHandler;
 	private final CustomeAuthenticationEntryPoint authenticationEntryPoint;
 
-	private static final String[] PUBLIC_URLS = { "/auth/**", "/css/**", "/js/**", "/images/**", "/swagger-ui.html",
-			"/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**" };
+	private static final String[] PUBLIC_URLS = { "/auth/**", "/oauth2/**" , "/css/**", "/js/**", "/images/**", "/swagger-ui.html",
+			"/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**" , "/uploads/**" };
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -79,7 +82,7 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource configurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowedOrigins(List.of("http://localhost:4200" , "http://localhost:5371"));
+		config.setAllowedOrigins(List.of("http://localhost:4200" , "http://localhost:5173","http://localhost:12000"));
 		config.setAllowedHeaders(List.of("*"));
 		config.setAllowedMethods(List.of("*"));
 		config.setAllowCredentials(true);
