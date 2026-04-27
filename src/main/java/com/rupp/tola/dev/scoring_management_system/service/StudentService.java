@@ -1,23 +1,38 @@
 package com.rupp.tola.dev.scoring_management_system.service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.dto.request.StudentsFilterRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.request.ImportStudentRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentStatisticsResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.StudentsFilterResponse;
+import com.rupp.tola.dev.scoring_management_system.entity.Student;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import com.rupp.tola.dev.scoring_management_system.entity.Students;
 
 public interface StudentService {
-	Students createStudents(Students students);
 
-	Students getById(UUID id);
+	StudentResponse create(StudentRequest request);
 
-	Optional<Students> findByClassesId(UUID id);
+	StudentResponse getById(UUID uuid);
 
-	List<Students> getStudents();
+	Page<StudentResponse> getAll(Pageable pageable);
 
-//	Map<String, String> getByStatus(Boolean status);
-	Page<Students> getByStatusPagination(Map<String, String> param, Boolean status);
+	StudentResponse update(UUID uuid, StudentRequest request);
+
+	void delete(UUID uuid);
+
+	ClassResponse getClassByStudentId(UUID uuid);
+
+	List<StudentResponse> importStudents(ImportStudentRequest request);
+
+	StudentStatisticsResponse statistics();
+
+	List<StudentsFilterResponse> studentsFilterResponse(StudentsFilterRequest request);
+
 }
