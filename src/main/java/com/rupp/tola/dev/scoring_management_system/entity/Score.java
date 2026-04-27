@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tbl_score", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { "student_id", "semester_id", "subject_id"})
-})
+@Table(
+		name = "tbl_score",
+		uniqueConstraints = {@UniqueConstraint(name = "uk_score_unique", columnNames = {"student_id", "semester_id", "subject_id"})})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,18 +32,26 @@ public class Score extends BaseEntity implements Serializable {
 	private Student student;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({
-			@JoinColumn(name = "semester_id", referencedColumnName = "semester_id"),
-			@JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
-	})
-	private Course course;
+	@JoinColumn(name = "subject_id")
+	private Subject subject;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "semester_id")
+	private Semester semester;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@Column(name = "score")
 	private BigDecimal score;
 
-	@Column(name = "score_grade")
-	private String grade;
+	@Column(name = "version")
+	private Integer version;
 
+
+
+	@Column(name = "is_deleted")
 	private boolean status;
 
 }

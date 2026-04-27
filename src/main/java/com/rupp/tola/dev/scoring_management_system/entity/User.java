@@ -16,8 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "tbl_user")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @EntityListeners(AuditListener.class)
 public class User implements UserDetails {

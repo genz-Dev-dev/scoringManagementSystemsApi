@@ -1,9 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
+import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,6 +18,8 @@ public interface ClassService {
 	ClassResponse getById(UUID id);
 
 	ClassResponse update(UUID id, ClassRequest request);
+
+	List<ClassResponse> findAll();
 
     void delete(UUID id);
 

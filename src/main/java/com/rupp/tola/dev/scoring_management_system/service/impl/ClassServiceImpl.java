@@ -2,7 +2,6 @@ package com.rupp.tola.dev.scoring_management_system.service.impl;
 
 import com.rupp.tola.dev.scoring_management_system.dto.request.ClassRequest;
 import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
-import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
 import com.rupp.tola.dev.scoring_management_system.entity.Class;
 import com.rupp.tola.dev.scoring_management_system.entity.Department;
 import com.rupp.tola.dev.scoring_management_system.exception.DuplicateResourceException;
@@ -18,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -56,6 +56,12 @@ public class ClassServiceImpl implements ClassService {
 		Class saved = classRepository.save(clazz);
 		log.info("Class with id {} updated successfully", saved.getId());
 		return classMapper.toResponse(saved);
+	}
+
+	@Override
+	public List<ClassResponse> findAll() {
+		List<Class> classes = classRepository.findAll();
+		return classes.stream().map(classMapper::toResponse).toList();
 	}
 
 	@Override

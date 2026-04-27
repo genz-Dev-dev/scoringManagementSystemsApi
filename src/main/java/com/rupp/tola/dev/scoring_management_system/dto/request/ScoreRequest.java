@@ -1,16 +1,11 @@
 package com.rupp.tola.dev.scoring_management_system.dto.request;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,21 +13,14 @@ import java.util.UUID;
 @Builder
 public class ScoreRequest {
 
-    @NotNull(message = "Semester ID is required")
-    private UUID semesterId;
 
-    @NotNull(message = "Subject ID is required")
-    private UUID subjectId;
+	private UUID studentId;
+	private UUID subjectId;
+	private UUID semesterId;
+	private UUID userId;
 
-    @NotNull(message = "Student ID is required")
-    private UUID studentId;
-
-    @Min(value = 0, message = "Score must be at least 0")
-    @Max(value = 100, message = "Score must not exceed 100")
-    private double score;
-
-    private String grade;
-
-    private boolean status;
+	private double score;
+	private Integer version;
+	private boolean status;
 
 }

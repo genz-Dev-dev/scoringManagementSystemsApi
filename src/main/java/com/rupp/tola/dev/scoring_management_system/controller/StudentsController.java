@@ -10,11 +10,9 @@ import com.rupp.tola.dev.scoring_management_system.dto.request.StudentRequest;
 import com.rupp.tola.dev.scoring_management_system.data.MultipleResponse;
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import com.rupp.tola.dev.scoring_management_system.dto.request.StudentsFilterRequest;
-import com.rupp.tola.dev.scoring_management_system.dto.response.ClassResponse;
-import com.rupp.tola.dev.scoring_management_system.dto.response.StudentResponse;
-import com.rupp.tola.dev.scoring_management_system.dto.response.StudentStatisticsResponse;
-import com.rupp.tola.dev.scoring_management_system.dto.response.StudentsFilterResponse;
+import com.rupp.tola.dev.scoring_management_system.dto.response.*;
 import com.rupp.tola.dev.scoring_management_system.service.ExcelService;
+import com.rupp.tola.dev.scoring_management_system.service.StudentScoreReportService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
@@ -35,6 +33,7 @@ public class StudentsController {
 
 	private final StudentService studentService;
 	private final ExcelService excelService;
+	private final StudentScoreReportService getStudentScoreReport;
 
 	@GetMapping
 	public ResponseEntity<MultipleResponse<StudentResponse>> findAll(PaginationRequest request) {
@@ -112,5 +111,12 @@ public class StudentsController {
 						response
 				)
 		);
+	}
+
+	@GetMapping("/student-scores")
+	public ResponseEntity<SingleResponse <List<StudentScoreResponse>>> getReport() {
+		return ResponseEntity.ok(SingleResponse
+				.success("Successfully retrieved student statistics response.", getStudentScoreReport.getStudentScoreReport()));
+
 	}
 }

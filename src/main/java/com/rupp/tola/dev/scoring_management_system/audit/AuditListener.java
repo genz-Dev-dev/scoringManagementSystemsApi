@@ -65,9 +65,7 @@ public class AuditListener {
         try {
             // prevent audit loop
             if (entity instanceof AuditLog) return;
-
             AuditLog log = new AuditLog();
-
             log.setTableName(entity.getClass().getSimpleName());
             log.setAction(action);
             log.setChangeAt(LocalDateTime.now());

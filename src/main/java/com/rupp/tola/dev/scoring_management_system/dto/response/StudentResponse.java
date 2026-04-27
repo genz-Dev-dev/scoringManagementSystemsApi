@@ -25,6 +25,8 @@ public class StudentResponse {
 
     private String khLastName;
 
+    private String className;
+
     private String enFirstName;
 
     private String enLastName;

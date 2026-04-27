@@ -20,6 +20,7 @@ public interface StudentMapper {
 	Student toEntity(StudentRequest request);
 
 	@Mapping(target = "address", source = "address")
+	@Mapping(target = "className",source = "clazz.name")
 	StudentResponse toResponse(Student student);
 
 	List<StudentResponse> toList(List<Student> students);
