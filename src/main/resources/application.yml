@@ -9,20 +9,21 @@ app:
 
 spring:
     datasource:
+        #    url: jdbc:postgresql://postgres:5432/SM
         url: jdbc:postgresql://localhost:4321/SM
-        username: SMUSER
-        password: SMPW
+        username: ${DB_USERNAME:SMUSER}
+        password: ${DB_PASSWORD:SMPW}
         driver-class-name: org.postgresql.Driver
 
     jpa:
         hibernate:
             ddl-auto: update
-
+        #      ddl-auto: create-drop
         show-sql: true
-
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
+    #        format_sql: true
 
     liquibase:
         enabled: false
@@ -49,9 +50,14 @@ spring:
                         required: true
                 debug: false
 
+    h2:
+        console:
+            enabled: true
+
 jwt:
     secret: ${JWT_SECRET:your-super-secret-key-must-be-at-least-256-bits-long-for-hs256}
     expiration-ms: 86400000 # 24 hours
+    expiration-refresh: 604800000 # 7 day
 
 springdoc:
     swagger-ui:
@@ -61,51 +67,7 @@ springdoc:
         path: /v3/api-docs
         enabled: true
     packages-to-scan: com.rupp.tola.dev.scoring_management_system
-#server:
-#    port: 8080
-#    servlet:
-#        context-path: /api
-#
-#app:
-#    cors:
-#        allowed-origins: ${ALLOW_ORIGINS:http://localhost:4200,http://localhost:5173}
-#
-#spring:
-#    datasource:
-#        url: jdbc:postgresql://localhost:5432/scoring_management_systems
-#        username: tola.dev
-#        password: namtola123
-#        driver-class-name: org.postgresql.Driver
-#
-#    jpa:
-#        hibernate:
-#            ddl-auto: update
-#        properties:
-#            hibernate:
-#                dialect: org.hibernate.dialect.PostgreSQLDialect
-#        show-sql: true
-#
-#    liquibase:
-#        enabled: true
-#        change-log: classpath:db/changelog/db.changeLog-master.yaml
-#
-#    servlet:
-#        multipart:
-#            enabled: true
-#            max-file-size: 10MB
-#            max-request-size: 10MB
-#            file-size-threshold: 2KB
-#
-##    security:
-##        user:
-##            name: tola.dev
-##            password: namtola123
-#
-#springdoc:
-#    swagger-ui:
-#        path: /swagger-ui.html
-#        enabled: true
-#    api-docs:
-#        path: /v3/api-docs
-#        enabled: true
-#    packages-to-scan: com.rupp.tola.dev.scoring_management_system
+
+uploads:
+    department: /home/tola/Documents/springProjects/scoring_management_system/BoukryUniversity
+    subject: /home/tola/Documents/springProjects/scoring_management_system/BoukryUniversity
