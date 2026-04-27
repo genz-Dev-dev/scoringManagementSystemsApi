@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 import com.kh.rupp_dev.boukryuniversity.constant.CodePrefix;
-import com.kh.rupp_dev.boukryuniversity.dto.request.UploadBatchesRequest;
 import com.kh.rupp_dev.boukryuniversity.dto.response.ClassResponse;
 import com.kh.rupp_dev.boukryuniversity.dto.request.ImportStudentRequest;
 import com.kh.rupp_dev.boukryuniversity.dto.request.StudentRequest;
@@ -20,7 +19,6 @@ import com.kh.rupp_dev.boukryuniversity.exception.ResourceNotFoundException;
 import com.kh.rupp_dev.boukryuniversity.mapper.ClassMapper;
 import com.kh.rupp_dev.boukryuniversity.mapper.StudentAddressMapper;
 import com.kh.rupp_dev.boukryuniversity.mapper.StudentMapper;
-import com.kh.rupp_dev.boukryuniversity.mapper.UploadBatchesMapper;
 import com.kh.rupp_dev.boukryuniversity.repository.ClassRepository;
 import com.kh.rupp_dev.boukryuniversity.repository.UploadBatchesRepository;
 import com.kh.rupp_dev.boukryuniversity.security.AuthService;

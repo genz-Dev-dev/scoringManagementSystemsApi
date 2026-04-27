@@ -19,6 +19,10 @@ public class StudentResponse {
 
     private UUID id;
 
+    private UUID classId;
+    
+    private String className;
+
     private String studentCode;
 
     private String khFirstName;
