@@ -1,7 +1,7 @@
 package com.rupp.tola.dev.scoring_management_system.audit;
 
 import com.rupp.tola.dev.scoring_management_system.entity.AuditLog;
-import com.rupp.tola.dev.scoring_management_system.repository.AuditLogRepository;
+import com.rupp.tola.dev.scoring_management_system.service.AuditLogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.WeakHashMap;
 @Component
 public class AuditListener {
 
-    private static AuditLogRepository repository;
+    private static AuditLogService auditLogService;
 
     private static final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule())
@@ -27,8 +27,8 @@ public class AuditListener {
     private static final Map<Object, String> CACHE = new WeakHashMap<>();
 
     @Autowired
-    public void setRepository(AuditLogRepository repo) {
-        AuditListener.repository = repo;
+    public void setAuditLogService(AuditLogService service) {
+        AuditListener.auditLogService = service;
     }
 
     // capture original state AFTER loading from DB
@@ -41,8 +41,9 @@ public class AuditListener {
         }
     }
 
-    @PrePersist
-    public void prePersist(Object entity) {
+    @PostPersist
+    public void postPersist(Object entity) {
+        // After entity is persisted, its ID (if generated) is available.
         saveAudit(entity, "INSERT", null, toJson(entity));
     }
 
@@ -50,7 +51,6 @@ public class AuditListener {
     public void preUpdate(Object entity) {
         String oldData = CACHE.get(entity);
         saveAudit(entity, "UPDATE", oldData, toJson(entity));
-        CACHE.remove(entity);
     }
 
     @PreRemove
@@ -75,7 +75,7 @@ public class AuditListener {
             log.setOldData(oldJson);
             log.setNewData(newJson);
 
-            repository.save(log);
+            auditLogService.saveAuditLog(log);
 
         } catch (Exception e) {
             e.printStackTrace();
