@@ -22,5 +22,11 @@ public class AuditLogServiceImpl implements AuditLogService {
                 .map(auditLogMapper::toResponse)
                 .toList();
     }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional(propagation = org.springframework.transaction.annotation.Propagation.REQUIRES_NEW)
+    public void saveAuditLog(AuditLog auditLog) {
+        auditLogRepository.save(auditLog);
+    }
 }
 
