@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,7 +98,7 @@ public class AuditListener {
                     field.setAccessible(true);
                     
                     // Skip static fields to avoid unnecessary data
-                    if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                    if (Modifier.isStatic(field.getModifiers())) {
                         continue;
                     }
 
