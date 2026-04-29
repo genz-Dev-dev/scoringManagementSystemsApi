@@ -27,7 +27,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<SingleResponse<Object>> handleDuplicateKey(DataIntegrityViolationException ex) {
 
-		String message = "Score already exists for this student, semester, and subject.";
+		String specificMessage = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage()
+				: ex.getMessage();
+		String message = "Data integrity violation: " + specificMessage;
 
 		return ResponseEntity.status(HttpStatus.CONFLICT)
 				.body(SingleResponse.success(false, message, HttpStatus.CONFLICT, null));

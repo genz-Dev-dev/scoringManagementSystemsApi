@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("audit")
+@RequestMapping("/audit")
 public class AuditLogController {
     private final AuditLogService auditLogService;
     @GetMapping
