@@ -1,27 +1,39 @@
 package com.rupp.tola.dev.scoring_management_system.exception;
 
 import com.rupp.tola.dev.scoring_management_system.data.ErrorResponse;
+import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import io.jsonwebtoken.JwtException;
 import org.jspecify.annotations.Nullable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.naming.AuthenticationException;
-import java.util.HashMap;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<SingleResponse<Object>> handleDuplicateKey(DataIntegrityViolationException ex) {
+
+        String specificMessage = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage()
+                : ex.getMessage();
+        String message = "Data integrity violation: " + specificMessage;
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(SingleResponse.success(false, message, HttpStatus.CONFLICT, null));
+    }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse<Object>> handleAuthenticationException(AuthenticationException ex) {
@@ -30,11 +42,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse<Object>> handleRuntimeException(RuntimeException ex) {
-        return ResponseEntity.badRequest().body(ErrorResponse.error(ex.getLocalizedMessage()));
+        String message = ex.getMessage() != null ? ex.getMessage()
+                : "An unexpected " + ex.getClass().getSimpleName() + " occurred";
+        log.error("Runtime exception: ", ex);
+        return ResponseEntity.badRequest().body(ErrorResponse.error(message));
     }
-		String specificMessage = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage()
-				: ex.getMessage();
-		String message = "Data integrity violation: " + specificMessage;
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ErrorResponse<Object>> handleJwtException(JwtException ex) {
@@ -42,33 +54,58 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public static ResponseEntity<ErrorResponse<Void>> handleIllegalState(IllegalStateException ex) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponse.error(ex.getMessage()));
+    public ResponseEntity<Object> handleIllegalState(IllegalStateException ex) {
+        var errorResponse = ErrorResponse.error(ex.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse<Void>> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponse.error(ex.getMessage()));
+    public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException ex) {
+        var errorResponse = ErrorResponse.error(ex.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @Override
-    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        Map<String , Object> errorResponse = new HashMap<>();
+    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        Map<String, Object> errorResponse = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach((error) -> {
             errorResponse.put(error.getField(), error.getDefaultMessage());
         });
-        return ResponseEntity.badRequest().body(ErrorResponse.error(HttpStatus.BAD_REQUEST ,"Method argument not valid", errorResponse));
+        return ResponseEntity.badRequest()
+                .body(ErrorResponse.error(HttpStatus.BAD_REQUEST, "Method argument not valid", errorResponse));
+    }
+
+    @Override
+    protected @Nullable ResponseEntity<Object> handleHttpMessageNotReadable(
+            org.springframework.http.converter.HttpMessageNotReadableException ex, HttpHeaders headers,
+            HttpStatusCode status, WebRequest request) {
+        String exactErrorMsg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.error(HttpStatus.BAD_REQUEST,
+                "Malformed JSON request or invalid accepted values (e.g. invalid Enum). Details: " + exactErrorMsg));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse<Void>> handleGeneral(Exception ex) {
-        log.error("Unexpected error: ", ex);
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorResponse.error(ex.getMessage()));
+    public ResponseEntity<ErrorResponse<?>> handleGeneral(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorResponse.error(ex.getLocalizedMessage()));
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse<?>> handleNotFound(ResourceNotFoundException ex) {
+        var errorResponse = ErrorResponse.error(HttpStatus.NOT_FOUND, ex.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorResponse<?>> handleDuplicateResourceException(DuplicateResourceException ex) {
+        var errorResponse = ErrorResponse.error(ex.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(ExcelException.class)
+    public ResponseEntity<ErrorResponse<?>> handleExcelException(ExcelException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.error(ex.getLocalizedMessage()));
+    }
+
 }
