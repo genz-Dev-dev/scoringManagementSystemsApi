@@ -32,6 +32,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse<Object>> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.badRequest().body(ErrorResponse.error(ex.getLocalizedMessage()));
     }
+		String specificMessage = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage()
+				: ex.getMessage();
+		String message = "Data integrity violation: " + specificMessage;
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ErrorResponse<Object>> handleJwtException(JwtException ex) {
