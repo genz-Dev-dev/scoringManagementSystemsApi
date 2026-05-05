@@ -21,4 +21,6 @@ public class AttendanceResponse {
     private String userId;
 
     private LocalDateTime workDate;
+
+    private String status;
 }

@@ -1,8 +1,10 @@
 package com.rupp.tola.dev.scoring_management_system.repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.rupp.tola.dev.scoring_management_system.entity.Attendance;
 import com.rupp.tola.dev.scoring_management_system.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	 Optional<User> findByEmail(String email);
 
 	 Optional<User> findByVerificationToken(String token);
+
+
 }

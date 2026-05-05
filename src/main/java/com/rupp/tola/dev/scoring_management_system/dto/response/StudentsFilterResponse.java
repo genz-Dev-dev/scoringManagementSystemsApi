@@ -10,7 +10,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class StudentsFilterResponse {
         private UUID studentId;
         private String studentCode;
