@@ -3,6 +3,7 @@ package com.rupp.tola.dev.scoring_management_system.exception;
 import com.rupp.tola.dev.scoring_management_system.data.ErrorResponse;
 import com.rupp.tola.dev.scoring_management_system.data.SingleResponse;
 import io.jsonwebtoken.JwtException;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -26,10 +27,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<SingleResponse<Object>> handleDuplicateKey(DataIntegrityViolationException ex) {
-
-        String specificMessage = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage()
-                : ex.getMessage();
-        String message = "Data integrity violation: " + specificMessage;
+        String message = "Some Data is duplicate please check it again ..!! "+ ex.getMessage() ;
 
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(SingleResponse.success(false, message, HttpStatus.CONFLICT, null));
@@ -67,7 +65,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+                                                                            @NonNull HttpHeaders headers,
+                                                                            @NonNull HttpStatusCode status, @NonNull WebRequest request) {
         Map<String, Object> errorResponse = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach((error) -> {
             errorResponse.put(error.getField(), error.getDefaultMessage());
@@ -78,8 +77,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected @Nullable ResponseEntity<Object> handleHttpMessageNotReadable(
-            org.springframework.http.converter.HttpMessageNotReadableException ex, HttpHeaders headers,
-            HttpStatusCode status, WebRequest request) {
+            org.springframework.http.converter.HttpMessageNotReadableException ex, @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status, @NonNull WebRequest request) {
         String exactErrorMsg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.error(HttpStatus.BAD_REQUEST,
                 "Malformed JSON request or invalid accepted values (e.g. invalid Enum). Details: " + exactErrorMsg));
