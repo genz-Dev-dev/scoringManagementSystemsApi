@@ -18,6 +18,5 @@ public interface StudentFilterMapper {
     @Mapping(target = "khFirstName",source = "khFirstName")
     @Mapping(target = "enFirstName",source = "enFirstName")
     @Mapping(target = "enLastName",source = "enLastName")
-
     StudentsFilterResponse toResponse(Student student);
 }

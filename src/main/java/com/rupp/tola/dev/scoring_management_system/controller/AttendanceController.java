@@ -24,7 +24,7 @@ public class AttendanceController {
 	private final AttendanceService attendanceService;
 	private final AttendanceMapper attendanceMapper;
 
-	@PostMapping("/request")
+	@PostMapping("")
 	public ResponseEntity<SingleResponse<AttendanceResponse>> create(
 			@RequestBody @Valid AttendanceRequestDto attendanceRequest) {
 

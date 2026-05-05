@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -30,5 +31,8 @@ public class Attendance {
     private User user;
 
     @Column(name = "work_date")
-    private LocalDateTime workDate;
+    private LocalDate workDate;
+
+    @Column(name = "status_type")
+    private String status;
 }

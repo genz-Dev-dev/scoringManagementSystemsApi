@@ -20,5 +20,6 @@ public interface AttendanceMapper {
 	@Mapping(target = "startDate", source = "startDate")
 	@Mapping(target = "endDate", source = "endDate")
 	@Mapping(target = "workDate", source = "workDate")
+	@Mapping(target = "status",source = "status")
 	AttendanceResponse toResponse(Attendance attendance);
 }
