@@ -10,7 +10,7 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name = "attendance_request")
+@Table(name = "tbl_attendance_request")
 @Data
 @NoArgsConstructor
 public class AttendanceRequest {
